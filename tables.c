@@ -1,12 +1,15 @@
-struct mCode /*12 digit machine code line*/
+struct word /*12 digit machine code line*/
 {
-    /* 12 digit */
+    int opcode: 4;
+    int funct: 4;
+    int inVal: 2;
+    int outval: 2;
 };
 
 struct objects /*output table*/
 {
     int address;
-    mCode line;
+    int line: 12;
     char ARE;
 };
 
