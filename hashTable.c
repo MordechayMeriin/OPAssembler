@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "dataModel.c"
 #define HASHSIZE 101
@@ -9,13 +10,15 @@ struct hnode{
     Rule val;
 };
 
+char *strdup(const char *);
+
 static struct hnode *hashTab[HASHSIZE];
 
 unsigned int hash(char *s)
 {
     unsigned int hashval;
 
-    for (hashval = 0; *s != "\0"; s++)
+    for (hashval = 0; *s != '\0'; s++)
     {
         hashval = *s + 31 * hashval;
     }

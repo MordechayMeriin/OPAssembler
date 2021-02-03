@@ -1,10 +1,11 @@
-#include "linkedList.c"
-
+/*#include "linkedList.c"*/
+#include "hashTable.c"
+/*
 void testListValid()
 {
     Word *aa,*bb,*cc,*dd;
     List *p;
-    
+
     aa = walloc();
     bb = walloc();
     cc = walloc();
@@ -27,4 +28,4 @@ void testListValid()
     printf("%d\n", getFromList(p, 1).val12.value);
     printf("%d\n", getFromList(p, 2).val12.value);
     printf("%d\n", getFromList(p, 3).val12.value);
-}
+}*/
