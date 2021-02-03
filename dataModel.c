@@ -1,10 +1,10 @@
 
 typedef struct opword /*12 digit machine code line*/
 {
-    signed int opcode: 4;
-    signed int funct: 4;
-    signed int inVal: 2;
-    signed int outval: 2;
+    unsigned int opcode: 4;
+    unsigned int funct: 4;
+    unsigned int inVal: 2;
+    unsigned int outval: 2;
 } OpWord;
 
 typedef struct int12{
@@ -16,6 +16,25 @@ typedef union
     OpWord op;
     Int12 val12;
 } Word;
+
+typedef struct addressingMethod
+{
+    int m0: 1;
+    int m1: 1;
+    int m2: 1;
+    int m3: 1;
+}AddressingMethod;
+
+
+typedef struct rule
+{
+    unsigned int opcode: 4;
+    unsigned int funct: 4;
+    char *name;
+    AddressingMethod inAd;
+    AddressingMethod outAd;
+} Rule;
+
 
 Word *walloc()
 {
