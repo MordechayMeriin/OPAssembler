@@ -3,6 +3,6 @@
 
 int main() {
    printf("Hello, World!\n");
-
+   testHash();
    return 0;
 }

@@ -1,5 +1,11 @@
 /*#include "linkedList.c"*/
 #include "hashTable.c"
+
+void testHash()
+{
+    createRulesTable();
+}
+
 /*
 void testListValid()
 {

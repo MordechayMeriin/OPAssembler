@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 typedef struct opword /*12 digit machine code line*/
 {
     unsigned int opcode: 4;
@@ -19,10 +20,10 @@ typedef union
 
 typedef struct addressingMethod
 {
-    int m0: 1;
-    int m1: 1;
-    int m2: 1;
-    int m3: 1;
+    unsigned int m0: 1;
+    unsigned int m1: 1;
+    unsigned int m2: 1;
+    unsigned int m3: 1;
 }AddressingMethod;
 
 
