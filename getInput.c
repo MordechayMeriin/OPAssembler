@@ -3,7 +3,7 @@
 char *getLine(FILE *f1)
 {
 	char c, *line;
-	int i;
+	int i,j;
 
 	if((c=getc(f1)) == EOF)
 		return NULL;
@@ -11,11 +11,27 @@ char *getLine(FILE *f1)
 	if(line)
 	{
        line[0]=c;
-		for(i=1 ; c = getc(f1) != EOF && c != '\n' && i<(MAXLINE-1) ; i++)
-			line[i] = c;
+		for(i=1, j=0 ; i+j<MAXLINE ; i++)
+		{
+			c = getc(f1);
+			if(c != EOF && c != '\n')
+				line[i] = c;
+			if (c==' ' || c=='\t') /*sequance of any number of white characters become one space, and if there is a comma it replaces this space*/
+			{
+				line[i++]=' ';
+				c = skipBlanks(f1,&j);
+				if(c==',')
+				{
+					i--;
+					j++;
+					line[i++] = c;
+					line[i++] = c = skipBlanks(f1,&j);
+				}
+			}
+		}
 		line[i] = '\0';
 
-		if(i < MAXLINE && c!= EOF && c != '\n')
+		if(i+j < MAXLINE && c!= EOF && c != '\n')
 		{
 			c = getc(f1);
 			while((c = getc(f1)) != EOF && c != '\n')
@@ -31,10 +47,10 @@ char *getLine(FILE *f1)
 	}	
 }
 
-int skipBlanks(char *line, int index)
+char skipBlanks(FILE *f1, int *skipped)
 {
 	char c;
-	for(c = line[index] ; c != '\0' && isspace(c) ; index++)
-	    ;
-	return index;
+	while(c = getc(f1) && isspace(c))
+	    *skipped++;
+	return c;
 }
