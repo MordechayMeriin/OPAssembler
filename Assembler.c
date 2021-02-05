@@ -4,14 +4,14 @@
 int main() {
    printf("Hello, World!\n");
 
-   /*testHash();*/
+   testHash();
 
    /*
    IC=100,DC=0,hashtable
    first run
-   if there are errors - print errors and stop
+   if there are errors - print errors and stop    ?? Shouldn't we stop only after the second run ??
    else - second run
-   if there are errors - print errors and stop
+   if there are errors - print errors and stop    
    else - build output files
    */
 

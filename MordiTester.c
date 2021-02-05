@@ -1,5 +1,5 @@
 /*#include "linkedList.c"*/
-#include "hashTable.c"
+#include "rulesHash.c"
 
 void testHash()
 {

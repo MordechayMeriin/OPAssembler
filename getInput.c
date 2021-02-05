@@ -47,10 +47,10 @@ char *getLine(FILE *f1)
 	}	
 }
 
-char skipBlanks(FILE *f1, int *skipped)
+char skipBlanks(FILE *f1, int *skipped) /* you have warnings here */
 {
 	char c;
-	while(c = getc(f1) && isspace(c))
+	while((c = getc(f1)) && isspace(c))
 	    *skipped++;
 	return c;
 }
