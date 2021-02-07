@@ -9,7 +9,7 @@ void first(FILE *f1, int *IC, int *DC)
     {
         if(isEmpty(line))
         {
-
+ 
         }
        else if(isItDir(line))
        {
