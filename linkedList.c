@@ -1,12 +1,7 @@
 #include <stdlib.h>
-#include "dataModel.c"
-
-typedef struct lnode List;
-
-struct lnode{
-    struct lnode *next;
-    Word value;
-};
+#include <stdio.h>
+#include "linkedList.h"
+#include "common.h"
 
 List *listalloc()
 {
@@ -14,8 +9,7 @@ List *listalloc()
     p = (List *)calloc(sizeof(List), 1);
     if (p == NULL)
     {
-        printf("%s\n", "Failed to allocate memory for the linked list.");
-        exit(2);
+        mallocError("Linked list node");
     }  
     return p;
 }

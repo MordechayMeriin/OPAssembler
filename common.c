@@ -1,4 +1,5 @@
-
+#include <stdio.h>
+#include <stdlib.h>
 
 int strCompare(char *s1, char *s2)
 {
@@ -10,4 +11,10 @@ int strCompare(char *s1, char *s2)
         }       
     }
     return *s1 - *s2;
+}
+
+void mallocError(char *dataType)
+{
+    printf("Error: could not allocate memory for a %s.", dataType);
+    exit(2);
 }

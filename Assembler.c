@@ -4,7 +4,7 @@
 int main() {
    printf("Hello, World!\n");
 
-   testHash();
+   /*testHash();*/
 
    /*
    IC=100,DC=0,hashtable

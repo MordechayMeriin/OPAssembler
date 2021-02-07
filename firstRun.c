@@ -1,9 +1,11 @@
+#include <stdio.h>
 #include "firstRun.h"
 
-void first(FILE *f1, struct hnode *ht1, int *IC, int *DC)
+
+void first(FILE *f1, int *IC, int *DC)
 {
     char line[MAXLINE];
-    while(line=getline(f1) != EOF)
+    while((*line=getLine(f1)) != EOF)
     {
         if(isEmpty(line))
         {

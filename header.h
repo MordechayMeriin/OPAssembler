@@ -1,3 +1,6 @@
-#include <stdio.h>
-#include "tables.c"
-#include "getInput.c"
+
+#include "errors.h"
+#include "firstRun.h"
+
+
+

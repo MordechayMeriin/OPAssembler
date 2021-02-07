@@ -1,9 +1,6 @@
-#include "dataModel.c"
-#include "common.c"
-#define HASHSIZE 101
-#define RULESNUM 16
-#define LETTERSNUM 31
-
+#include <stdlib.h>
+#include "rulesHash.h"
+#include "common.h"
 
 static Rule *hashTab[HASHSIZE];
 
@@ -44,8 +41,7 @@ Rule *setRule(Rule rule)
     np = malloc(sizeof(Rule));
     if (np == NULL)
     {
-        printf("malloc: failed in install to hash table.");
-        exit(2);
+        mallocError("Rules hash table");
     }
     hashval = hash(rule.name);
     hashTab[hashval] = np;    

@@ -1,2 +1,2 @@
-Assembler: Assembler.c 
-	gcc -o Assembler Assembler.c -Wall -ansi -pedantic
+Assembler: Assembler.c common.c dataModel.c errors.c firstRun.c getInput.c linkedList.c rulesHash.c
+	gcc -o Assembler Assembler.c common.c dataModel.c errors.c firstRun.c getInput.c linkedList.c rulesHash.c -Wall -ansi -pedantic
