@@ -8,6 +8,7 @@ int main() {
 
    /*
    IC=100,DC=0,hashtable
+   int flags[1];
    first run
    if there are errors - print errors and stop    ?? Shouldn't we stop only after the second run ??
    else - second run
