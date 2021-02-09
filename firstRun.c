@@ -7,16 +7,16 @@ void first(FILE *f1, int *IC, int *DC, int *flags)
     char line[MAXLINE];
     while((*line=getLine(f1)) != EOF)
     {
+        if(isThereLable(line))
+        {
+           flags[0]=1;
+        }
         if(isEmpty(line))
         {
             ;
         }
        else if(isItDir(line))
        {
-           if(isThereLable(line))
-           {
-               flags[0]=1;
-           }
            if (openWord(line, ".data ", 6) || openWord(line, ".string ", 8))
            {
                if(flags[0])
@@ -45,9 +45,15 @@ void first(FILE *f1, int *IC, int *DC, int *flags)
            }
            
        }
-       else 
+       else /*it is a command line*/
        {
-           
+          if(flags[0])
+            {
+                /*
+                enter to symbols tabel as code
+                symbol value is IC
+               */
+            }
        }
     }
 }
