@@ -5,3 +5,5 @@
 
 char *getLine(FILE *);
 char skipBlanks(FILE *, int *);
+FILE *openFile(char *);
+char *readLine(FILE *);

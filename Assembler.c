@@ -1,21 +1,33 @@
-/*#include "header.h"*/
 #include <stdio.h>
-#include "MordiTester.c" /* For tests only. Delete before sending the project! */
+#include "firstRun.h"
 
-int main() {
-   printf("Hello, World!\n");
+extern int currentLine;
 
-   testHash();
+int main(int argc, char *argv[]) {
 
-   /*
-   IC=100,DC=0,hashtable
-   int flags[1];
-   first run
-   if there are errors - print errors and stop    ?? Shouldn't we stop only after the second run ??
-   else - second run
-   if there are errors - print errors and stop    
-   else - build output files
-   */
+   if (argc > 1)
+   {
+      int i;
+      for (i = 1; i < argc; i++)
+      {
+         FILE *inputFile;
+         char *line;
+         inputFile = openFile(argv[i]);
 
+         while ((line = readLine(inputFile)) != NULL)
+         {
+            printf("Line\t%d:\t", currentLine);
+            printf("%s\n", line);
+            free(line);
+         }
+         
+         free(inputFile);
+      }   
+   }
+   else
+   {
+      printf("No arguments were passed. Please specify the \".as\" files to assemble.\n");
+      exit(1);
+   }
    return 0;
 }

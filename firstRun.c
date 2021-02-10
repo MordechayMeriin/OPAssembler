@@ -2,10 +2,18 @@
 #include "firstRun.h"
 
 
-void first(FILE *f1, int *IC, int *DC, int *flags)
+void first(FILE *file)
 {
-    char line[MAXLINE];
-    while((*line=getLine(f1)) != EOF)
+    int IC, ICF,DC, DCF, flags[1];
+    char *line;
+    line = (char *)calloc(sizeof(char), MAXLINE + 1);
+
+    if (line == NULL)
+    {
+        mallocError("string");
+    }
+    
+    while(*(line=getLine(file)) != EOF)
     {
         if(isThereLable(line))
         {
@@ -69,5 +77,11 @@ int isItDir(char *line)
 {
     if(line[0]=='.')
         return 1;
+    return 0;
+}
+
+int isThereLable(char *line)
+{
+
     return 0;
 }

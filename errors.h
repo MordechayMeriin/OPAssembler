@@ -1,6 +1,4 @@
 
-static char *errorsLog;
-
 void errorLog(char *error);
 
 void printErrors();
