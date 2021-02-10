@@ -1,10 +1,11 @@
-#include "header.h"
+/*#include "header.h"*/
+#include <stdio.h>
 #include "MordiTester.c" /* For tests only. Delete before sending the project! */
 
 int main() {
    printf("Hello, World!\n");
 
-   /*testHash();*/
+   testHash();
 
    /*
    IC=100,DC=0,hashtable

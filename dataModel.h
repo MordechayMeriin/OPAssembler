@@ -1,14 +1,20 @@
+#define WORD_SIZE 12
+#define OPCODE_SIZE 4
+#define FUNCT_SIZE 4
+#define INVAL_SIZE 2
+#define OUTVAL_SIZE 2
+
 
 typedef struct opword /*12 digit machine code line*/
 {
-    unsigned int opcode: 4;
-    unsigned int funct: 4;
-    unsigned int inVal: 2;
-    unsigned int outval: 2;
+    unsigned int opcode: OPCODE_SIZE;
+    unsigned int funct: FUNCT_SIZE;
+    unsigned int inVal: INVAL_SIZE;
+    unsigned int outval: OUTVAL_SIZE;
 } OpWord;
 
 typedef struct int12{
-    signed int value: 12;
+    signed int value: WORD_SIZE;
 } Int12;
 
 typedef union
@@ -28,8 +34,8 @@ typedef struct addressingMethod
 
 typedef struct rule
 {
-    unsigned int opcode: 4;
-    unsigned int funct: 4;
+    unsigned int opcode: OPCODE_SIZE;
+    unsigned int funct: FUNCT_SIZE;
     char *name;
     AddressingMethod inAd;
     AddressingMethod outAd;

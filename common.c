@@ -1,17 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-int strCompare(char *s1, char *s2)
-{
-    for (; *s1 == *s2; s2++)
-    {
-        if (*s1 == '\0')
-        {
-            return 0;
-        }       
-    }
-    return *s1 - *s2;
-}
+#include <string.h>
 
 void mallocError(char *dataType)
 {
@@ -23,6 +12,9 @@ int openWord(char *line, char *word, int wordLength)
 {
     char *tmp;
     int i;
+
+    tmp = calloc(sizeof(char), wordLength + 1);
+
     for(i=0 ; i<wordLength ; i++)
         tmp[i]=line[i];
     if(strcmp(tmp,word)==0)

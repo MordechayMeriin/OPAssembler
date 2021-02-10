@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "rulesHash.h"
 #include "common.h"
 
@@ -25,7 +26,7 @@ Rule *getRule(char *s)
 
     np = hashTab[hash(s)];
     
-    if (strCompare(s, np->name))
+    if (strcmp(s, np->name) == 0)
     {
         return np;
     }       

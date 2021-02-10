@@ -1,38 +1,44 @@
-/*#include "linkedList.c"*/
-/*
-#include "rulesHash.c"
+#include <stdio.h>
+#include <stdlib.h>
+#include "binary.h"
 
-void testHash()
+void testBinary();
+
+int main()
 {
-    createRulesTable();
+    testBinary();
+
+    return 0;
 }
-*/
-/*
-void testListValid()
+
+void testBinary()
 {
-    Word *aa,*bb,*cc,*dd;
-    List *p;
+    OpWord *word;
+    Int12 *a;
+    Int12 *b;
+    Int12 *reg;
+    /*unsigned int wordNum;
+    unsigned int negative;*/
 
-    aa = walloc();
-    bb = walloc();
-    cc = walloc();
-    dd = walloc();
+    word = (OpWord *)malloc(sizeof(OpWord));
+    a = (Int12 *)malloc(sizeof(Int12));
+    b = (Int12 *)malloc(sizeof(Int12));
+    reg = (Int12 *)malloc(sizeof(Int12));
 
-    aa->val12.value = 1;
-    bb->val12.value = 54;
-    cc->val12.value = 0;
-    dd->val12.value = -1;
+    word->opcode = 2;
+    word->funct = 10;
+    word->inVal = 3;
+    word->outval = 1;
 
-    
-    p = listalloc();
-    
-    addToList(p, aa);
-    addToList(p, bb);
-    addToList(p, cc);
-    addToList(p, dd);
+    a->value = -1;
+    b->value = 1;
+    reg= intToRegister(3);
 
-    printf("%d\n", getFromList(p, 0).val12.value);
-    printf("%d\n", getFromList(p, 1).val12.value);
-    printf("%d\n", getFromList(p, 2).val12.value);
-    printf("%d\n", getFromList(p, 3).val12.value);
-}*/
+    printf("\nbinary word: %03X \nbinary negative one: %03X \nbinary one: %03X \nbinary register 3: %03X \n", 
+        wordToInt(word), int12ToInt(a), int12ToInt(b),int12ToInt(reg));
+
+    free(word);
+    free(a);
+    free(b);
+    free(reg);
+}
