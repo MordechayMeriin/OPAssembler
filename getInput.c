@@ -23,6 +23,11 @@ char *getLine(FILE *f1)
 			c = fgetc(f1);
 			if(c != EOF && c != '\n')
 				line[i] = c;
+			else
+			{
+				line[i]='\0';
+				break;
+			}
 			if (c==' ' || c=='\t') /*sequance of any number of white characters become one space, and if there is a comma it replaces this space*/
 			{
 				line[i++]=' ';
@@ -32,7 +37,7 @@ char *getLine(FILE *f1)
 					i--;
 					j++;
 					line[i++] = c;
-					line[i++] = c = skipBlanks(f1,&j);
+					line[i++] = (c = skipBlanks(f1,&j));
 				}
 			}
 		}
@@ -40,8 +45,8 @@ char *getLine(FILE *f1)
 
 		if(i+j < MAXLINE && c!= EOF && c != '\n')
 		{
-			c = getc(f1);
-			while((c = getc(f1)) != EOF && c != '\n')
+			c = fgetc(f1);
+			while((c = fgetc(f1)) != EOF && c != '\n')
 				;
 			return "Error. Line is too long";
 		}
@@ -104,7 +109,7 @@ char *readLine(FILE *file)
 char skipBlanks(FILE *f1, int *skipped)
 {
 	char c;
-	while((c = getc(f1)) && ( c==' ' || c=='\t'))
+	while((c = fgetc(f1)) && ( c==' ' || c=='\t'))
 	    (*skipped)++;
 	return c;
 }
@@ -114,7 +119,7 @@ FILE *openFile(char *fileName)
 	FILE *pf;
 	char *fullFileName;
 	char ending[] = ".as";
-
+	printf("checkpoint1\n");
 	fullFileName = (char *)malloc(sizeof(fileName) + sizeof(ending));
 	if (fullFileName == NULL)
 	{
@@ -125,14 +130,15 @@ FILE *openFile(char *fileName)
 
 	strcat(fullFileName, fileName);
 	strcat(fullFileName, ending);
-
+	printf("checkpoint2\n");
 	pf = fopen(fullFileName, "r");
-
+	printf("checkpoint3\n");
 	if (pf == NULL)
 	{
-		printf("An error accured when trying to read the file filename");
+		printf("An error occured when trying to read the file filename");
 		exit(2);
 	}
 	free(fullFileName);
+	printf("checkpoint4\n");
 	return pf;
 }
