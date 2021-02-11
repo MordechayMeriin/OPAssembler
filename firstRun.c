@@ -2,9 +2,8 @@
 #include "firstRun.h"
 
 
-void first(FILE *file)
+void first(FILE *file, int *IC, int *DC, int *DFC, int *flags)
 {
-    int IC, ICF,DC, DCF, flags[1];
     char *line;
     line = (char *)calloc(sizeof(char), MAXLINE + 1);
 

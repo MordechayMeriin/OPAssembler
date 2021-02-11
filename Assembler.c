@@ -7,14 +7,14 @@ int main(int argc, char *argv[]) {
 
    if (argc > 1)
    {
-      int i;
+      int i, IC=0, ICF=0,DC=0, DCF=0, flags[1]={0};
       for (i = 1; i < argc; i++)
       {
          FILE *inputFile;
          char *line;
          inputFile = openFile(argv[i]);
 
-         while ((line = readLine(inputFile)) != NULL)
+         while ((line = getLine(inputFile/*, &IC, &DC, &DCF, flags*/)) != NULL)
          {
             printf("Line\t%d:\t", currentLine);
             printf("%s\n", line);
