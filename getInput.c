@@ -142,3 +142,18 @@ FILE *openFile(char *fileName)
 	printf("checkpoint4\n");
 	return pf;
 }
+
+void deleteBlanks(char *line)
+{
+	char tmp[MAXLINE];
+	int i=0, j;
+	for (j=0 ; j<MAXLINE && line[j]!='\0' ; j++)
+		if(line[j]!=' ' && line[j]!='\t')
+			tmp[i++]=line[j];
+		else if(i==0 || tmp[i-1]==',' || line[j+1]==',' || tmp[i-1]==' ')
+				;
+		else
+			tmp[i++]=' ';
+	tmp[i]='\0';
+	strcpy(line, tmp);
+}

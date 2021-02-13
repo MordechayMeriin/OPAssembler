@@ -4,8 +4,9 @@
 #include "common.c"
 
 
-int main(int argc, char *argv[]) {
-
+int main(int argc, char *argv[])
+{
+/*
    int currentLine=0, i, IC=0, ICF=0,DC=0, DCF=0, flags[1]={0};
    printf("cp1\n");
    if (argc > 1)
@@ -36,6 +37,16 @@ int main(int argc, char *argv[]) {
    {
       printf("No arguments were passed. Please specify the \".as\" files to assemble.\n");
       exit(1);
-   }
+   }*/
+   char a[]="MAIN:   add r3, LIST", b[]="  LOOP:    prn, #48,  ", c[]="        lea STR, r6";
+   printf("a:  %s\n", a);
+   printf("b:  %s\n", b);
+   printf("c:  %s\n", c);
+   deleteBlanks(a);
+   deleteBlanks(b);
+   deleteBlanks(c);
+   printf("a:  %s\n", a);
+   printf("b:  %s\n", b);
+   printf("c:  %s\n", c);
    return 0;
 }
