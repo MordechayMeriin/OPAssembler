@@ -11,8 +11,9 @@ void first(FILE *file, int *IC, int *DC, int *DFC, int *flags)
     {
         mallocError("string");
     }
-    
-    while(*(line=getLine(file)) != EOF)
+    line=readLine(file);
+    deleteBlanks(line);
+    while(*line != EOF)
     {
         if(isThereLable(line))
         {
@@ -62,6 +63,8 @@ void first(FILE *file, int *IC, int *DC, int *DFC, int *flags)
                */
             }
        }
+       line=readLine(file);
+       deleteBlanks(line);
     }
 }
 

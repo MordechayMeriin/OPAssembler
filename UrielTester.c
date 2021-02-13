@@ -6,6 +6,12 @@
 
 int main(int argc, char *argv[])
 {
+   char AA[]="a1 a2 a3", BB[]="aaabbb", CC[]="a1 ";
+   int j,k,l;
+   j=openWord(AA, "a1", 2);
+   k=openWord(BB, "ab", 2);
+   l=openWord(AA, CC, 3);
+   printf("101?\t%d%d%d", j,k,l);
 /*
    int currentLine=0, i, IC=0, ICF=0,DC=0, DCF=0, flags[1]={0};
    printf("cp1\n");
@@ -38,7 +44,7 @@ int main(int argc, char *argv[])
       printf("No arguments were passed. Please specify the \".as\" files to assemble.\n");
       exit(1);
    }*/
-   char a[]="MAIN:   add r3, LIST", b[]="  LOOP:    prn, #48,  ", c[]="        lea STR, r6";
+   /*char a[]="MAIN:   add r3, LIST", b[]="  LOOP:    prn, #48,  ", c[]="        lea STR, r6";
    printf("a:  %s\n", a);
    printf("b:  %s\n", b);
    printf("c:  %s\n", c);
@@ -47,6 +53,6 @@ int main(int argc, char *argv[])
    deleteBlanks(c);
    printf("a:  %s\n", a);
    printf("b:  %s\n", b);
-   printf("c:  %s\n", c);
+   printf("c:  %s\n", c);*/
    return 0;
 }
