@@ -5,7 +5,7 @@
 
 int currentLine = 0;
 
-char *getLine(FILE *f1)
+/*char *getLine(FILE *f1)
 {
 	char c, *line;
 	int i=0,j;
@@ -28,7 +28,7 @@ char *getLine(FILE *f1)
 				line[i]='\0';
 				break;
 			}
-			if (c==' ' || c=='\t') /*sequance of any number of white characters become one space, and if there is a comma it replaces this space*/
+			if (c==' ' || c=='\t') /*sequance of any number of white characters become one space, and if there is a comma it replaces this space/
 			{
 				line[i++]=' ';
 				c = skipBlanks(f1,&j);
@@ -58,7 +58,7 @@ char *getLine(FILE *f1)
 		mallocError("string");
 		return "";
 	}	
-}
+}*/
 
 char *readLine(FILE *file)
 {
@@ -106,14 +106,13 @@ char *readLine(FILE *file)
 	return line;
 }
 
-char skipBlanks(FILE *f1, int *skipped)
+/*char skipBlanks(FILE *f1, int *skipped)
 {
 	char c;
 	while((c = fgetc(f1)) && ( c==' ' || c=='\t'))
 	    (*skipped)++;
 	return c;
-}
-
+}*/
 FILE *openFile(char *fileName)
 {
 	FILE *pf;
@@ -143,7 +142,7 @@ FILE *openFile(char *fileName)
 	return pf;
 }
 
-void deleteBlanks(char *line)
+void deleteBlanks(char *line) /**/
 {
 	char tmp[MAXLINE];
 	int i=0, j;
