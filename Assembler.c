@@ -1,13 +1,13 @@
 #include <stdio.h>
-#include "firstRun.h"
+#include "header.h"
 
 extern int currentLine;
+int  IC=0, ICF=0,DC=0, DCF=0, flags[1]={0}; /*global vars, flags[0] signals if there is an error*/
 
 int main(int argc, char *argv[]) {
-
+   int i;
    if (argc > 1)
    {
-      int i, IC=0, ICF=0,DC=0, DCF=0, flags[1]={0};
       for (i = 1; i < argc; i++)
       {
          FILE *inputFile;
