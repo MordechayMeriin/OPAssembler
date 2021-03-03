@@ -77,3 +77,13 @@ void createRulesTable()
         setRule(rules[i]);
     }
 }
+
+int isValidCommand(char *command)
+{
+    if (getRule(*command) != NULL)
+    {
+        return 1;
+    }
+    return 0;
+    
+}

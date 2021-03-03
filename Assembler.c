@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "header.h"
 
-extern int currentLine;
+/*extern int currentLine;*/
 int  IC=0, ICF=0,DC=0, DCF=0, flags[1]={0}; /*global vars, flags[0] signals if there is an error*/
 
 int main(int argc, char *argv[]) {
@@ -11,16 +11,15 @@ int main(int argc, char *argv[]) {
       for (i = 1; i < argc; i++)
       {
          FILE *inputFile;
-         char *line;
+         char *line = calloc(sizeof(char), 81);
          inputFile = openFile(argv[i]);
 
-         while ((line = readLine(inputFile)) != NULL)
+         while ((fgets(line, 81, inputFile)) != NULL)
          {
-            printf("Line\t%d:\t", currentLine);
             printf("%s\n", line);
-            free(line);
+            /*free(line);*/
          }
-         
+         free(line);
          free(inputFile);
       }   
    }

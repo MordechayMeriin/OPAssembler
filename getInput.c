@@ -28,7 +28,7 @@ int currentLine = 0;
 				line[i]='\0';
 				break;
 			}
-			if (c==' ' || c=='\t') /*sequance of any number of white characters become one space, and if there is a comma it replaces this space/
+			if (c==' ' || c=='\t') /sequance of any number of white characters become one space, and if there is a comma it replaces this space/
 			{
 				line[i++]=' ';
 				c = skipBlanks(f1,&j);
@@ -155,4 +155,33 @@ void deleteBlanks(char *line) /**/
 			tmp[i++]=' ';
 	tmp[i]='\0';
 	strcpy(line, tmp);
+}
+
+char *getWord(char *line, char *word)
+{
+	char *str = (char *)calloc(sizeof(char), MAXWORD);
+	char *c = str;
+	while (isSpace(*line) && *line != '\0')
+		line++;
+
+	while (!isSpace(*line) && *line != '\0')
+	{
+		*c = *line;
+		if (*c == ',')
+		{
+			c++;
+			line++;
+			break;
+		}
+		c++;
+		line++;
+	}
+	*c = '\0';
+	word = str;
+	return line;
+}
+
+int isSpace(char c)
+{
+	return(c == ' ' || c == '\t' || c == '\n');
 }

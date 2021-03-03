@@ -1,4 +1,5 @@
 #include "rulesHash.h"
+#include "linkedList.h"
 #include "getInput.h"
 
 void first(FILE *file);

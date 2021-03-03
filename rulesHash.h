@@ -12,3 +12,5 @@ Rule *getRule(char *s);
 Rule *setRule(Rule rule);
 
 void createRulesTable();
+
+int isValidCommand(char *command)
