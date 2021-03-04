@@ -1,6 +1,8 @@
 #include "rulesHash.h"
 #include "linkedList.h"
 #include "getInput.h"
+#include "tables.c"
+
 
 void first(FILE *file);
 int isEmpty(char * line); /*is it an empty line or a comment line*/

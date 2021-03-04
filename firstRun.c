@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "firstRun.h"
-#include "tables.c"
 
 void first(FILE *file)
 {
@@ -68,7 +67,7 @@ void first(FILE *file)
                     /*
                     enter to symbols tabel as code
                     symbol value is IC
-                */
+                */ 
                 }
                 if (isValidCommand(firstWord))
                 {
@@ -86,6 +85,10 @@ void first(FILE *file)
         }
 
     }
+    ICF=IC;
+    DCF=DC;
+    setVal(SymbolList, ICF);
+    second(codeList, dataList, SymbolList);
 }
 
 int isEmpty(char *line)

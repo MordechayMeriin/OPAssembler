@@ -70,13 +70,20 @@ void addToTable(struct symblols *newS, char *name, char *attributes, int val)
         
 }
 
+void setVal(struct symblols *s, int val)
+{
+    s->value+=val;
+    if(S->next != NULL)
+        setVal(s->next, val);
+}
+
 void setAddress(struct symblols *s, char *name, Int12 address) /*for the second run*/
 {
     if (strcmp(s->nex.name, *name)==0)
     {
         s->address=address;
     }
-    else if(newS->next != NULL)
+    else if(S->next != NULL)
         setAddress(s->next, name, address);
     else
     {

@@ -2,7 +2,7 @@
 #include "header.h"
 
 /*extern int currentLine;*/
-int  IC=0, ICF=0,DC=0, DCF=0, flags[1]={0}; /*global vars, flags[0] signals if there is an error*/
+int  IC=0, ICF=0,DC=0, DCF=0, flags[2]={0,0}; /*global vars, flags[0] signals if there is a label, flags[1] errors*/
 
 int main(int argc, char *argv[]) {
    int i;
@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
          FILE *inputFile;
          char *line = calloc(sizeof(char), 81);
          inputFile = openFile(argv[i]);
+         /*here comes first-run, right? instead of the 'while' that comes next*/
+
 
          while ((fgets(line, 81, inputFile)) != NULL)
          {
