@@ -41,22 +41,16 @@ void first(FILE *file)
                     {
                         addToTable(SymbolList, label, "data", DC);
                         /*
-                        enter to symbols tabel as data
-                        
-                        symbol value is DC
-                        identify data type
+                        identify data type and length (how?)
                         DC+=(data length)
                         */
                     }
                 }
-                else if(openWord(line, ".extern ", 8) || openWord(line, ".entry ", 7))
+                else if(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0 /*openWord(line, ".extern ", 8) || openWord(line, ".entry ", 7)*/)
                 {
-                    if(openWord(line, ".extern ", 8))
+                    if(firstWord, ".extern")==0)
                     {
-                        /*
-                            enter to symbols tabel as external
-                            value is 0 
-                        */
+                        addToTable(SymbolList, label, "extern", 0);
                     }
                 }
                 else
@@ -70,6 +64,7 @@ void first(FILE *file)
             {
                 if(flags[0])
                 {
+                    addToTable(SymbolList, label, "code", IC);
                     /*
                     enter to symbols tabel as code
                     symbol value is IC
