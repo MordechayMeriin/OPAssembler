@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "firstRun.h"
+#include "tables.c"
 
 void first(FILE *file)
 {
     extern int flags[];
+    char label[MAXWORD];
+    char *firstWord;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     List *codeList = listalloc();
     List *dataList = listalloc();
@@ -22,23 +25,23 @@ void first(FILE *file)
     {
         if(!isEmpty(line))
         {
-            char *label;
-            char *firstWord;
             line = getWord(line, firstWord);
             if(isThereLable(firstWord))
             {
                 flags[0]=1;
-                label = firstWord;
+                strcpy(label, firstWord);
                 line = getWord(line, firstWord);
             }
-            else if(isItDir(firstWord))
+            /*else*/ if(isItDir(firstWord))
             {
                 if (strcmp(firstWord, ".data")==0 ||  strcmp(firstWord, ".string")==0 /*openWord(line, ".data ", 6) || openWord(line, ".string ", 8)*/)
                 {
                     if(flags[0])
                     {
+
                         /*
                         enter to symbols tabel as data
+                        
                         symbol value is DC
                         identify data type
                         DC+=(data length)
