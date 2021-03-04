@@ -11,6 +11,7 @@ void first(FILE *file)
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     List *codeList = listalloc();
     List *dataList = listalloc();
+    Symbols *SymbolList = Slistalloc();
 
     if (line == NULL)
     {
@@ -38,7 +39,7 @@ void first(FILE *file)
                 {
                     if(flags[0])
                     {
-
+                        addToTable(SymbolList, label, "data", DC);
                         /*
                         enter to symbols tabel as data
                         
