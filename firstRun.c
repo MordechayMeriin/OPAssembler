@@ -47,19 +47,17 @@ void first(FILE *file)
                     else
                         errorLog("invalid data");
                 }
-                else if(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0)
+                else if(strcmp(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0)
                 {
-                    if(firstWord, ".extern")==0)
+                    if(strcmp(firstWord, ".extern")==0)
                     {
                         addToTable(SymbolList, label, "extern", 0);
                     }
                 }
                 else
                 {
-                    /*error*/
+                    errorLog("invalid direction");
                 }
-                
-                
             }
             else /*it is a command line*/
             {
@@ -83,10 +81,17 @@ void first(FILE *file)
         }
 
     }
-    ICF=IC;
-    DCF=DC;
-    setVal(SymbolList, ICF);
-    second(codeList, dataList, SymbolList);
+    if(errorsLog!=NULL)
+    {
+        printErrors();
+    }
+    else
+    {
+        ICF=IC;
+        DCF=DC;
+        setVal(SymbolList, ICF);
+        second(codeList, dataList, SymbolList);
+    }
 }
 
 int isEmpty(char *line)
@@ -144,37 +149,39 @@ int datalen(char *line, char *type)
     int i, j=0;
     if(strcmp(type, ".string")==0)
     {
+        if(strlen(line)<=2)
+            return 0;
         for(i=2; line[i]!='\0' && line[i]!='\"' ; i++)
         ;
         if(line[0]==' ' && line[1]=='\"' && line[i]=='\"' && line[i+1]=='\0')
             return (i-3);/*starts with a space and appostrophes, and ends with appostrophes, total 3 spare cahracters*/
         else
+        {
             return 0;
+        }
     }
     if(strcmp(type, ".data")==0)
     {
-
+        if(strlen(line)<=1)
+            return 0;
         for(i=1, j=1; line[i]!='\0' ; i++)
         {
             if(line[i]>='0' || line[i]<='9' || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
             {
                 if((line[i]=='+' || line[i]=='-')&& (line[i+1]>'9' || line[i+1]<'0'))
                 {
-                    errorLog("invalid data");
-                    break;
+                    return 0;
                 }
                 else if(line[i]==',' && (line[i-1]>'9' || line[i-1]<'0' || line[i+1]=='\0'))
                 {
-                    errorLog("invalid data");
-                    break;
+                    return 0;
                 }
                 else if(line[i]==',')
                     j++;
             }
             else
             {
-                errorLog("invalid data");
-                break;
+                return 0;
             }
         }
         return j;

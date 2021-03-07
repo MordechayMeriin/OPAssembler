@@ -73,8 +73,9 @@ void addToTable(struct symblols *newS, char *name, char *attributes, int val)
 
 void setVal(struct symblols *s, int val)
 {
-    s->value+=val;
-    if(S->next != NULL)
+    if(strstr(s->attributes, "data"))
+        s->value+=val;
+    if(s->next != NULL)
         setVal(s->next, val);
 }
 

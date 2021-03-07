@@ -3,7 +3,6 @@
 #include "errors.h"
 #include "common.h"
 
-static char *errorsLog;
 
 void errorLog(char *error)
 {
