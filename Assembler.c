@@ -2,7 +2,7 @@
 #include "header.h"
 
 /*extern int currentLine;*/
-int  IC=0, ICF=0,DC=0, DCF=0, flags[2]={0,0}; /*global vars, flags[0] signals if there is a label, flags[1] errors*/
+int  IC, DC, L ,ICF,DCF; /*global vars*/
 
 int main(int argc, char *argv[]) {
    int i;

@@ -46,22 +46,23 @@ Symbols *Slistalloc()
 
 void addToTable(struct symblols *newS, char *name, char *attributes, int val)
 {
-    if(newS->next == NULL)
+    if(newS == NULL)
+    {  
+        newS= Slistalloc();
+        strcpy(newS->name ,*name);
+        strcpy(newS->attributes ,*attributes);
+        newS->value=val;       
+    }
+    else if (strcmp(newS->name, *name)==0)
     {
-        if (strcmp(newS->nex.name, *name)==0)
-        {
-            /*error: two symbols with the same name*/
-            break;
-        }
-        else
-        {
-            Symbols *tempS;
-            strcpy(newS->name ,*name);
-            strcpy(newS->attributes ,*attributes);
-            newS->value=val;       
-            tempS = Slistalloc();          
-            newS->next = tempS;
-        }
+        errorLog("two symbols with the same name");
+    }
+    else if(newS->next == NULL)
+    {  
+        newS->next = Slistalloc();
+        strcpy(newS->next.name ,*name);
+        strcpy(newS->next.attributes ,*attributes);
+        newS->next.value=val;       
     }
     else
     {
@@ -79,7 +80,7 @@ void setVal(struct symblols *s, int val)
 
 void setAddress(struct symblols *s, char *name, Int12 address) /*for the second run*/
 {
-    if (strcmp(s->nex.name, *name)==0)
+    if (strcmp(s->next.name, *name)==0)
     {
         s->address=address;
     }

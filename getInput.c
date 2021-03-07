@@ -118,7 +118,6 @@ FILE *openFile(char *fileName)
 	FILE *pf;
 	char *fullFileName;
 	char ending[] = ".as";
-	printf("checkpoint1\n");
 	fullFileName = (char *)malloc(sizeof(fileName) + sizeof(ending));
 	if (fullFileName == NULL)
 	{
@@ -129,16 +128,13 @@ FILE *openFile(char *fileName)
 
 	strcat(fullFileName, fileName);
 	strcat(fullFileName, ending);
-	printf("checkpoint2\n");
 	pf = fopen(fullFileName, "r");
-	printf("checkpoint3\n");
 	if (pf == NULL)
 	{
 		printf("An error occured when trying to read the file filename");
 		exit(2);
 	}
 	free(fullFileName);
-	printf("checkpoint4\n");
 	return pf;
 }
 
@@ -147,12 +143,25 @@ void deleteBlanks(char *line) /**/
 	char tmp[MAXLINE];
 	int i=0, j;
 	for (j=0 ; j<MAXLINE && line[j]!='\0' ; j++)
+	{
 		if(line[j]!=' ' && line[j]!='\t')
+		{
 			tmp[i++]=line[j];
-		else if(i==0 || tmp[i-1]==',' || line[j+1]==',' || tmp[i-1]==' ')
-				;
+			if(tmp[j]]==',')
+				tmp[i++]=' ';
+		}
+		else if(i==0 || line[j+1]==',' || tmp[i-1]==' ')
+		{
+			if(tmp[i-2]==',' && line[j+1]==',')
+				errorLog("Syntax error: two commas in a row")
+		}
 		else
+		{
 			tmp[i++]=' ';
+		}
+	}
+	if(tmp[i]==' ')
+		i--;
 	tmp[i]='\0';
 	strcpy(line, tmp);
 }
@@ -161,9 +170,9 @@ char *getWord(char *line, char *word)
 {
 	char *str = (char *)calloc(sizeof(char), MAXWORD);
 	char *c = str;
-	while (isSpace(*line) && *line != '\0')
+/*	while (isSpace(*line) && *line != '\0')
 		line++;
-
+*/
 	while (!isSpace(*line) && *line != '\0')
 	{
 		*c = *line;
@@ -183,5 +192,5 @@ char *getWord(char *line, char *word)
 
 int isSpace(char c)
 {
-	return(c == ' ' || c == '\t' || c == '\n');
+	return(c == ' ' || c == '\t' /*|| c == '\n'*/);
 }

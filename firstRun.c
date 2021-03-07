@@ -4,7 +4,8 @@
 
 void first(FILE *file)
 {
-    extern int flags[];
+    extern int IC=100, DC=0, ICF, DCF, L;
+    int labelFlag=0;
     char label[MAXWORD];
     char *firstWord;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
@@ -23,29 +24,30 @@ void first(FILE *file)
 
     while(fgets(line, MAXLINE, file) != NULL)
     {
+        deleteBlanks(line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
-            if(isThereLable(firstWord))
+            if(isItLable(firstWord))
             {
-                flags[0]=1;
+                labelFlag=1;
                 strcpy(label, firstWord);
                 line = getWord(line, firstWord);
             }
             /*else*/ if(isItDir(firstWord))
             {
-                if (strcmp(firstWord, ".data")==0 ||  strcmp(firstWord, ".string")==0 /*openWord(line, ".data ", 6) || openWord(line, ".string ", 8)*/)
+                if (strcmp(firstWord, ".data")==0 ||  strcmp(firstWord, ".string")==0)
                 {
-                    if(flags[0])
+                    if(labelFlag)
                     {
                         addToTable(SymbolList, label, "data", DC);
-                        /*
-                        identify data type and length (how?)
-                        DC+=(data length)
-                        */
                     }
+                    if(datalen(line, firstWord))
+                        DC+=datalen(line, firstWord);
+                    else
+                        errorLog("invalid data");
                 }
-                else if(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0 /*openWord(line, ".extern ", 8) || openWord(line, ".entry ", 7)*/)
+                else if(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0)
                 {
                     if(firstWord, ".extern")==0)
                     {
@@ -61,13 +63,9 @@ void first(FILE *file)
             }
             else /*it is a command line*/
             {
-                if(flags[0])
+                if(labelFlag)
                 {
                     addToTable(SymbolList, label, "code", IC);
-                    /*
-                    enter to symbols tabel as code
-                    symbol value is IC
-                */ 
                 }
                 if (isValidCommand(firstWord))
                 {
@@ -105,8 +103,82 @@ int isItDir(char *line)
     return 0;
 }
 
-int isThereLable(char *line)
+int isItLable(char *word)
 {
+    if(word[strlen(word)-1]==':')
+    {
+        word[strlen(word)-1]='\0';
+        if(strlen(word)>=MAXWORD)
+            errorLog("invalid label name, too long");
+        else if(validLabel(word))
+        {
+            return 1;
+        }
+        else
+        {
+            errorLog("invalid label name");
+        }
+    }
+    return 0;
+}
 
+int validLabel(char *word)
+{
+    int i=0;
+    if(isValidCommand(word))
+        return 0;
+    if(strlen(word)==2 && word[0]=='r' && word[1]>='0' && word[1]<='7')
+        return 0;
+    if((word[i]<'a' || word[i]>'z') && (word[i]<<'A' || word[i]>'Z'))
+        return 0;
+    for( ; word[i]!='/0' ; i++)
+    {
+        if((word[i]<'a' || word[i]>'z') && (word[i]<<'A' || word[i]>'Z') && (word[i]<'0' || word[i]>'9'))
+            return 0;
+    }
+    return 1;
+}
+
+int datalen(char *line, char *type)
+{
+    int i, j=0;
+    if(strcmp(type, ".string")==0)
+    {
+        for(i=2; line[i]!='\0' && line[i]!='\"' ; i++)
+        ;
+        if(line[0]==' ' && line[1]=='\"' && line[i]=='\"' && line[i+1]=='\0')
+            return (i-3);/*starts with a space and appostrophes, and ends with appostrophes, total 3 spare cahracters*/
+        else
+            return 0;
+    }
+    if(strcmp(type, ".data")==0)
+    {
+
+        for(i=1, j=1; line[i]!='\0' ; i++)
+        {
+            if(line[i]>='0' || line[i]<='9' || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
+            {
+                if((line[i]=='+' || line[i]=='-')&& (line[i+1]>'9' || line[i+1]<'0'))
+                {
+                    errorLog("invalid data");
+                    break;
+                }
+                else if(line[i]==',' && (line[i-1]>'9' || line[i-1]<'0' || line[i+1]=='\0'))
+                {
+                    errorLog("invalid data");
+                    break;
+                }
+                else if(line[i]==',')
+                    j++;
+            }
+            else
+            {
+                errorLog("invalid data");
+                break;
+            }
+        }
+        return j;
+
+    }
     return 0;
 }
