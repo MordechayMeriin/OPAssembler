@@ -1,5 +1,5 @@
 
-void errorLog(char *error);
+void errorLog(int, char *);
 
 void printErrors();
 

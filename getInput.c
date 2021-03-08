@@ -147,13 +147,13 @@ void deleteBlanks(char *line) /**/
 		if(line[j]!=' ' && line[j]!='\t')
 		{
 			tmp[i++]=line[j];
-			if(tmp[j]]==',')
+			if(tmp[j]==',')
 				tmp[i++]=' ';
 		}
 		else if(i==0 || line[j+1]==',' || tmp[i-1]==' ')
 		{
 			if(tmp[i-2]==',' && line[j+1]==',')
-				errorLog("Syntax error: two commas in a row")
+				errorLog(0/*add line number!!!*/, "Syntax error: two commas in a row");
 		}
 		else
 		{

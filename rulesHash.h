@@ -5,6 +5,7 @@
 #define RULESNUM 16
 #define LETTERSNUM 31
 
+
 unsigned int hash(char *s);
 
 Rule *getRule(char *s);
@@ -13,4 +14,4 @@ Rule *setRule(Rule rule);
 
 void createRulesTable();
 
-int isValidCommand(char *command)
+int isValidCommand(char *command);

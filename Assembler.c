@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include "header.h"
+#include "firstRun.h"
 
 /*extern int currentLine;*/
-int  IC, DC, L ,ICF,DCF; /*global vars*/
+int  IC = 100, DC = 0, L ,ICF,DCF; /*global vars*/
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
    int i;
    if (argc > 1)
    {
@@ -23,7 +24,8 @@ int main(int argc, char *argv[]) {
          }
          free(line);
          free(inputFile);
-      }   
+      }
+      return 0;   
    }
    else
    {

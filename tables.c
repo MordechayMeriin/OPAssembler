@@ -1,37 +1,6 @@
-struct word /*12 digit machine code line*/
-{
-    int opcode: 4;
-    int funct: 4;
-    int inVal: 2;
-    int outval: 2;
-};
-
-struct objects /*output table*/
-{
-    int address;
-    int line: 12;
-    char ARE;
-};
-
-struct label /*entries and externals tables*/
-{
-    char name[10];
-    int address;
-};
-
-/*struct symbols
-{
-    char symbol[10];
-    int value;
-    char attributes[4]; /*code/entry/data/external*
-};*/
-typedef struct symbols{
-    Int12 address;
-    char *name;
-    char *attributes;
-    Symbols *next;
-    int value;
-} Symbols;
+#include "tables.h"
+#include <stdlib.h>
+#include <string.h>
 
 Symbols *Slistalloc()
 {
@@ -44,7 +13,7 @@ Symbols *Slistalloc()
     return p;
 }
 
-void addToTable(struct symblols *newS, char *name, char *attributes, int val)
+void addToTable(struct symbols *newS, char *name, char *attributes, int val)
 {
     if(newS == NULL)
     {  
@@ -55,14 +24,14 @@ void addToTable(struct symblols *newS, char *name, char *attributes, int val)
     }
     else if (strcmp(newS->name, *name)==0)
     {
-        errorLog("two symbols with the same name");
+        errorLog(0/*need to add line number!!!*/,"two symbols with the same name");
     }
     else if(newS->next == NULL)
     {  
         newS->next = Slistalloc();
-        strcpy(newS->next.name ,*name);
-        strcpy(newS->next.attributes ,*attributes);
-        newS->next.value=val;       
+        strcpy(newS->next->name ,*name);
+        strcpy(newS->next->attributes ,*attributes);
+        newS->next->value=val;       
     }
     else
     {
@@ -71,7 +40,7 @@ void addToTable(struct symblols *newS, char *name, char *attributes, int val)
         
 }
 
-void setVal(struct symblols *s, int val)
+void setVal(struct symbols *s, int val)
 {
     if(strstr(s->attributes, "data"))
         s->value+=val;
@@ -79,13 +48,13 @@ void setVal(struct symblols *s, int val)
         setVal(s->next, val);
 }
 
-void setAddress(struct symblols *s, char *name, Int12 address) /*for the second run*/
+void setAddress(struct symbols *s, char *name, Int12 address) /*for the second run*/
 {
-    if (strcmp(s->next.name, *name)==0)
+    if (strcmp(s->next->name, *name)==0)
     {
         s->address=address;
     }
-    else if(S->next != NULL)
+    else if(s->next != NULL)
         setAddress(s->next, name, address);
     else
     {

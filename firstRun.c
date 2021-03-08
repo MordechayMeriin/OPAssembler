@@ -4,8 +4,9 @@
 
 void first(FILE *file)
 {
-    extern int IC=100, DC=0, ICF, DCF, L;
-    int labelFlag=0;
+    extern int IC, DC, ICF, DCF, L;
+    short int labelFlag=0;
+    int lineNumber = 0;
     char label[MAXWORD];
     char *firstWord;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
@@ -45,7 +46,7 @@ void first(FILE *file)
                     if(datalen(line, firstWord))
                         DC+=datalen(line, firstWord);
                     else
-                        errorLog("invalid data");
+                        errorLog(lineNumber, "Data is too long.");
                 }
                 else if(strcmp(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0)
                 {
@@ -56,7 +57,7 @@ void first(FILE *file)
                 }
                 else
                 {
-                    errorLog("invalid direction");
+                    errorLog(lineNumber, strcat("Invalid direction: ", firstWord));
                 }
             }
             else /*it is a command line*/
@@ -67,11 +68,11 @@ void first(FILE *file)
                 }
                 if (isValidCommand(firstWord))
                 {
-                    /* code */
+                    Rule *rule = getRule(firstWord);
                 }
                 else
                 {
-                    /* error */
+                    errorLog(lineNumber, strcat("Unknown command ", firstWord));
                 }
                 
                 
@@ -79,7 +80,7 @@ void first(FILE *file)
             /*line=readLine(file);
             deleteBlanks(line);*/
         }
-
+        lineNumber++;
     }
     if(errorsLog!=NULL)
     {
@@ -114,14 +115,14 @@ int isItLable(char *word)
     {
         word[strlen(word)-1]='\0';
         if(strlen(word)>=MAXWORD)
-            errorLog("invalid label name, too long");
+            errorLog(0/*add line number!!!*/, "invalid label name, too long");
         else if(validLabel(word))
         {
             return 1;
         }
         else
         {
-            errorLog("invalid label name");
+            errorLog(0/*add line number!!!*/, "invalid label name");
         }
     }
     return 0;
@@ -189,3 +190,5 @@ int datalen(char *line, char *type)
     }
     return 0;
 }
+
+/*(char *)[2] */

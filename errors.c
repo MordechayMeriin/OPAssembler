@@ -4,17 +4,19 @@
 #include "common.h"
 
 
-void errorLog(char *error)
+void errorLog(int line, char *error)
 {
-    char *c;
+    char *c, *errorMessage = "";
+
+    sprintf(errorMessage, "Error at line %d: %s.", line, error);
 
     if (errorsLog == NULL)
     {
-        errorsLog = (char *)malloc(sizeof(*error) + sizeof(char));       
+        errorsLog = (char *)malloc(sizeof(*errorMessage) + sizeof(char));       
     }
     else
     {
-        errorsLog = (char *)realloc(errorsLog, (sizeof(*error) + sizeof(*errorsLog) + sizeof(char)));     
+        errorsLog = (char *)realloc(errorsLog, (sizeof(*errorMessage) + sizeof(*errorsLog) + sizeof(char)));     
     }
     if (errorsLog == NULL)
     {
@@ -24,9 +26,9 @@ void errorLog(char *error)
     for (c = errorsLog; *c != '\0'; c++)
         ;
     
-    for (; *error != '\0'; error++, c++)
+    for (; *errorMessage != '\0'; errorMessage++, c++)
     {
-        *c = *error;
+        *c = *errorMessage;
     }
     *c = '\n';
     c++;

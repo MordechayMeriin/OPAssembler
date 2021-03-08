@@ -1,3 +1,6 @@
+#ifndef DATAMODEL_INCLUDED
+#define DATAMODEL_INCLUDED
+
 #define WORD_SIZE 12
 #define OPCODE_SIZE 4
 #define FUNCT_SIZE 4
@@ -31,7 +34,6 @@ typedef struct addressingMethod
     unsigned int m3: 1;
 }AddressingMethod;
 
-
 typedef struct rule
 {
     unsigned int opcode: OPCODE_SIZE;
@@ -42,3 +44,5 @@ typedef struct rule
 } Rule;
 
 Word *walloc();
+
+#endif
