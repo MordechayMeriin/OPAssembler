@@ -109,20 +109,21 @@ int isItDir(char *line)
     return 0;
 }
 
-int isItLable(char *word)
+int isItLable(int lineNumber, char *word)
 {
     if(word[strlen(word)-1]==':')
     {
         word[strlen(word)-1]='\0';
         if(strlen(word)>=MAXWORD)
-            errorLog(0/*add line number!!!*/, "invalid label name, too long");
+            errorLog(lineNumber,  "invalid label name, too long");
         else if(validLabel(word))
         {
             return 1;
         }
         else
         {
-            errorLog(0/*add line number!!!*/, "invalid label name");
+            errorLog(lineNumber,strcat(word, " is an invalid label name");
+            return 1; /*maybe 0?*/
         }
     }
     return 0;
