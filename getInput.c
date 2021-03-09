@@ -3,7 +3,7 @@
 #include "errors.h"
 #include <string.h>
 
-int currentLine = 0;
+/*int currentLine = 0;*/
 
 /*char *getLine(FILE *f1)
 {
@@ -59,7 +59,7 @@ int currentLine = 0;
 		return "";
 	}	
 }*/
-
+/*
 char *readLine(FILE *file)
 {
 	int i,c;
@@ -104,7 +104,7 @@ char *readLine(FILE *file)
 	*index = '\0';
 	currentLine++;
 	return line;
-}
+}*/
 
 /*char skipBlanks(FILE *f1, int *skipped)
 {
@@ -138,7 +138,7 @@ FILE *openFile(char *fileName)
 	return pf;
 }
 
-void deleteBlanks(char *line) /**/
+void deleteBlanks(int lineNumber, char *line) /**/
 {
 	char tmp[MAXLINE];
 	int i=0, j;
@@ -153,7 +153,7 @@ void deleteBlanks(char *line) /**/
 		else if(i==0 || line[j+1]==',' || tmp[i-1]==' ')
 		{
 			if(tmp[i-2]==',' && line[j+1]==',')
-				errorLog(0/*add line number!!!*/, "Syntax error: two commas in a row");
+				errorLog(lineNumber, "Syntax error: two commas in a row");
 		}
 		else
 		{

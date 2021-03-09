@@ -25,7 +25,7 @@ void first(FILE *file)
 
     while(fgets(line, MAXLINE, file) != NULL)
     {
-        deleteBlanks(line);
+        deleteBlanks(lineNumber, line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
