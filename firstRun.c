@@ -7,7 +7,7 @@ void first(FILE *file)
     extern int IC, DC, ICF, DCF;
     short int labelFlag=0;
     int L, lineNumber = 1;
-    char label[MAXWORD];
+    char label[MAXWORD], EXlabel[MAXWORD];
     char *firstWord;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     List *codeList = listalloc();
@@ -48,13 +48,24 @@ void first(FILE *file)
                     if(datalen(line, firstWord))
                         DC+=datalen(line, firstWord);
                     else
-                        errorLog(lineNumber, "invalid data");
+                        errorLog(lineNumber, "Invalid data");
                 }
                 else if(strcmp(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0)
                 {
                     if(strcmp(firstWord, ".extern")==0)
                     {
-                        addToTable(SymbolList, label, "extern", 0);
+                        getWord(line, EXlabel);
+                        if (validLabel(EXlabel))
+                        {
+                            if (*line=='\0')
+                            {
+                                addToTable(SymbolList, EXlabel, "external", 0, lineNumber);
+                            }
+                            else
+                            {
+                                errorLog(lineNumber, "extern direction contains more than one operand")
+                            }
+                        }
                     }
                 }
                 else
@@ -130,7 +141,7 @@ int isItLable(int lineNumber, char *word)
     {
         word[strlen(word)-1]='\0';
         if(strlen(word)>=MAXWORD)
-            errorLog(lineNumber,  "invalid label name, too long");
+            errorLog(lineNumber, "invalid label name, too long");
         else if(validLabel(word))
         {
             return 1;
@@ -216,7 +227,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
                 {
                     line = getWord(line, operands[1]);  
                 }
-                else 
+                else
                 {
                     errorLog(lineNumber, "2 operands without ',' seperate.");
                     operands[1] = tmp;                  

@@ -32,7 +32,7 @@ typedef struct symbols{
 
 Symbols *Slistalloc();
 
-void addToTable(struct symbols *newS, char *name, char *attributes, int val);
+void addToTable(struct symbols *newS, char *name, char *attributes, int val, int lineNumber);
 
 void setVal(struct symbols *s, int val);
 
