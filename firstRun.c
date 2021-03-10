@@ -6,7 +6,7 @@ void first(FILE *file)
 {
     extern int IC, DC, ICF, DCF;
     short int labelFlag=0;
-    int L, lineNumber = 0;
+    int L, lineNumber = 1;
     char label[MAXWORD];
     char *firstWord;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
