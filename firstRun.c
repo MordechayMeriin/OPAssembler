@@ -77,7 +77,7 @@ void first(FILE *file)
             {
                 if(labelFlag)
                 {
-                    addToTable(SymbolList, label, "code", IC);
+                    addToTable(SymbolList, label, "code", IC, lineNumber);
                 }
                 if (isValidCommand(firstWord))
                 {
@@ -92,8 +92,11 @@ void first(FILE *file)
                         {
                             L++;
                         }
-                        
                     }
+                    
+                    /*binary command code*/
+                    
+                    IC+=L;
                     
                 }
                 else
