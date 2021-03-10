@@ -48,7 +48,7 @@ void first(FILE *file)
                     if(datalen(line, firstWord))
                         DC+=datalen(line, firstWord);
                     else
-                        errorLog(lineNumber, "Data is too long.");
+                        errorLog(lineNumber, "invalid data");
                 }
                 else if(strcmp(firstWord, ".extern")==0 ||  strcmp(firstWord, ".entry")==0)
                 {
@@ -168,43 +168,29 @@ int datalen(char *line, char *type)
     {
         if(strlen(line)<=2)
             return 0;
-        for(i=2; line[i]!='\0' && line[i]!='\"' ; i++)
+        for(i=1; line[i]!='\0' && line[i]!='\"' ; i++)
         ;
-        if(line[0]==' ' && line[1]=='\"' && line[i]=='\"' && line[i+1]=='\0')
-            return (i-3);/*starts with a space and appostrophes, and ends with appostrophes, total 3 spare cahracters*/
-        else
-        {
-            return 0;
-        }
+        if(line[0]=='\"' && line[i]=='\"' && line[i+1]=='\0')
+            return (i-2);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters*/
     }
     if(strcmp(type, ".data")==0)
     {
-        if(strlen(line)<=1)
-            return 0;
-        for(i=1, j=1; line[i]!='\0' ; i++)
+        for(i=1; line[i]!='\0' ; i++)
         {
             if(line[i]>='0' || line[i]<='9' || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
             {
-                if((line[i]=='+' || line[i]=='-')&& (line[i+1]>'9' || line[i+1]<'0'))
-                {
-                    return 0;
-                }
-                else if(line[i]==',' && (line[i-1]>'9' || line[i-1]<'0' || line[i+1]=='\0'))
-                {
-                    return 0;
-                }
-                else if(line[i]==',')
+                if((line[i]=='+' || line[i]=='-') && (line[i+1]>'9' || line[i+1]<'0'))
+                ;
+                else if(line[i]==',' && (/*line[i-1]>'9' || line[i-1]<'0' ||*/ line[i+1]=='\0'))
+                ;
+                else if(line[i]==',' && j==0)
+                ;
+                else if(line[i]==',' || j==0)
                     j++;
             }
-            else
-            {
-                return 0;
-            }
         }
-        return j;
-
     }
-    return 0;
+    return j;
 }
 
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
