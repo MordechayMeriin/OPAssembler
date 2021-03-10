@@ -4,7 +4,7 @@
 
 void first(FILE *file)
 {
-    extern int IC, DC, ICF, DCF, L;
+    extern int IC, DC, ICF, DCF;
     short int labelFlag=0;
     int lineNumber = 0;
     char label[MAXWORD];
@@ -69,6 +69,19 @@ void first(FILE *file)
                 if (isValidCommand(firstWord))
                 {
                     Rule *rule = getRule(firstWord);
+                    char **operands = getOperands(line, lineNumber);
+                    int L = 1;
+                    if (operands[0] != NULL)
+                    {
+                        L++;
+
+                        if (operands[1] != NULL)
+                        {
+                            L++;
+                        }
+                        
+                    }
+                    
                 }
                 else
                 {
@@ -192,4 +205,68 @@ int datalen(char *line, char *type)
     return 0;
 }
 
-/*(char *)[2] */
+char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
+{
+    char **operands = (char **)calloc(sizeof(char), MAXWORD * 2);
+    char *thirdOperand;
+    line = getWord(line, operands[0]);
+    
+    if (operands[0] != NULL)
+    {
+        if (operands[0] == ',')
+        {
+            errorLog(lineNumber, "unnecessary ',' character.")
+        }
+        
+        if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
+        {
+            char *tmp;
+            line = getWord(line, tmp);
+            if (tmp != NULL)
+            {
+                if (*tmp == ',') 
+                {
+                    line = getWord(line, operands[1]);  
+                }
+                else 
+                {
+                    errorLog(lineNumber, "2 operands without ',' seperate.");
+                    operands[1] = tmp;                  
+                }  
+            }                       
+        }
+        else /*if first operand ends with a comma*/
+        {
+            line = getWord(line, operands[1]); 
+        }
+        if (operands[1] != NULL)
+        {
+            if (operands[1] == ',')
+            {
+                errorLog(lineNumber, "unnecessary ',' character.")
+            }
+            
+            line = getWord(line, thirdOperand); 
+            if (thirdOperand != NULL)
+            {
+                errorLog(lineNumber, "you can't have more then 2 operands.");
+            }
+        }        
+    }
+    
+    return operands;
+}
+
+int trimComma(char *word)/*delete a comma at the end of an operand, and return an indication if there was a comma.*/
+{
+    int isComma;
+    while (*word != '\0')
+    {
+        word++;
+    }
+    isComma =  (--word == ',');
+
+    *word = '\0';
+
+    return isComma;
+}
