@@ -6,13 +6,15 @@ void first(FILE *file)
 {
     extern int IC, DC, ICF, DCF;
     short int labelFlag=0;
-    int lineNumber = 0;
+    int L, lineNumber = 0;
     char label[MAXWORD];
     char *firstWord;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     List *codeList = listalloc();
     List *dataList = listalloc();
     Symbols *SymbolList = Slistalloc();
+    Rule *rule;
+    char **operands;
 
     if (line == NULL)
     {
@@ -68,9 +70,9 @@ void first(FILE *file)
                 }
                 if (isValidCommand(firstWord))
                 {
-                    Rule *rule = getRule(firstWord);
-                    char **operands = getOperands(line, lineNumber);
-                    int L = 1;
+                    rule = getRule(firstWord);
+                    operands = getOperands(line, lineNumber);
+                    L = 1;
                     if (operands[0] != NULL)
                     {
                         L++;
@@ -85,7 +87,7 @@ void first(FILE *file)
                 }
                 else
                 {
-                    errorLog(lineNumber, strcat("Unknown command ", firstWord));
+                    errorLog(lineNumber, strcat("Unknown command: ", firstWord));
                 }
                 
                 
@@ -210,6 +212,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
     char **operands = (char **)calloc(sizeof(char), MAXWORD * 2);
     char *thirdOperand;
     line = getWord(line, operands[0]);
+    char *tmp;
     
     if (operands[0] != NULL)
     {
@@ -220,7 +223,6 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         
         if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
         {
-            char *tmp;
             line = getWord(line, tmp);
             if (tmp != NULL)
             {
