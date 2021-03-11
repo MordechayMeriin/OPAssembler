@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include "firstRun.h"
 
 void first(FILE *file)
@@ -94,11 +95,31 @@ void first(FILE *file)
                     operation->opcode = rule->opcode;
                     operation->funct = rule->funct;
 
-
                     if (operands[0] != NULL)
                     {
                         L++;
-                        
+                        if (*operands[0] == '#')
+                        {
+                            if (!isStringNumber(++(operands[0])))
+                            {
+                                errorLog(lineNumber, strcat(operands[0] - 1, " - invalid operand. must be a number."));
+                            }
+                            
+                            operation->inVal = atoi(operands[0]);
+                        }
+                        else if (*operands[0] == '%')
+                        {
+                            /* code */
+                        }
+                        else if (isRegister(operands[0]))
+                        {
+                            operation->inVal = intToRegister(*(++(operands[0])))->value;
+                        }
+                        else /*direct addressing*/
+                        {
+                            /* code */
+                        }
+                                               
                         if (operands[1] != NULL)
                         {
                             L++;
@@ -283,4 +304,18 @@ int trimComma(char *word)/*delete a comma at the end of an operand, and return a
     *word = '\0';
 
     return isComma;
+}
+
+int isRegister(char *operand)
+{
+    if (*operand == 'r')
+    {
+        operand++;
+        if(isStringNumber(operand))
+        {
+            int registerNum = atoi(operand);
+            return (registerNum >= 0 && registerNum <= 7 && *(++operand) == '\0');            
+        }
+    }
+    return 0;   
 }

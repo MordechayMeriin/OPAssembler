@@ -3,6 +3,7 @@
 #include "getInput.h"
 #include "tables.h"
 #include "errors.h"
+#include "binary.h"
 
 
 void first(FILE *file);
@@ -13,3 +14,4 @@ int datalen(char *line, char *type);
 int validLabel(char *word);
 char **getOperands(char *line, int lineNumber);/*Return an array of strings, representing the operands. Comma checks included*/
 int trimComma(char *word);/*delete a comma at the end of an operand, and return an indication if there was a comma.*/
+int isRegister(char *operand);
