@@ -72,6 +72,7 @@ void first(FILE *file)
                             }
                         }
                     }
+                    /*else- save line as labelName in an array of entries. idea continues in secondRun...*/
                 }
                 else
                 {
