@@ -27,7 +27,7 @@ int isStringNumber(char *str)
         {
             return 0;
         }
-        
+        str++;
     }
     return 1;
 }
