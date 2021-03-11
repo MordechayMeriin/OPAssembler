@@ -187,6 +187,8 @@ char *getWord(char *line, char *word)
 	}
 	*c = '\0';
 	word = str;
+	if(*line==' ')
+		line++;
 	return line;
 }
 

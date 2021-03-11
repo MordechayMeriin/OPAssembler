@@ -9,17 +9,15 @@ void mallocError(char *dataType)
     exit(2);
 }
 
-int openWord(char *line, char *word, int wordLength)
+/*int openWord(char *line, char *word, int wordLength)
 {
     char tmp[MAXWORD];
     int i;
 
-    /*tmp = calloc(sizeof(char), wordLength + 1);*/
-
-    for(i=0 ; i<wordLength ; i++)
+     for(i=0 ; i<wordLength ; i++)
         tmp[i]=line[i];
     tmp[i]='\0';
     if(strcmp(tmp,word)==0)
         return 1;
     return 0;
-}
+}*/
