@@ -197,11 +197,11 @@ int validLabel(char *word)
         return 0;
     if(strlen(word)==2 && word[0]=='r' && word[1]>='0' && word[1]<='7')
         return 0;
-    if((word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z'))
+    if(!isalpha(word[i])/*(word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z')*/)
         return 0;
     for( ; word[i]!='\0' ; i++)
     {
-        if((word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z') && (word[i]<'0' || word[i]>'9'))/*I think there is a function for that*/
+        if(!isalpha(word[i]) && !isdigit(word[i])/*(word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z') && (word[i]<'0' || word[i]>'9')*/)
             return 0;
     }
     return 1;
@@ -223,16 +223,18 @@ int datalen(char *line, char *type)
     {
         for(i=1; line[i]!='\0' ; i++)
         {
-            if(line[i]>='0' || line[i]<='9' || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
+            if(isdigit(line[i]) || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
             {
-                if((line[i]=='+' || line[i]=='-') && (line[i+1]>'9' || line[i+1]<'0'))
+                if((line[i]=='+' || line[i]=='-') && !isdigit(line[i+1]))
                 ;
-                else if(line[i]==',' && (/*line[i-1]>'9' || line[i-1]<'0' ||*/ line[i+1]=='\0'))
+                else if(line[i]==',' && line[i+1]=='\0')
                 ;
                 else if(line[i]==',' && j==0)
                 ;
                 else if(line[i]==',' || j==0)
                     j++;
+                if(j==0)
+                    break;
             }
         }
     }
