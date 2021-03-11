@@ -29,7 +29,7 @@ void first(FILE *file)
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
-            if(isItLable(firstWord))
+            if(isItLable(lineNumber, firstWord))
             {
                 labelFlag=1;
                 strcpy(label, firstWord);
@@ -71,10 +71,19 @@ void first(FILE *file)
                     Rule *rule = getRule(firstWord);
                     char **operands = getOperands(line, lineNumber);
                     int L = 1;
+                    OpWord *operation = (OpWord *)calloc(sizeof(OpWord), 1);
+                    if (operation == NULL)
+                    {
+                        mallocError("OpWord");
+                    }
+                    
+                    operation->opcode = rule->opcode;
+                    operation->funct = rule->funct;
+
                     if (operands[0] != NULL)
                     {
                         L++;
-
+                        
                         if (operands[1] != NULL)
                         {
                             L++;
@@ -135,7 +144,7 @@ int isItLable(int lineNumber, char *word)
         }
         else
         {
-            errorLog(lineNumber,strcat(word, " is an invalid label name");
+            errorLog(lineNumber,strcat(word, " is an invalid label name"));
             return 1; /*maybe 0?*/
         }
     }
@@ -213,9 +222,9 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
     
     if (operands[0] != NULL)
     {
-        if (operands[0] == ',')
+        if (*operands[0] == ',')
         {
-            errorLog(lineNumber, "unnecessary ',' character.")
+            errorLog(lineNumber, "unnecessary ',' character.");
         }
         
         if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
@@ -241,9 +250,9 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         }
         if (operands[1] != NULL)
         {
-            if (operands[1] == ',')
+            if (*operands[1] == ',')
             {
-                errorLog(lineNumber, "unnecessary ',' character.")
+                errorLog(lineNumber, "unnecessary ',' character.");
             }
             
             line = getWord(line, thirdOperand); 

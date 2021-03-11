@@ -28,10 +28,10 @@ typedef union
 
 typedef struct addressingMethod
 {
-    unsigned int m0: 1;
-    unsigned int m1: 1;
-    unsigned int m2: 1;
-    unsigned int m3: 1;
+    unsigned int immediate: 1;
+    unsigned int direct: 1;
+    unsigned int relative: 1;
+    unsigned int registerDirect: 1;
 }AddressingMethod;
 
 typedef struct rule
