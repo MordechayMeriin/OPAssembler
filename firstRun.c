@@ -310,12 +310,13 @@ int trimComma(char *word)/*delete a comma at the end of an operand, and return a
 
 int isRegister(char *operand)
 {
+    int registerNum;
     if (*operand == 'r')
     {
         operand++;
         if(isStringNumber(operand))
         {
-            int registerNum = atoi(operand);
+            registerNum = atoi(operand);
             return (registerNum >= 0 && registerNum <= 7 && *(++operand) == '\0');            
         }
     }
