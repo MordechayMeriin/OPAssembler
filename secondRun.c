@@ -10,9 +10,9 @@ void second(List *codeList, List *dataList, Symbols *SymbolList /*, char **label
     {
         /*if(isItDir)*/
         {
-            /*if(dir==entry)*/ /*for each labelName in etries array*/
+            /*if(dir==entry)*/ /*for each labelName*/
             {
-                /*labelName = NULL; /*the lable's name...*/
+                /*labelName = NULL; the lable's name...*/
                 for(tmp=SymbolList ; strcmp(tmp->name, labelName/*[i]*/)!=0 && tmp!=NULL ; tmp=tmp->next)
                 ;
                 if(strcmp(labelName/*[i]*/, tmp->name)==0)

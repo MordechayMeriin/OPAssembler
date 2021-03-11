@@ -67,7 +67,7 @@ void addToTable(struct symbols *newS, char *name, char *attributes, int val, int
         newS= Slistalloc();
         strcpy(newS->name ,name);
         strcpy(newS->attributes ,attributes);
-        newS->value=val;       
+        newS->value.value=val;       
     }
     else if (strcmp(newS->name, name)==0)
     {
@@ -81,7 +81,7 @@ void addToTable(struct symbols *newS, char *name, char *attributes, int val, int
         newS->next = Slistalloc();
         strcpy(newS->next->name ,name);
         strcpy(newS->next->attributes ,attributes);
-        newS->next->value=val;       
+        newS->next->value.value=val;       
     }
     else
     {
@@ -93,12 +93,12 @@ void addToTable(struct symbols *newS, char *name, char *attributes, int val, int
 void setVal(struct symbols *s, int val)
 {
     if(strstr(s->attributes, "data"))
-        s->value+=val;
+        s->value.value+=val;
     if(s->next != NULL)
         setVal(s->next, val);
 }
 
-void setAddress(struct symbols *s, char *name, Int12 address) /*for the second run*/
+/*void setAddress(struct symbols *s, char *name, Int12 address)
 {
     if (strcmp(s->next->name, name)==0)
     {
@@ -108,6 +108,6 @@ void setAddress(struct symbols *s, char *name, Int12 address) /*for the second r
         setAddress(s->next, name, address);
     else
     {
-        /*error*/
+        error
     }
-}
+}*/
