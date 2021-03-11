@@ -48,7 +48,10 @@ void first(FILE *file)
                         addToTable(SymbolList, label, "data", DC, lineNumber);
                     }
                     if(datalen(line, firstWord))
+                    {
                         DC+=datalen(line, firstWord);
+                        dataCoding(line, dataList);
+                    }
                     else
                         errorLog(lineNumber, "Invalid data");
                 }
@@ -239,6 +242,38 @@ int datalen(char *line, char *type)
         }
     }
     return j;
+}
+
+void dataCoding(char *line, struct lnode *dataList)
+{
+    int tmp, sign;
+    Word *TW = walloc();
+    if(*line=='\"')
+    {
+        line++;
+        for(; *line!='\"' ; line++)
+        {
+            TW->val12.value=(int)(*line);
+            addToList(dataList, TW);
+        }
+    }
+    else
+    {
+        for(; *line!='\0'; line++)
+        {
+            for(tmp=0, sign=1 ; *line!=','; line++)
+            {
+                if(*line=='-')
+                    sign=-1;
+                else if(*line!='+')
+                    tmp=tmp*10+(((int)(*line)-'0')*sign);
+            }
+            TW->val12.value=tmp;
+            addToList(dataList, TW);
+            if(*line==' ')
+                line++;
+        }
+    }
 }
 
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
