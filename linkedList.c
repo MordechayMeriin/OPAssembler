@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "linkedList.h"
 #include "common.h"
+#include "errors.h"
 
 List *listalloc()
 {
@@ -83,7 +85,7 @@ void addToTable(struct symbols *newS, char *name, char *attributes, int val, int
     }
     else
     {
-        addToTable(newS->next, name, attributes, val, , lineNumber);
+        addToTable(newS->next, name, attributes, val, lineNumber);
     }
         
 }

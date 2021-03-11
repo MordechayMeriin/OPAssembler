@@ -5,4 +5,4 @@ void printErrors();
 
 void freeLogMemory();
 
-static char *errorsLog;
+int areErrorsExist();

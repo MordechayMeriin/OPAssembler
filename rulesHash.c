@@ -80,7 +80,7 @@ void createRulesTable()
 
 int isValidCommand(char *command)
 {
-    if (getRule(*command) != NULL)
+    if (getRule(command) != NULL)
     {
         return 1;
     }

@@ -3,6 +3,7 @@
 #include "errors.h"
 #include "common.h"
 
+static char *errorsLog;
 
 void errorLog(int line, char *error)
 {
@@ -46,4 +47,9 @@ void printErrors()
 void freeLogMemory()
 {
     free(errorsLog);
+}
+
+int areErrorsExist()
+{
+    return (errorsLog == NULL);
 }

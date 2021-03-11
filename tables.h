@@ -18,7 +18,7 @@ struct label /*entries and externals tables*/
 {
     char symbol[10];
     int value;
-    char attributes[4]; /*code/entry/data/external*
+    char attributes[4]; code/entry/data/external
 };*/
 
 

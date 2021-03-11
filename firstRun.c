@@ -5,10 +5,11 @@
 void first(FILE *file)
 {
     extern int IC, DC, ICF, DCF;
+    extern void second(List *, List *, Symbols *);
     short int labelFlag=0;
     int L, lineNumber = 1;
     char label[MAXWORD], EXlabel[MAXWORD];
-    char *firstWord;
+    char *firstWord = NULL;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     List *codeList = listalloc();
     List *dataList = listalloc();
@@ -43,7 +44,7 @@ void first(FILE *file)
                 {
                     if(labelFlag)
                     {
-                        addToTable(SymbolList, label, "data", DC);
+                        addToTable(SymbolList, label, "data", DC, lineNumber);
                     }
                     if(datalen(line, firstWord))
                         DC+=datalen(line, firstWord);
@@ -63,7 +64,7 @@ void first(FILE *file)
                             }
                             else
                             {
-                                errorLog(lineNumber, "extern direction contains more than one operand")
+                                errorLog(lineNumber, "extern direction contains more than one operand");
                             }
                         }
                     }
@@ -121,7 +122,7 @@ void first(FILE *file)
         }
         lineNumber++;
     }
-    if(errorsLog!=NULL)
+    if(areErrorsExist())
     {
         printErrors();
     }
@@ -175,11 +176,11 @@ int validLabel(char *word)
         return 0;
     if(strlen(word)==2 && word[0]=='r' && word[1]>='0' && word[1]<='7')
         return 0;
-    if((word[i]<'a' || word[i]>'z') && (word[i]<<'A' || word[i]>'Z'))
+    if((word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z'))
         return 0;
-    for( ; word[i]!='/0' ; i++)
+    for( ; word[i]!='\0' ; i++)
     {
-        if((word[i]<'a' || word[i]>'z') && (word[i]<<'A' || word[i]>'Z') && (word[i]<'0' || word[i]>'9'))
+        if((word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z') && (word[i]<'0' || word[i]>'9'))/*I think there is a function for that*/
             return 0;
     }
     return 1;
@@ -220,9 +221,10 @@ int datalen(char *line, char *type)
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
 {
     char **operands = (char **)calloc(sizeof(char), MAXWORD * 2);
-    char *thirdOperand;
+    char *thirdOperand = NULL;
+    char *tmp = NULL;
     line = getWord(line, operands[0]);
-    char *tmp;
+    
     
     if (operands[0] != NULL)
     {
@@ -276,7 +278,7 @@ int trimComma(char *word)/*delete a comma at the end of an operand, and return a
     {
         word++;
     }
-    isComma =  (--word == ',');
+    isComma =  (*(--word) == ',');
 
     *word = '\0';
 

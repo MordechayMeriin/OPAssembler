@@ -12,7 +12,7 @@ void second(List *codeList, List *dataList, Symbols *SymbolList)
         {
             /*if(dir==entry)*/
             {
-                /*labelName = the lable's name...*/
+                labelName = NULL; /*the lable's name...*/
                 for(tmp=SymbolList ; strcmp(tmp->name, labelName)!=0 && tmp!=NULL ; tmp=tmp->next)
                 ;
                 if(strcmp(labelName, tmp->name)==0)
@@ -23,7 +23,7 @@ void second(List *codeList, List *dataList, Symbols *SymbolList)
             /*step 6, comlete binary coding*/
         }
     }
-    if(errorsLog!=NULL)
+    if(areErrorsExist())
     {
         printErrors();
     }
