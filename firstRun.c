@@ -107,18 +107,21 @@ void first(FILE *file)
                     if (operands[0] != NULL)
                     {
                         L++;
-                        addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);
-                                               
                         if (operands[1] != NULL)
                         {
                             L++;
+                            addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);
                             addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
+                        }
+                        else
+                        {
+                            addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
                         }
                     }
                     
-                    /*binary command code*/
-                    
                     IC+=L;
+
+                    /*add this to the table*/
                     
                 }
                 else
@@ -359,7 +362,7 @@ void addOperandToWord(OpWord *word, int value, int operandType)
 
 void addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber)
 {
-    if (*operand == '#')
+    if (*operand == '#')/*Immediate Addressing*/
     {
         if (getAddressingMethod(rule, operandType).immediate)
         {
@@ -375,15 +378,22 @@ void addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, i
             errorLog(lineNumber, strcat("immeidate addressing operand is not supported for the command: ", firstWord));
         }       
     }
-    else if (*operand == '%') /*relative Addressing*/
+    else if (*operand == '%') /*Relative Addressing*/
     {
         /* code */
     }
-    else if (isRegister(operand))
+    else if (isRegister(operand)) /*Register Addressing*/
     {
-        addOperandToWord(operation, intToRegister(atoi(*(++operand)))->value, operandType);
+        if (getAddressingMethod(rule, operandType))
+        {
+            addOperandToWord(operation, intToRegister(atoi(*(++operand)))->value, operandType);
+        }
+        else
+        {
+            errorLog(lineNumber, strcat("register addressing operand is not supported for the command: ", firstWord));
+        }        
     }
-    else /*direct addressing*/
+    else /*Direct addressing*/
     {
         /* code */
     }
