@@ -140,7 +140,7 @@ void first(FILE *file)
                 {
                     errorLog(lineNumber, strcat("Unknown command: ", firstWord));
                 }
-                
+                 
                 
             }
             /*line=readLine(file);
