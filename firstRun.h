@@ -18,3 +18,4 @@ int trimComma(char *word);/*delete a comma at the end of an operand, and return 
 int isRegister(char *operand);
 void addOperandToWord(OpWord *word, int value, int operandType);
 void addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber);
+void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList);

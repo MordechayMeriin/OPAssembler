@@ -6,8 +6,9 @@
 
 void first(FILE *file)
 {
+    FILE *Sfile = file;
     extern int IC, DC, ICF, DCF;
-    extern void second(List *, List *, Symbols *);
+    extern void second(FILE *,List *, List *, Symbols *);
     short int labelFlag=0;
     int L, lineNumber = 1;
     char label[MAXWORD], EXlabel[MAXWORD];
@@ -141,7 +142,7 @@ void first(FILE *file)
         ICF=IC;
         DCF=DC;
         setVal(SymbolList, ICF);
-        second(codeList, dataList, SymbolList);
+        second(Sfile, codeList, dataList, SymbolList);
     }
 }
 
