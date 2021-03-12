@@ -15,3 +15,5 @@ Rule *setRule(Rule rule);
 void createRulesTable();
 
 int isValidCommand(char *command);
+
+int getAddressingMethod(Rule *rule, int operandType)

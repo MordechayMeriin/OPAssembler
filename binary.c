@@ -18,7 +18,7 @@ Int12 *wordToInt12(OpWord *pword)
         mallocError("Int12");
     }
 
-    outval = pword->outval;
+    outval = pword->outVal;
     inval = pword->inVal << OUTVAL_SIZE;
     funct = pword->funct << (OUTVAL_SIZE + INVAL_SIZE);
     opcode = pword->opcode << (OUTVAL_SIZE + INVAL_SIZE + FUNCT_SIZE);

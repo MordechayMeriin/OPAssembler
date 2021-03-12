@@ -6,6 +6,8 @@
 #define FUNCT_SIZE 4
 #define INVAL_SIZE 2
 #define OUTVAL_SIZE 2
+#define SOURCE_OPERAND 0
+#define TARGET_OPERAND 1
 
 
 typedef struct opword /*12 digit machine code line*/
@@ -13,7 +15,7 @@ typedef struct opword /*12 digit machine code line*/
     unsigned int opcode: OPCODE_SIZE;
     unsigned int funct: FUNCT_SIZE;
     unsigned int inVal: INVAL_SIZE;
-    unsigned int outval: OUTVAL_SIZE;
+    unsigned int outVal: OUTVAL_SIZE;
 } OpWord;
 
 typedef struct int12{

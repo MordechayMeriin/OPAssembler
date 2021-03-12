@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include "firstRun.h"
 
+
 void first(FILE *file)
 {
     extern int IC, DC, ICF, DCF;
@@ -17,6 +18,7 @@ void first(FILE *file)
     Symbols *SymbolList = Slistalloc();
     Rule *rule;
     char **operands;
+    OpWord *operation;
 
     if (line == NULL)
     {
@@ -29,6 +31,7 @@ void first(FILE *file)
 
     while(fgets(line, MAXLINE, file) != NULL)
     {
+        
         deleteBlanks(lineNumber, line);
         if(!isEmpty(line))
         {
@@ -87,14 +90,15 @@ void first(FILE *file)
                 }
                 if (isValidCommand(firstWord))
                 {
-                    Rule *rule = getRule(firstWord);
-                    char **operands = getOperands(line, lineNumber);
-                    int L = 1;
-                    OpWord *operation = (OpWord *)calloc(sizeof(OpWord), 1);
+                    operation = (OpWord *)calloc(sizeof(OpWord), 1);
                     if (operation == NULL)
                     {
                         mallocError("OpWord");
                     }
+
+                    L = 1;
+                    rule = getRule(firstWord);
+                    operands = getOperands(line, lineNumber);
                     
                     operation->opcode = rule->opcode;
                     operation->funct = rule->funct;
@@ -102,31 +106,12 @@ void first(FILE *file)
                     if (operands[0] != NULL)
                     {
                         L++;
-                        if (*operands[0] == '#')
-                        {
-                            if (!isStringNumber(++(operands[0])))
-                            {
-                                errorLog(lineNumber, strcat(operands[0] - 1, " - invalid operand. must be a number."));
-                            }
-                            
-                            operation->inVal = atoi(operands[0]);
-                        }
-                        else if (*operands[0] == '%')
-                        {
-                            /* code */
-                        }
-                        else if (isRegister(operands[0]))
-                        {
-                            operation->inVal = intToRegister(*(++(operands[0])))->value;
-                        }
-                        else /*direct addressing*/
-                        {
-                            /* code */
-                        }
+                        addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);
                                                
                         if (operands[1] != NULL)
                         {
                             L++;
+                            addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
                         }
                     }
                     
@@ -357,4 +342,48 @@ int isRegister(char *operand)
         }
     }
     return 0;   
+}
+
+void addOperandToWord(OpWord *word, int value, int operandType)
+{
+    if (operandType == SOURCE_OPERAND)
+    {
+        word->inVal = value;
+    }
+    else
+    {
+       word->outVal = value;
+    }    
+}
+
+void addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber)
+{
+    if (*operand == '#')
+    {
+        if (getAddressingMethod(rule, operandType).immediate)
+        {
+            if (!isStringNumber(++operand))
+            {
+                errorLog(lineNumber, strcat(operand - 1, " - invalid operand. must be a number."));
+            }
+
+            addOperandToWord(operation, atoi(operand), operandType);
+        }
+        else
+        {
+            errorLog(lineNumber, strcat("immeidate addressing operand is not supported for the command: ", firstWord));
+        }       
+    }
+    else if (*operand == '%') /*relative Addressing*/
+    {
+        /* code */
+    }
+    else if (isRegister(operand))
+    {
+        addOperandToWord(operation, intToRegister(atoi(*(++operand)))->value, operandType);
+    }
+    else /*direct addressing*/
+    {
+        /* code */
+    }
 }
