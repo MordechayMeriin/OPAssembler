@@ -102,11 +102,11 @@ void addOperand2(OpWord *operation, Symbols SymbolList, Rule *rule, char *operan
             {
                 if(rel) /*Relative Addressing*/
                 {
-                    ;
+                    addOperandToWord(operation, /*value*/, operandType);;
                 }
                 else /*Direct addressing*/
                 {
-                    ;
+                    addOperandToWord(operation, /*value*/, operandType);;
                 }
             }
             else
