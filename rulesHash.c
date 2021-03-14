@@ -88,11 +88,11 @@ int isValidCommand(char *command)
     
 }
 
-int getAddressingMethod(Rule *rule, int operandType)
+AddressingMethod *getAddressingMethod(Rule *rule, int operandType)
 {
     if (operandType == SOURCE_OPERAND)
     {
-        return rule->inAd;
+        return &(rule->inAd);
     }
-    return rule->outAd;
+    return &(rule->outAd);
 }

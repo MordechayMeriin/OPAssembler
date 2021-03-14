@@ -166,13 +166,13 @@ void deleteBlanks(int lineNumber, char *line) /**/
 	strcpy(line, tmp);
 }
 
-char *getWord(char *line, char *word)
+char *getWord(char *line, char *word)/*this function doesn't work.*/
 {
 	char *str = (char *)calloc(sizeof(char), MAXWORD);
 	char *c = str;
-/*	while (isSpace(*line) && *line != '\0')
+	while (isSpace(*line) && *line != '\0')
 		line++;
-*/
+
 	while (!isSpace(*line) && *line != '\0')
 	{
 		*c = *line;

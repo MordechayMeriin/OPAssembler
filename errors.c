@@ -7,6 +7,7 @@ static char *errorsLog;
 
 void errorLog(int line, char *error)
 {
+    printf("inside errorLog\n");
     char *c, *errorMessage = "";
 
     sprintf(errorMessage, "Error at line %d: %s.", line, error);

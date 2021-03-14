@@ -1,3 +1,6 @@
+#ifndef FIRST_RUN_INCLUDED
+#define FIRST_RUN_INCLUDED
+
 #include "rulesHash.h"
 #include "linkedList.h"
 #include "getInput.h"
@@ -16,6 +19,9 @@ int validLabel(char *word);
 char **getOperands(char *line, int lineNumber);/*Return an array of strings, representing the operands. Comma checks included*/
 int trimComma(char *word);/*delete a comma at the end of an operand, and return an indication if there was a comma.*/
 int isRegister(char *operand);
-void addOperandToWord(OpWord *word, int value, int operandType);
-void addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber);
+void addOperandTypeToWord(OpWord *word, int value, int operandType);
+void addOperand(OpWord *operation, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber);
+void addRowToCodeList(List *list, int address ,Int12 value, char ARE);
 void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList);
+
+#endif

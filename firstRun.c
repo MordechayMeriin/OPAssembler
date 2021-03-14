@@ -20,6 +20,7 @@ void first(FILE *file)
     Rule *rule;
     char **operands;
     OpWord *operation;
+    Int12 *codedOp1 = NULL, *codedOp2 = NULL;
 
     if (line == NULL)
     {
@@ -27,24 +28,29 @@ void first(FILE *file)
     }
     /*line=readLine(file);
     deleteBlanks(line);*/
-
     createRulesTable();
-
     while(fgets(line, MAXLINE, file) != NULL)
     {
-        
+        printf("line %d:\n", lineNumber);
         deleteBlanks(lineNumber, line);
+        printf("1\n");
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
+            printf("2\n");
+            printf("word: %s\n", firstWord);
             if(isItLable(lineNumber, firstWord))
             {
                 labelFlag=1;
+                printf("2.1\n");
                 strcpy(label, firstWord);
+                printf("2.2\n");
                 line = getWord(line, firstWord);
+                printf("3\n");
             }
             /*else*/ if(isItDir(firstWord))
             {
+                printf("4\n");
                 if (strcmp(firstWord, ".data")==0 ||  strcmp(firstWord, ".string")==0)
                 {
                     if(labelFlag)
@@ -91,7 +97,7 @@ void first(FILE *file)
                 }
                 if (isValidCommand(firstWord))
                 {
-                    operation = (OpWord *)calloc(sizeof(OpWord), 1);
+                    operation = (OpWord *)calloc(sizeof(OpWord), 1);                    
                     if (operation == NULL)
                     {
                         mallocError("OpWord");
@@ -106,23 +112,30 @@ void first(FILE *file)
 
                     if (operands[0] != NULL)
                     {
-                        L++;
+                        L++; 
+                        codedOp1 = i12alloc();                       
                         if (operands[1] != NULL)
                         {
                             L++;
-                            addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);
-                            addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
+                            codedOp2 = i12alloc();
+                            addOperand(operation, rule, operands[0], codedOp1, SOURCE_OPERAND, lineNumber);
+                            addOperand(operation, rule, operands[1], codedOp2, TARGET_OPERAND, lineNumber);
                         }
                         else
                         {
-                            addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
+                            addOperand(operation, rule, operands[0], codedOp1, TARGET_OPERAND, lineNumber);
                         }
                     }
                     
-                    IC+=L;
-
-                    /*add this to the table*/
-                    
+                    addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                    if (operands[0] != NULL)
+                    {
+                        addRowToCodeList(codeList, IC++, *codedOp1, 'N');
+                        if (operands[1] != NULL)
+                        {
+                            addRowToCodeList(codeList, IC++, *codedOp2, 'N');
+                        }                        
+                    }                                        
                 }
                 else
                 {
@@ -165,9 +178,12 @@ int isItDir(char *line)
 
 int isItLable(int lineNumber, char *word)
 {
+    printf("inside isItLabel %s\n", word);
     if(word[strlen(word)-1]==':')
     {
+        printf("inside isItLabel 1\n");
         word[strlen(word)-1]='\0';
+        printf("inside isItLabel 2\n");
         if(strlen(word)>=MAXWORD)
             errorLog(lineNumber, "invalid label name, too long");
         else if(validLabel(word))
@@ -237,13 +253,13 @@ int datalen(char *line, char *type)
 void dataCoding(char *line, struct lnode *dataList)
 {
     int tmp, sign;
-    Word *TW = walloc();
-    if(*line=='\"')
+    Row *TW = ralloc();
+    if(*line=='\"')/*what does it mean?*/
     {
         line++;
         for(; *line!='\"' ; line++)
         {
-            TW->val12.value=(int)(*line);
+            TW->value=(int)(*line);/*you need to use atoi() to convert string to number.*/
             addToList(dataList, TW);
         }
     }
@@ -256,11 +272,11 @@ void dataCoding(char *line, struct lnode *dataList)
                 if(*line=='-')
                     sign=-1;
                 else if(*line!='+')
-                    tmp=tmp*10+(((int)(*line)-'0')*sign);
+                    tmp=tmp*10+(((int)(*line)-'0')*sign);/*atoi(). what did you do here?*/
             }
-            TW->val12.value=tmp;
+            TW->value=tmp;
             addToList(dataList, TW);
-            if(*line==' ')
+            if(*line==' ') /*why?*/
                 line++;
         }
     }
@@ -348,7 +364,7 @@ int isRegister(char *operand)
     return 0;   
 }
 
-void addOperandToWord(OpWord *word, int value, int operandType)
+void addOperandTypeToWord(OpWord *word, int value, int operandType)
 {
     if (operandType == SOURCE_OPERAND)
     {
@@ -360,41 +376,75 @@ void addOperandToWord(OpWord *word, int value, int operandType)
     }    
 }
 
-void addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber)
+void addOperand(OpWord *operation, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber)
 {
+    struct addressingMethod *method = getAddressingMethod(rule, operandType);
+
     if (*operand == '#')/*Immediate Addressing*/
     {
-        if (getAddressingMethod(rule, operandType).immediate)
+        
+        if (method->immediate)
         {
+            addOperandTypeToWord(operation, IMMEDIATE_ADDRESSING, operandType);
             if (!isStringNumber(++operand))
             {
                 errorLog(lineNumber, strcat(operand - 1, " - invalid operand. must be a number."));
             }
-
-            addOperandToWord(operation, atoi(operand), operandType);
+            else
+            {
+                codedOperand->value = atoi(operand);
+            }           
         }
         else
         {
-            errorLog(lineNumber, strcat("immeidate addressing operand is not supported for the command: ", firstWord));
+            errorLog(lineNumber, strcat("immeidate addressing operand is not supported for the command: ", rule->name));
         }       
     }
     else if (*operand == '%') /*Relative Addressing*/
     {
-        /* code */
-    }
-    else if (isRegister(operand)) /*Register Addressing*/
-    {
-        if (getAddressingMethod(rule, operandType))
+        if (method->relative)
         {
-            addOperandToWord(operation, intToRegister(atoi(*(++operand)))->value, operandType);
+            addOperandTypeToWord(operation, RELATIVE_ADDRESSING, operandType);
         }
         else
         {
-            errorLog(lineNumber, strcat("register addressing operand is not supported for the command: ", firstWord));
+            errorLog(lineNumber, strcat("relative addressing operand is not supported for the command: ", rule->name));
+        }
+        
+        
+    }
+    else if (isRegister(operand)) /*Register Addressing*/
+    {
+        if (method->registerDirect)
+        {
+            codedOperand = intToRegister(atoi(++operand));
+            addOperandTypeToWord(operation, REGISTER_DIRECT_ADDRESSING, operandType);
+        }
+        else
+        {
+            errorLog(lineNumber, strcat("register addressing operand is not supported for the command: ", rule->name));
         }        
     }
     else /*Direct addressing*/
     {
-        /* code */
+        if (method->direct)
+        {
+            addOperandTypeToWord(operation, REGISTER_DIRECT_ADDRESSING, operandType);
+        }
+        else
+        {
+            errorLog(lineNumber, strcat("direct addressing operand is not supported for the command: ", rule->name));
+        }       
     }
+}
+
+void addRowToCodeList(List *list, int address ,Int12 value, char ARE)
+{
+    Row *row = ralloc();
+
+    row->address = address;
+    row->value = value.value;
+    row->ARE = ARE;
+
+    addToList(list, row);
 }

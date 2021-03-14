@@ -1,3 +1,6 @@
+#ifndef GET_INPUT_INCLUDED
+#define GET_INPUT_INCLUDED
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -11,3 +14,5 @@ FILE *openFile(char *);
 void deleteBlanks(int lineNumber, char *);
 char *getWord(char *line, char *word);
 int isSpace(char);
+
+#endif

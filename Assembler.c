@@ -12,17 +12,9 @@ int main(int argc, char *argv[])
       for (i = 1; i < argc; i++)
       {
          FILE *inputFile;
-         char *line = calloc(sizeof(char), 81);
          inputFile = openFile(argv[i]);
-         /*here comes first-run, right? instead of the 'while' that comes next*/
+         first(inputFile);
 
-
-         while ((fgets(line, 81, inputFile)) != NULL)
-         {
-            printf("%s\n", line);
-            /*free(line);*/
-         }
-         free(line);
          free(inputFile);
       }
       return 0;   

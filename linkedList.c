@@ -16,7 +16,7 @@ List *listalloc()
     return p;
 }
 
-void addToList(struct lnode *list, Word *value)
+void addToList(struct lnode *list, Row *value)
 {
     if(list->next == NULL)
     {
@@ -32,7 +32,7 @@ void addToList(struct lnode *list, Word *value)
         
 }
 
-Word getFromList(struct lnode *list, int index)
+Row getFromList(struct lnode *list, int index)
 {
     struct lnode *pCurrentNode = list;
     int i;

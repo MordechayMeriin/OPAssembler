@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include "firstRun.h"
+#include "secondRun.h"
 
 void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
 {
@@ -83,7 +81,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
     }
 }
 
-void addOperand2(OpWord *operation, Symbols SymbolList, Rule *rule, char *operand, int operandType, int lineNumber)
+void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *operand, int operandType, int lineNumber)
 {
     int rel=0;
     Symbols *tmp;
@@ -98,25 +96,25 @@ void addOperand2(OpWord *operation, Symbols SymbolList, Rule *rule, char *operan
         {
             for(; strcmp(SymbolList->name, operand)!=0 && SymbolList!=NULL ; SymbolList=SymbolList->next)
                 ;
-            if(strcmp(operand, tmp->name)==0)
+            if(strcmp(operand, tmp->name)==0)/*you did not assign any value to temp*/
             {
                 if(rel) /*Relative Addressing*/
                 {
-                    addOperandToWord(operation, /*value*/, operandType);;
+                    /*addOperandToWord(operation, value, operandType);*/ /*Function is Irrelevant here, look at the updated code*/
                 }
                 else /*Direct addressing*/
                 {
-                    addOperandToWord(operation, /*value*/, operandType);;
+                    /*addOperandToWord(operation, value, operandType);*/ /*Function is Irrelevant here, look at the updated code*/
                 }
             }
             else
             {
-                errorLog(strcat(operand, " is not a known label"), lineNumber);
+                errorLog(lineNumber, strcat(operand, " is not a known label"));
             }
         }
         else
         {
-            errorLog(strcat(operand, " is not a valid label"), lineNumber);
+            errorLog(lineNumber, strcat(operand, " is not a valid label"));
         }
     }
 }

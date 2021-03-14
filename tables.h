@@ -1,12 +1,7 @@
 #ifndef TABLES_INCLUDED
 #define TABLES_INCLUDED
 
-struct objects /*output table*/
-{
-    int address;
-    int line: 12;
-    char ARE;
-};
+
 
 struct label /*entries and externals tables*/
 {

@@ -1,3 +1,6 @@
+#ifndef RULES_HASH_INCLUDED
+#define RULES_HASH_INCLUDED
+
 #include "dataModel.h"
 #include "common.h"
 
@@ -16,4 +19,6 @@ void createRulesTable();
 
 int isValidCommand(char *command);
 
-int getAddressingMethod(Rule *rule, int operandType)
+AddressingMethod *getAddressingMethod(Rule *rule, int operandType);
+
+#endif

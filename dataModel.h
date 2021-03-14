@@ -8,6 +8,11 @@
 #define OUTVAL_SIZE 2
 #define SOURCE_OPERAND 0
 #define TARGET_OPERAND 1
+#define IMMEDIATE_ADDRESSING 0
+#define DIRECT_ADDRESSING 1
+#define RELATIVE_ADDRESSING 2
+#define REGISTER_DIRECT_ADDRESSING 3
+
 
 
 typedef struct opword /*12 digit machine code line*/
@@ -28,6 +33,13 @@ typedef union
     Int12 val12;
 } Word;
 
+typedef struct row /*output table*/
+{
+    int address;
+    int value: 12;
+    char ARE;
+}Row;
+
 typedef struct addressingMethod
 {
     unsigned int immediate: 1;
@@ -45,6 +57,7 @@ typedef struct rule
     AddressingMethod outAd;
 } Rule;
 
-Word *walloc();
+Int12 *i12alloc();
+Row *ralloc();
 
 #endif
