@@ -10,6 +10,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
     Rule *rule;
     char **operands;
     OpWord *operation;
+    Int12 *codedOp1 = NULL, *codedOp2 = NULL;
 
     if (line == NULL)
     {
@@ -46,25 +47,26 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
                 {
                     mallocError("OpWord");
                 }
-                L = 1;
+                 L = 1;
                 rule = getRule(firstWord);
                 operands = getOperands(line, lineNumber);
                 
                 operation->opcode = rule->opcode;
                 operation->funct = rule->funct;
-
                 if (operands[0] != NULL)
                 {
-                    L++;
+                    L++; 
+                    codedOp1 = i12alloc();                       
                     if (operands[1] != NULL)
                     {
                         L++;
-                        addOperand2(operation, SymbolList, rule, operands[0], SOURCE_OPERAND, lineNumber);
-                        addOperand2(operation, SymbolList, rule, operands[1], TARGET_OPERAND, lineNumber);
+                        codedOp2 = i12alloc();
+                        addOperand2(operation, SymbolList, rule, operands[0], codedOp1, SOURCE_OPERAND, lineNumber);
+                        addOperand2(operation, SymbolList, rule, operands[1], codedOp2, TARGET_OPERAND, lineNumber);
                     }
                     else
                     {
-                        addOperand2(operation, SymbolList, rule, operands[0], TARGET_OPERAND, lineNumber);
+                        addOperand2(operation, SymbolList, rule, operands[0], codedOp1, TARGET_OPERAND, lineNumber);
                     }
                 }
             }
@@ -81,10 +83,9 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
     }
 }
 
-void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *operand, int operandType, int lineNumber)
+void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber)
 {
     int rel=0;
-    Symbols *tmp;
     if (*operand != '#' && !isRegister(operand))
     {
         if (*operand == '%')
@@ -96,15 +97,15 @@ void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *opera
         {
             for(; strcmp(SymbolList->name, operand)!=0 && SymbolList!=NULL ; SymbolList=SymbolList->next)
                 ;
-            if(strcmp(operand, tmp->name)==0)/*you did not assign any value to temp*/
+            if(strcmp(operand, SymbolList->name)==0)
             {
                 if(rel) /*Relative Addressing*/
                 {
-                    /*addOperandToWord(operation, value, operandType);*/ /*Function is Irrelevant here, look at the updated code*/
+                    codedOperand->value = (SymbolList->value.value)-(0);
                 }
                 else /*Direct addressing*/
                 {
-                    /*addOperandToWord(operation, value, operandType);*/ /*Function is Irrelevant here, look at the updated code*/
+                    codedOperand->value = SymbolList->value.value;
                 }
             }
             else
