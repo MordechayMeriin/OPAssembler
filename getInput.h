@@ -12,7 +12,7 @@ char skipBlanks(FILE *, int *);*/
 FILE *openFile(char *);
 /*char *readLine(FILE *);*/
 void deleteBlanks(int lineNumber, char *);
-char *getWord(char *line, char *word);
+char *getWord(char *line, char **word);
 int isSpace(char);
 
 #endif

@@ -62,15 +62,20 @@ Symbols *Slistalloc()
 
 void addToTable(struct symbols *newS, char *name, char *attributes, int val, int lineNumber)
 {
+    printf("inside addToLabel. name = %s, attributes = %s, val = %d, lineNumber = %d.\n", name, attributes, val, lineNumber);
+    printf("inside addToLabel. newS add = %d.\n", &newS);
+    printf("inside addToLabel. newS: name = %s, attributes = %s, value = %d, next = %d.\n", newS->name, newS->attributes, newS->value.value, &(newS->next));
     if(newS == NULL)
     {  
+        printf("addToLabel: newS == NULL\n");
         newS= Slistalloc();
         strcpy(newS->name ,name);
         strcpy(newS->attributes ,attributes);
         newS->value.value=val;       
     }
-    else if (strcmp(newS->name, name)==0)
+    else if (strcmp(newS->name, name)==0)/*the newS is not null at the first time, but everything inside is null, so we gwt a sepmentation faulte here*/
     {
+        printf("addToLabel: after name compare\n");
         if (strcmp(attributes, "external"))
         {
             errorLog(lineNumber, "two symbols with the same name");

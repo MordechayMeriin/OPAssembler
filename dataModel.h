@@ -59,5 +59,6 @@ typedef struct rule
 
 Int12 *i12alloc();
 Row *ralloc();
+char **psalloc();
 
 #endif

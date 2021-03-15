@@ -1,24 +1,28 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "errors.h"
 #include "common.h"
+
+#define ERROR_PREFIX_LENGTH 30
 
 static char *errorsLog;
 
 void errorLog(int line, char *error)
-{
-    char *c, *errorMessage = "";
-    printf("inside errorLog\n");
 
+{  
+    int errorLength;
+    char *c, *errorMessage = (char *)calloc(sizeof(char), strlen(error) + ERROR_PREFIX_LENGTH);
     sprintf(errorMessage, "Error at line %d: %s.", line, error);
-
-    if (errorsLog == NULL)
+    errorLength = strlen(errorMessage);
+    if (errorsLog == NULL || *errorLog == '\0')
     {
-        errorsLog = (char *)malloc(sizeof(*errorMessage) + sizeof(char));       
+        errorsLog = (char *)malloc(sizeof(char) * (strlen(errorMessage) + 2));       
     }
     else
     {
-        errorsLog = (char *)realloc(errorsLog, (sizeof(*errorMessage) + sizeof(*errorsLog) + sizeof(char)));     
+        errorsLog = (char *)realloc(errorsLog, sizeof(char) * (strlen(errorMessage) + strlen(errorsLog) + 3));
+        /*errorsLog = (char *)realloc(errorsLog, (sizeof(*errorMessage) + sizeof(*errorsLog) + sizeof(char)));  */   
     }
     if (errorsLog == NULL)
     {
@@ -39,7 +43,7 @@ void errorLog(int line, char *error)
 
 void printErrors()
 {
-    if (errorsLog != NULL)
+    if (*errorLog != '\0')
     {
         printf("Assembly errors:\n\n%s", errorsLog);
     }
@@ -52,5 +56,5 @@ void freeLogMemory()
 
 int areErrorsExist()
 {
-    return (errorsLog == NULL);
+    return (!*errorLog == '\0');
 }

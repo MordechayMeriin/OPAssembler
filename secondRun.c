@@ -12,6 +12,8 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
 
+    printf("insideSecond\n");
+
     if (line == NULL)
     {
         mallocError("string");
