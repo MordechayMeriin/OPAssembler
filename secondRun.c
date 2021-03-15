@@ -2,7 +2,7 @@
 
 void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
 {
-    extern int IC, DC, ICF, DCF;
+    /*extern int IC, DC, ICF, DCF;*/
     int L, lineNumber = 1;
     char *firstWord = NULL;
     char *line = (char *)calloc(sizeof(char), MAXLINE);
