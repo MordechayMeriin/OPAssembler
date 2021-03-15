@@ -37,7 +37,7 @@ void first(FILE *file)
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
-            printf("word: %s\n", *firstWord);
+            /*printf("word: %s\n", *firstWord);*/
             if(isItLable(lineNumber, *firstWord))
             {
                 labelFlag=1;
@@ -144,7 +144,7 @@ void first(FILE *file)
             deleteBlanks(line);*/
         }
         lineNumber++;
-        printSymbols(SymbolList, 1);
+        /*printSymbols(SymbolList, 1);*/
     }
     if(areErrorsExist())
     {
@@ -257,7 +257,7 @@ void dataCoding(char *line, struct lnode *dataList)
     int tmp, i/*, sign*/;
     char num[MAXWORD];
     Row *TW = ralloc();
-    printf("!%s!\n", line);
+    /*printf("!%s!\n", line);*/
     if(*line=='\"')
     {
         line++;
