@@ -170,7 +170,7 @@ int isItDir(char *line)
     {
         return 1;
     }
-    printf("isitdir = 0\n||%s||\n", line);
+    printf("||%s||\n", line);
     return 0;
 }
 
