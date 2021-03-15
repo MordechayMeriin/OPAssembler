@@ -10,7 +10,7 @@ void first(FILE *file)
     extern int IC, DC, ICF, DCF;
     extern void second(FILE *,List *, List *, Symbols *);
     short int labelFlag=0;
-    int L, lineNumber = 1;
+    int L, lineNumber = 1, tmp=0;
     char label[MAXWORD], **EXlabel = psalloc();
     char **firstWord = psalloc();
     char *line = (char *)calloc(sizeof(char), MAXLINE);
@@ -52,9 +52,11 @@ void first(FILE *file)
                     {
                         addToTable(SymbolList, label, "data", DC, lineNumber);
                     }
-                    if(datalen(line, *firstWord))
+                    tmp=datalen(line, *firstWord);
+                    if(tmp)
                     {
-                        DC+=datalen(line, *firstWord); /*we call datalen twice?*/
+                        DC+=tmp;
+                        printf("DC=%d\n", DC);
                         dataCoding(line, dataList);
                     }
                     else
@@ -166,11 +168,6 @@ int isEmpty(char *line)
 
 int isItDir(char *line)
 {
-    /*if(line[3]=='p')
-    {
-        line[4]='\0';
-    }*/
-    /*printf("||%s||\n", line);*/
     if( line[0]=='.')
     {
         return 1;
@@ -224,29 +221,34 @@ int datalen(char *line, char *type)
         if(strlen(line)<=2)
             return 0;
         for(i=1; line[i]!='\0' && line[i]!='\"' ; i++)
-        ;
-        if(line[0]=='\"' && line[i]=='\"' && line[i+1]=='\0')
-            return (i-2);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters*/
+            ;
+        printf("datalen checkpoint: !%s! %d\n", line, i);
+        if(line[0]=='\"' && line[i]=='\"' && (line[i+1]=='\0' || (line[i+1] == ' ' /*&& line[i+2]=='\n'*/)))
+            return (i-1);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters, but indexes starts from 0*/
     }
     if(strcmp(type, ".data")==0)
     {
         printf("data datalen: ||%s||, %d\n", line, strlen(line));
-        for(i=1; line[i]!='\0' ; i++)
+        for(i=0; line[i]!='\0' ; i++)
         {
             if(isdigit(line[i]) || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
             {
                 if((line[i]=='+' || line[i]=='-') && !isdigit(line[i+1]))
-                ;
+                    printf("datalen checkpoint: A\n");
                 else if(line[i]==',' && line[i+1]=='\0')
-                ;
-                else if(line[i]==',' && j==0)
-                ;
+                    printf("datalen checkpoint: B\n");
+                else if(line[i]==',' && i==0)
+                    printf("datalen checkpoint: C\n");
                 else if(line[i]==',' || j==0)
+                {
+                    printf("datalen checkpoint: J\n");
                     j++;
+                }
                 if(j==0)
                     break;
             }
         }
+        printf("datalen checkpoint: !%s! %d\n", line, j);
     }
     return j;
 }
