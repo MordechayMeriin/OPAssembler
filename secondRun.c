@@ -4,7 +4,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
 {
     /*extern int IC, DC, ICF, DCF;*/
     int L, lineNumber = 1;
-    char *firstWord = NULL;
+    char **firstWord = psalloc();
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     Symbols *tmp;
     Rule *rule;
@@ -25,13 +25,13 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
-            if(isItLable(lineNumber, firstWord))
+            if(isItLable(lineNumber, *firstWord))
             {
                 line = getWord(line, firstWord);
             }
-            if(isItDir(firstWord))
+            if(isItDir(*firstWord))
             {
-                if (strcmp(firstWord, ".entry")==0)
+                if (strcmp(*firstWord, ".entry")==0)
                 {
                     for(tmp=SymbolList ; strcmp(tmp->name, line)!=0 && tmp!=NULL ; tmp=tmp->next)
                     ;
@@ -50,7 +50,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
                     mallocError("OpWord");
                 }
                  L = 1;
-                rule = getRule(firstWord);
+                rule = getRule(*firstWord);
                 operands = getOperands(line, lineNumber);
                 
                 operation->opcode = rule->opcode;

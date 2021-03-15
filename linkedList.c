@@ -100,9 +100,9 @@ void setVal(struct symbols *s, int val)
 
 void printSymbols(struct symbols *S, int num)
 {
-    printf("symbol n%d: %s, %s, %d\n", num, S->name, S->attributes, S->value.value);
     if(S->next != NULL)
     {
+    printf("symbol n%d: %s, %s, %d\n", num, S->name, S->attributes, S->value.value);
         printSymbols(S->next, num+1);
     }    
 }

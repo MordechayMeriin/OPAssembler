@@ -142,7 +142,7 @@ void first(FILE *file)
             deleteBlanks(line);*/
         }
         lineNumber++;
-        /*printSymbols(SymbolList, 1);*/
+        printSymbols(SymbolList, 1);
     }
     if(areErrorsExist())
     {
@@ -166,11 +166,15 @@ int isEmpty(char *line)
 
 int isItDir(char *line)
 {
-    if(line[0]=='.')
+    /*if(line[3]=='p')
+    {
+        line[4]='\0';
+    }*/
+    /*printf("||%s||\n", line);*/
+    if( line[0]=='.')
     {
         return 1;
     }
-    printf("||%s||\n", line);
     return 0;
 }
 
@@ -201,11 +205,11 @@ int validLabel(char *word)
         return 0;
     if(strlen(word)==2 && word[0]=='r' && word[1]>='0' && word[1]<='7')
         return 0;
-    if(!isalpha(word[i])/*(word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z')*/)
+    if(!isalpha(word[i]))
         return 0;
     for( ; word[i]!='\0' ; i++)
     {
-        if(!isalpha(word[i]) && !isdigit(word[i])/*(word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z') && (word[i]<'0' || word[i]>'9')*/)
+        if(!isalpha(word[i]) && !isdigit(word[i]))
             return 0;
     }
     return 1;
@@ -216,6 +220,7 @@ int datalen(char *line, char *type)
     int i, j=0;
     if(strcmp(type, ".string")==0)
     {
+        printf("string datalen: ||%s||, %d\n", line, strlen(line));
         if(strlen(line)<=2)
             return 0;
         for(i=1; line[i]!='\0' && line[i]!='\"' ; i++)
@@ -225,6 +230,7 @@ int datalen(char *line, char *type)
     }
     if(strcmp(type, ".data")==0)
     {
+        printf("data datalen: ||%s||, %d\n", line, strlen(line));
         for(i=1; line[i]!='\0' ; i++)
         {
             if(isdigit(line[i]) || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
@@ -249,7 +255,7 @@ void dataCoding(char *line, struct lnode *dataList)
 {
     int tmp, sign;
     Row *TW = ralloc();
-    if(*line=='\"')/*what does it mean?*/
+    if(*line=='\"')
     {
         line++;
         for(; *line!='\"' ; line++)
@@ -267,13 +273,13 @@ void dataCoding(char *line, struct lnode *dataList)
                 if(*line=='-')
                     sign=-1;
                 else if(*line!='+')
-                    tmp=tmp*10+(((int)(*line)-'0')*sign);/*atoi(). what did you do here?*/
+                    tmp=tmp*10+(((int)(*line)-'0')*sign);
             }
             TW->value=tmp;
             /*printf("dataCoding before addToList\n");*/
             addToList(dataList, TW);
             /*printf("dataCoding after addToList\n");*/
-            if(*line==' ') /*why?*/
+            if(*line==' ')
                 line++;
         }
     }
