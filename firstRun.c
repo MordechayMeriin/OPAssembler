@@ -33,7 +33,7 @@ void first(FILE *file)
     {
         labelFlag=0;
         deleteBlanks(lineNumber, line);
-        printf("\nline %d: %s", lineNumber, line);
+        printf("\nline %d: %s\n", lineNumber, line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -217,46 +217,47 @@ int datalen(char *line, char *type)
     int i, j=0;
     if(strcmp(type, ".string")==0)
     {
-        printf("string datalen: ||%s||, %d\n", line, strlen(line));
+        /*printf("string datalen: ||%s||, %d\n", line, strlen(line));*/
         if(strlen(line)<=2)
             return 0;
         for(i=1; line[i]!='\0' && line[i]!='\"' ; i++)
             ;
-        printf("datalen checkpoint: !%s! %d\n", line, i);
+        /*printf("datalen checkpoint: !%s! %d\n", line, i);*/
         if(line[0]=='\"' && line[i]=='\"' && (line[i+1]=='\0' || (line[i+1] == ' ' /*&& line[i+2]=='\n'*/)))
             return (i-1);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters, but indexes starts from 0*/
     }
     if(strcmp(type, ".data")==0)
     {
-        printf("data datalen: ||%s||, %d\n", line, strlen(line));
+        /*printf("data datalen: ||%s||, %d\n", line, strlen(line));*/
         for(i=0; line[i]!='\0' ; i++)
         {
             if(isdigit(line[i]) || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
             {
                 if((line[i]=='+' || line[i]=='-') && !isdigit(line[i+1]))
-                    printf("datalen checkpoint: A\n");
+                    ;
                 else if(line[i]==',' && line[i+1]=='\0')
-                    printf("datalen checkpoint: B\n");
+                    ;
                 else if(line[i]==',' && i==0)
-                    printf("datalen checkpoint: C\n");
+                    ;
                 else if(line[i]==',' || j==0)
                 {
-                    printf("datalen checkpoint: J\n");
                     j++;
                 }
                 if(j==0)
                     break;
             }
         }
-        printf("datalen checkpoint: !%s! %d\n", line, j);
+        /*printf("datalen checkpoint: !%s! %d\n", line, j);*/
     }
     return j;
 }
 
 void dataCoding(char *line, struct lnode *dataList)
 {
-    int tmp, sign;
+    int tmp, i/*, sign*/;
+    char num[MAXWORD];
     Row *TW = ralloc();
+    printf("!%s!\n", line);
     if(*line=='\"')
     {
         line++;
@@ -270,19 +271,29 @@ void dataCoding(char *line, struct lnode *dataList)
     {
         for(; *line!='\0'; line++)
         {
-            for(tmp=0, sign=1 ; *line!=',' && *line!='\n'; line++)
+            for(tmp=0/*, sign=1*/, i=0 ; *line!=',' && *line!='\n' && *line!=' ' && *line!='\0' ; i++, line++)
             {
-                if(*line=='-')
+                /*if(*line=='-')
                     sign=-1;
                 else if(*line!='+')
                     tmp=tmp*10+(((int)(*line)-'0')*sign);
+                */
+                num[i]=*line;
             }
-            TW->value=tmp;
-            /*printf("dataCoding before addToList\n");*/
-            addToList(dataList, TW);
-            /*printf("dataCoding after addToList\n");*/
-            if(*line==' ')
-                line++;
+            num[i]='\0';
+            tmp=atoi(num);
+            if(isdigit(num[0]) || num[0]=='-' || num[0]=='+')
+            {
+                printf("!%s! = !%d!\n", num, tmp);
+                TW->value=tmp;
+                printf("dataCoding before addToList. value=%d\n", TW->value);
+                addToList(dataList, TW);
+                printf("dataCoding after addToList\n");
+                /*if(*line==' ')
+                    line++;*/
+            }
+            if(*line=='\0')
+                line--;
         }
     }
 }

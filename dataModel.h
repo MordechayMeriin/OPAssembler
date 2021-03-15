@@ -36,7 +36,7 @@ typedef union
 typedef struct row /*output table*/
 {
     int address;
-    int value: 12;
+    signed int value: 12;
     char ARE;
 }Row;
 
