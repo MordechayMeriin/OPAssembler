@@ -15,7 +15,7 @@ void errorLog(int line, char *error)
     char *c, *errorMessage = (char *)calloc(sizeof(char), strlen(error) + ERROR_PREFIX_LENGTH);
     sprintf(errorMessage, "Error at line %d: %s.", line, error);
     errorLength = strlen(errorMessage);
-    if (errorsLog == NULL || *errorLog == '\0')
+    if (errorsLog == NULL || *errorsLog == '\0')
     {
         errorsLog = (char *)malloc(sizeof(char) * (strlen(errorMessage) + 2));       
     }
@@ -43,7 +43,7 @@ void errorLog(int line, char *error)
 
 void printErrors()
 {
-    if (*errorLog != '\0')
+    if (*errorsLog != '\0')
     {
         printf("Assembly errors:\n\n%s", errorsLog);
     }
@@ -56,5 +56,5 @@ void freeLogMemory()
 
 int areErrorsExist()
 {
-    return (!*errorLog == '\0');
+    return (!*errorsLog == '\0');
 }
