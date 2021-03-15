@@ -11,7 +11,7 @@ void first(FILE *file)
     extern void second(FILE *,List *, List *, Symbols *);
     short int labelFlag=0;
     int L, lineNumber = 1, tmp=0;
-    char label[MAXWORD], **EXlabel = psalloc();
+    char label[MAXWORD], EXlabel[MAXWORD];
     char **firstWord = psalloc();
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     List *codeList = listalloc();
@@ -22,7 +22,7 @@ void first(FILE *file)
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
  
-    if (line == NULL || firstWord == NULL || EXlabel == NULL)
+    if (line == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
     {
         mallocError("string");
     }
@@ -33,7 +33,7 @@ void first(FILE *file)
     {
         labelFlag=0;
         deleteBlanks(lineNumber, line);
-        printf("\nline %d: %s\n", lineNumber, line);
+        printf("\nline %d: |%s|\n", lineNumber, line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -66,12 +66,14 @@ void first(FILE *file)
                 {
                     if(strcmp(*firstWord, ".extern")==0)
                     {
-                        line = getWord(line, EXlabel);
-                        if (validLabel(*EXlabel))
+                        line = getWord(line, firstWord);
+                        strcpy(EXlabel, *firstWord);
+                        if (validLabel(EXlabel))
                         {
                             if (*line=='\0')
                             {
-                                addToTable(SymbolList, *EXlabel, "external", 0, lineNumber);
+                                printf("checkpoint exteral label\n");
+                                addToTable(SymbolList, EXlabel, "external", 0, lineNumber);
                             }
                             else
                             {
@@ -234,11 +236,11 @@ int datalen(char *line, char *type)
             if(isdigit(line[i]) || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
             {
                 if((line[i]=='+' || line[i]=='-') && !isdigit(line[i+1]))
-                    ;
+                    j=0;
                 else if(line[i]==',' && line[i+1]=='\0')
-                    ;
+                    j=0;
                 else if(line[i]==',' && i==0)
-                    ;
+                    j=0;
                 else if(line[i]==',' || j==0)
                 {
                     j++;

@@ -160,9 +160,11 @@ void deleteBlanks(int lineNumber, char *line)
 			tmp[i++]=' ';
 		}
 	}
-	if(tmp[i]==' ')
+	while(isspace(tmp[i]))
+	{
 		i--;
-	tmp[i]='\0';
+	}
+	tmp[--i]='\0';
 	strcpy(line, tmp);
 }
 
