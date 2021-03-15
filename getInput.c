@@ -138,7 +138,7 @@ FILE *openFile(char *fileName)
 	return pf;
 }
 
-void deleteBlanks(int lineNumber, char *line) /**/
+void deleteBlanks(int lineNumber, char *line)
 {
 	char tmp[MAXLINE];
 	int i=0, j;
@@ -166,13 +166,15 @@ void deleteBlanks(int lineNumber, char *line) /**/
 	strcpy(line, tmp);
 }
 
-char *getWord(char *line, char *word)/*this function doesn't work.*/
+char *getWord(char *line, char **word)
 {
-	char *str = (char *)calloc(sizeof(char), MAXWORD);
-	char *c = str;
+	char *c = (char *)calloc(sizeof(char), MAXWORD);
+	char *str = c;
+
 	while (isSpace(*line) && *line != '\0')
 		line++;
 
+	/*str = line;*/
 	while (!isSpace(*line) && *line != '\0')
 	{
 		*c = *line;
@@ -186,13 +188,14 @@ char *getWord(char *line, char *word)/*this function doesn't work.*/
 		line++;
 	}
 	*c = '\0';
-	word = str;
-	if(*line==' ')
+	*word = str;
+
+	if(*line == ' ')
 		line++;
 	return line;
 }
 
 int isSpace(char c)
 {
-	return(c == ' ' || c == '\t' /*|| c == '\n'*/);
+	return(c == ' ' || c == '\t' || c == '\n');
 }
