@@ -56,37 +56,32 @@ Symbols *Slistalloc()
     if (p == NULL)
     {
         mallocError("Symbols list node");
-    }  
+    }
+    else
+    {
+        char *tmp = (char *)calloc(sizeof(char), 1);
+        p->name = tmp;
+        tmp = (char *)calloc(sizeof(char), 1);
+        p->attributes = tmp;
+    }
     return p;
 }
 
 void addToTable(struct symbols *newS, char *name, char *attributes, int val, int lineNumber)
 {
-    printf("inside addToLabel. name = %s, attributes = %s, val = %d, lineNumber = %d.\n", name, attributes, val, lineNumber);
-    printf("inside addToLabel. newS add = %d.\n", &newS);
-    printf("inside addToLabel. newS: name = %s, attributes = %s, value = %d, next = %d.\n", newS->name, newS->attributes, newS->value.value, &(newS->next));
-    if(newS == NULL)
-    {  
-        printf("addToLabel: newS == NULL\n");
-        newS= Slistalloc();
-        strcpy(newS->name ,name);
-        strcpy(newS->attributes ,attributes);
-        newS->value.value=val;       
-    }
-    else if (strcmp(newS->name, name)==0)/*the newS is not null at the first time, but everything inside is null, so we gwt a sepmentation faulte here*/
+    if (strcmp(newS->name, name)==0)
     {
-        printf("addToLabel: after name compare\n");
         if (strcmp(attributes, "external"))
         {
             errorLog(lineNumber, "two symbols with the same name");
         }
     }
     else if(newS->next == NULL)
-    {  
+    {
         newS->next = Slistalloc();
-        strcpy(newS->next->name ,name);
-        strcpy(newS->next->attributes ,attributes);
-        newS->next->value.value=val;       
+        strcpy(newS->name ,name);
+        strcpy(newS->attributes ,attributes);
+        newS->value.value=val;
     }
     else
     {
@@ -101,6 +96,15 @@ void setVal(struct symbols *s, int val)
         s->value.value+=val;
     if(s->next != NULL)
         setVal(s->next, val);
+}
+
+void printSymbols(struct symbols *S, int num)
+{
+    printf("symbol n%d: %s, %s, %d\n", num, S->name, S->attributes, S->value.value);
+    if(S->next != NULL)
+    {
+        printSymbols(S->next, num+1);
+    }    
 }
 
 /*void setAddress(struct symbols *s, char *name, Int12 address)

@@ -21,7 +21,7 @@ void first(FILE *file)
     char **operands;
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
-
+ 
     if (line == NULL || firstWord == NULL || EXlabel == NULL)
     {
         mallocError("string");
@@ -31,8 +31,9 @@ void first(FILE *file)
     createRulesTable();
     while(fgets(line, MAXLINE, file) != NULL)
     {
-        printf("line %d: %s\n", lineNumber, line);
+        labelFlag=0;
         deleteBlanks(lineNumber, line);
+        printf("\nline %d: %s", lineNumber, line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -49,7 +50,7 @@ void first(FILE *file)
                 {
                     if(labelFlag)
                     {
-                        /*addToTable(SymbolList, label, "data", DC, lineNumber);*/
+                        addToTable(SymbolList, label, "data", DC, lineNumber);
                     }
                     if(datalen(line, *firstWord))
                     {
@@ -68,7 +69,7 @@ void first(FILE *file)
                         {
                             if (*line=='\0')
                             {
-                                /*addToTable(SymbolList, *EXlabel, "external", 0, lineNumber);*/
+                                addToTable(SymbolList, *EXlabel, "external", 0, lineNumber);
                             }
                             else
                             {
@@ -76,7 +77,6 @@ void first(FILE *file)
                             }
                         }
                     }
-                    /*else- save line as labelName in an array of entries. idea continues in second*/
                 }
                 else
                 {
@@ -87,7 +87,7 @@ void first(FILE *file)
             {
                 if(labelFlag)
                 {
-                    /*addToTable(SymbolList, label, "code", IC, lineNumber);*/
+                    addToTable(SymbolList, label, "code", IC, lineNumber);
                 }
                 if (isValidCommand(*firstWord))
                 {
@@ -142,6 +142,7 @@ void first(FILE *file)
             deleteBlanks(line);*/
         }
         lineNumber++;
+        /*printSymbols(SymbolList, 1);*/
     }
     if(areErrorsExist())
     {
@@ -169,6 +170,7 @@ int isItDir(char *line)
     {
         return 1;
     }
+    printf("isitdir = 0\n||%s||\n", line);
     return 0;
 }
 
@@ -279,7 +281,7 @@ void dataCoding(char *line, struct lnode *dataList)
 
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
 {
-    printf("inside getOperands with: %s\n", line);
+    /*printf("inside getOperands with: %s\n", line);*/
     char **operands = (char **)calloc(sizeof(char), MAXWORD * 2);
     char **thirdOperand = psalloc();
     char **tmp1 = psalloc(), **tmp2 = psalloc();
@@ -289,7 +291,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
     if (*tmp1 != NULL)
     {
         operands[0] = *tmp1;
-        printf("operands[0] = %s\n", operands[0]);
+        /*printf("operands[0] = %s\n", operands[0]);*/
         if (*operands[0] == ',')
         {
             errorLog(lineNumber, "unnecessary ',' character.");
@@ -319,7 +321,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         if (*tmp2 != NULL)
         {
             operands[1] = *tmp2;  
-            printf("operands[1] = %s\n", operands[1]);
+            /*printf("operands[1] = %s\n", operands[1]);*/
             if (*operands[1] == ',')
             {
                 errorLog(lineNumber, "unnecessary ',' character.");
