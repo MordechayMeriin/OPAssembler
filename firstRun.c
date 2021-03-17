@@ -29,6 +29,8 @@ void first(FILE *file)
     /*line=readLine(file);
     deleteBlanks(line);*/
     createRulesTable();
+    IC = 100;
+    DC = 0;
     while(fgets(line, MAXLINE, file) != NULL)
     {
         printf("line %d: %s\n", lineNumber, line);
@@ -143,6 +145,7 @@ void first(FILE *file)
         }
         lineNumber++;
     }
+
     if(areErrorsExist())
     {
         printErrors();
@@ -152,8 +155,9 @@ void first(FILE *file)
         ICF=IC;
         DCF=DC;
         setVal(SymbolList, ICF);
-        second(Sfile, codeList, dataList, SymbolList);
+        /*second(Sfile, codeList, dataList, SymbolList);*/
     }
+    printCodeListDebug(codeList);
 }
 
 int isEmpty(char *line)
@@ -444,11 +448,12 @@ void addOperand(OpWord *operation, Rule *rule, char *operand, Int12 *codedOperan
 
 void addRowToCodeList(List *list, int address ,Int12 value, char ARE)
 {
+    printf("inside addRowToCodeList\n");
     Row *row = ralloc();
 
     row->address = address;
     row->value = value.value;
     row->ARE = ARE;
-
+    printf("row: address = %d, value = %d, ARE = %c\n", row->address, row->value, row->ARE);
     addToList(list, row);
 }

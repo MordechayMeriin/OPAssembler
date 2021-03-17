@@ -13,17 +13,21 @@ List *listalloc()
     {
         mallocError("Linked list node");
     }  
+    p->next = NULL;
     return p;
 }
 
 void addToList(struct lnode *list, Row *value)
 {
+    printf("addToList: list.value.address = %d, value = %d\n", list->value.address, value->address);
     if(list->next == NULL)
     {
+        
         List *newList;
         list->value = *value;       
         newList = listalloc();          
         list->next = newList;
+        newList->next = NULL;
     }
     else
     {
@@ -36,6 +40,7 @@ Row getFromList(struct lnode *list, int index)
 {
     struct lnode *pCurrentNode = list;
     int i;
+    printf("getFromList: list.value.address = %d, index = %d\n", list->value.address, index);
     for (i = 0; i < index; i++)
     {
         if (pCurrentNode->next == NULL)
@@ -63,8 +68,8 @@ Symbols *Slistalloc()
 void addToTable(struct symbols *newS, char *name, char *attributes, int val, int lineNumber)
 {
     printf("inside addToLabel. name = %s, attributes = %s, val = %d, lineNumber = %d.\n", name, attributes, val, lineNumber);
-    printf("inside addToLabel. newS add = %d.\n", &newS);
-    printf("inside addToLabel. newS: name = %s, attributes = %s, value = %d, next = %d.\n", newS->name, newS->attributes, newS->value.value, &(newS->next));
+    printf("inside addToLabel. newS add = %d.\n", newS);
+    printf("inside addToLabel. newS: name = %s, attributes = %s, value = %d, next = %d.\n", newS->name, newS->attributes, newS->value.value, newS->next);
     if(newS == NULL)
     {  
         printf("addToLabel: newS == NULL\n");

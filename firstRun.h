@@ -7,6 +7,7 @@
 #include "tables.h"
 #include "errors.h"
 #include "binary.h"
+#include "output.h"
 
 
 void first(FILE *file);
