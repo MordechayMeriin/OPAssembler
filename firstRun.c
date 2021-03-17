@@ -14,7 +14,7 @@ void first(FILE *file)
     char label[MAXWORD], EXlabel[MAXWORD];
     char **firstWord = psalloc();
     char *line = (char *)calloc(sizeof(char), MAXLINE);
-    List *codeList = listalloc();
+    /*List *codeList = listalloc();*/
     List *dataList = listalloc();
     Symbols *SymbolList = Slistalloc();
     Rule *rule;
@@ -22,6 +22,7 @@ void first(FILE *file)
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
     Array *codeList1 = createDynamicTable();
+    /*Array *dataList1 = createDynamicTable();*/
  
     if (line == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
     {
@@ -34,9 +35,10 @@ void first(FILE *file)
     DC = 0;
     while(fgets(line, MAXLINE, Sfile) != NULL)
     {
+        printf("\nfirstRunLoopStart: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);
         labelFlag=0;
         deleteBlanks(lineNumber, line);
-        printf("\nline %d: |%s|\n", lineNumber, line);
+        printf("line %d: |%s|\n", lineNumber, line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -59,8 +61,9 @@ void first(FILE *file)
                     if(tmp)
                     {
                         DC+=tmp;
-                        printf("DC=%d\n", DC);
                         dataCoding(line, dataList);
+                        /*dataCoding1(line, dataList1);*/
+                        printf("DC=%d\n", DC);
                     }
                     else
                         errorLog(lineNumber, "Invalid data");
@@ -154,6 +157,7 @@ void first(FILE *file)
         }
         lineNumber++;
         /*printSymbols(SymbolList, 1);*/
+        printf("firstRunLoopEnd: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);
     }
     printf("now what??\n");
     if(areErrorsExist())
@@ -300,9 +304,9 @@ void dataCoding(char *line, struct lnode *dataList)
             {
                 printf("!%s! = !%d!\n", num, tmp);
                 TW->value=tmp;
-                printf("dataCoding before addToList. value=%d\n", TW->value);
+                printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->value.address, dataList->value.value, TW->value);
                 addToList(dataList, TW);
-                printf("dataCoding after addToList\n");
+                printf("dataCoding after addToList. datalist: %d, %d, value=%d\n\n",dataList->value.address, dataList->value.value, TW->value);
                 /*if(*line==' ')
                     line++;*/
             }
@@ -366,7 +370,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
 
 
              
-        printf("5\n");   
+        /*printf("5\n");   */
     }
     free(tmp1);
     free(tmp2);
@@ -486,4 +490,42 @@ void addRowToCodeList(List *list, int address ,Int12 value, char ARE)
     row->ARE = ARE;
     printf("row: address = %d, value = %d, ARE = %c\n", row->address, row->value, row->ARE);
     addToList(list, row);
+}
+
+void dataCoding1(char *line, Array *dataList)
+{
+    int tmp, i;
+    char num[MAXWORD];
+    Row *TW = ralloc();
+    if(*line=='\"')
+    {
+        line++;
+        for(; *line!='\"' ; line++)
+        {
+            TW->value=(int)(*line);
+            addToDynamicTable(dataList, TW);
+        }
+    }
+    else
+    {
+        for(; *line!='\0'; line++)
+        {
+            for(tmp=0, i=0 ; *line!=',' && *line!='\n' && *line!=' ' && *line!='\0' ; i++, line++)
+            {
+                num[i]=*line;
+            }
+            num[i]='\0';
+            tmp=atoi(num);
+            if(isdigit(num[0]) || num[0]=='-' || num[0]=='+')
+            {
+                printf("!%s! = !%d!\n", num, tmp);
+                TW->value=tmp;
+                printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->array->address, dataList->array->value, TW->value);
+                addToDynamicTable(dataList, TW);
+                printf("dataCoding after addToList\n");
+            }
+            if(*line=='\0')
+                line--;
+        }
+    }
 }

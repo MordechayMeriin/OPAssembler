@@ -22,7 +22,7 @@ Row *ralloc()
     {
         printf("%s\n", "Failed to allocate memory for a new code row.");
         exit(2);
-    }  
+    } 
     return p;
 }
 

@@ -8,18 +8,19 @@
 List *listalloc()
 {
     List *p;
+    Row *R=ralloc();
     p = (List *)calloc(sizeof(List), 1);
     if (p == NULL)
     {
         mallocError("Linked list node");
     }  
     p->next = NULL;
+    p->value=*R;
     return p;
 }
 
 void addToList(struct lnode *list, Row *value)
 {
-    printf("addToList: list.value.address = %d, value = %d\n", list->value.address, value->address);
     if(list->next == NULL)
     {
         
@@ -31,6 +32,7 @@ void addToList(struct lnode *list, Row *value)
     }
     else
     {
+    /*printf("addToList: list.value.address=%d, list.value.value=%d, value=%d\n", list->value.address, list->value.value, value->value);*/
         addToList(list->next, value);
     }
         
