@@ -29,6 +29,8 @@ void addToTable(struct symbols *newS, char *name, char *attributes, int val, int
 
 void setVal(struct symbols *s, int val);
 
+void printSymbols(struct symbols *S, int num);
+
 /*void setAddress(struct symbols *s, char *name, Int12 address);*/
 
 #endif

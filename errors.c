@@ -9,6 +9,7 @@
 static char *errorsLog;
 
 void errorLog(int line, char *error)
+
 {  
     int errorLength;
     char *c, *errorMessage = (char *)calloc(sizeof(char), strlen(error) + ERROR_PREFIX_LENGTH);
@@ -16,12 +17,11 @@ void errorLog(int line, char *error)
     errorLength = strlen(errorMessage);
     if (errorsLog == NULL || *errorsLog == '\0')
     {
-        errorsLog = (char *)malloc(sizeof(char) * (strlen(errorMessage) + 2));       
+        errorsLog = (char *)malloc(sizeof(char) * errorLength + 2));       
     }
     else
     {
-        errorsLog = (char *)realloc(errorsLog, sizeof(char) * (strlen(errorMessage) + strlen(errorsLog) + 3));
-        /*errorsLog = (char *)realloc(errorsLog, (sizeof(*errorMessage) + sizeof(*errorsLog) + sizeof(char)));  */   
+        errorsLog = (char *)realloc(errorsLog, sizeof(char) * (errorLength + strlen(errorsLog) + 3));  
     }
     if (errorsLog == NULL)
     {

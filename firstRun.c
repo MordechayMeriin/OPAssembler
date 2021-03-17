@@ -10,8 +10,8 @@ void first(FILE *file)
     extern int IC, DC, ICF, DCF;
     extern void second(FILE *,List *, List *, Symbols *);
     short int labelFlag=0;
-    int L, lineNumber = 1;
-    char label[MAXWORD], **EXlabel = psalloc();
+    int L, lineNumber = 1, tmp=0;
+    char label[MAXWORD], EXlabel[MAXWORD];
     char **firstWord = psalloc();
     char *line = (char *)calloc(sizeof(char), MAXLINE);
     List *codeList = listalloc();
@@ -21,8 +21,8 @@ void first(FILE *file)
     char **operands;
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
-
-    if (line == NULL || firstWord == NULL || EXlabel == NULL)
+ 
+    if (line == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
     {
         mallocError("string");
     }
@@ -33,12 +33,13 @@ void first(FILE *file)
     DC = 0;
     while(fgets(line, MAXLINE, file) != NULL)
     {
-        printf("line %d: %s\n", lineNumber, line);
+        labelFlag=0;
         deleteBlanks(lineNumber, line);
+        printf("\nline %d: |%s|\n", lineNumber, line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
-            printf("word: %s\n", *firstWord);
+            /*printf("word: %s\n", *firstWord);*/
             if(isItLable(lineNumber, *firstWord))
             {
                 labelFlag=1;
@@ -51,11 +52,13 @@ void first(FILE *file)
                 {
                     if(labelFlag)
                     {
-                        /*addToTable(SymbolList, label, "data", DC, lineNumber);*/
+                        addToTable(SymbolList, label, "data", DC, lineNumber);
                     }
-                    if(datalen(line, *firstWord))
+                    tmp=datalen(line, *firstWord);
+                    if(tmp)
                     {
-                        DC+=datalen(line, *firstWord); /*we call datalen twice?*/
+                        DC+=tmp;
+                        printf("DC=%d\n", DC);
                         dataCoding(line, dataList);
                     }
                     else
@@ -65,12 +68,14 @@ void first(FILE *file)
                 {
                     if(strcmp(*firstWord, ".extern")==0)
                     {
-                        line = getWord(line, EXlabel);
-                        if (validLabel(*EXlabel))
+                        line = getWord(line, firstWord);
+                        strcpy(EXlabel, *firstWord);
+                        if (validLabel(EXlabel))
                         {
                             if (*line=='\0')
                             {
-                                /*addToTable(SymbolList, *EXlabel, "external", 0, lineNumber);*/
+                                printf("checkpoint exteral label\n");
+                                addToTable(SymbolList, EXlabel, "external", 0, lineNumber);
                             }
                             else
                             {
@@ -78,7 +83,6 @@ void first(FILE *file)
                             }
                         }
                     }
-                    /*else- save line as labelName in an array of entries. idea continues in second*/
                 }
                 else
                 {
@@ -89,7 +93,7 @@ void first(FILE *file)
             {
                 if(labelFlag)
                 {
-                    /*addToTable(SymbolList, label, "code", IC, lineNumber);*/
+                    addToTable(SymbolList, label, "code", IC, lineNumber);
                 }
                 if (isValidCommand(*firstWord))
                 {
@@ -144,6 +148,7 @@ void first(FILE *file)
             deleteBlanks(line);*/
         }
         lineNumber++;
+        /*printSymbols(SymbolList, 1);*/
     }
 
     if(areErrorsExist())
@@ -169,7 +174,7 @@ int isEmpty(char *line)
 
 int isItDir(char *line)
 {
-    if(line[0]=='.')
+    if( line[0]=='.')
     {
         return 1;
     }
@@ -203,11 +208,11 @@ int validLabel(char *word)
         return 0;
     if(strlen(word)==2 && word[0]=='r' && word[1]>='0' && word[1]<='7')
         return 0;
-    if(!isalpha(word[i])/*(word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z')*/)
+    if(!isalpha(word[i]))
         return 0;
     for( ; word[i]!='\0' ; i++)
     {
-        if(!isalpha(word[i]) && !isdigit(word[i])/*(word[i]<'a' || word[i]>'z') && (word[i]<'A' || word[i]>'Z') && (word[i]<'0' || word[i]>'9')*/)
+        if(!isalpha(word[i]) && !isdigit(word[i]))
             return 0;
     }
     return 1;
@@ -218,40 +223,48 @@ int datalen(char *line, char *type)
     int i, j=0;
     if(strcmp(type, ".string")==0)
     {
+        /*printf("string datalen: ||%s||, %d\n", line, strlen(line));*/
         if(strlen(line)<=2)
             return 0;
         for(i=1; line[i]!='\0' && line[i]!='\"' ; i++)
-        ;
-        if(line[0]=='\"' && line[i]=='\"' && line[i+1]=='\0')
-            return (i-2);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters*/
+            ;
+        /*printf("datalen checkpoint: !%s! %d\n", line, i);*/
+        if(line[0]=='\"' && line[i]=='\"' && (line[i+1]=='\0' || (line[i+1] == ' ' /*&& line[i+2]=='\n'*/)))
+            return (i-1);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters, but indexes starts from 0*/
     }
     if(strcmp(type, ".data")==0)
     {
-        for(i=1; line[i]!='\0' ; i++)
+        /*printf("data datalen: ||%s||, %d\n", line, strlen(line));*/
+        for(i=0; line[i]!='\0' ; i++)
         {
             if(isdigit(line[i]) || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
             {
                 if((line[i]=='+' || line[i]=='-') && !isdigit(line[i+1]))
-                ;
+                    j=0;
                 else if(line[i]==',' && line[i+1]=='\0')
-                ;
-                else if(line[i]==',' && j==0)
-                ;
+                    j=0;
+                else if(line[i]==',' && i==0)
+                    j=0;
                 else if(line[i]==',' || j==0)
+                {
                     j++;
+                }
                 if(j==0)
                     break;
             }
         }
+        /*printf("datalen checkpoint: !%s! %d\n", line, j);*/
     }
     return j;
 }
 
 void dataCoding(char *line, struct lnode *dataList)
 {
-    int tmp, sign;
+    int tmp, i/*, sign*/;
+    char num[MAXWORD];
     Row *TW = ralloc();
-    if(*line=='\"')/*what does it mean?*/
+    /*printf("!%s!\n", line);*/
+    if(*line=='\"')
     {
         line++;
         for(; *line!='\"' ; line++)
@@ -264,26 +277,36 @@ void dataCoding(char *line, struct lnode *dataList)
     {
         for(; *line!='\0'; line++)
         {
-            for(tmp=0, sign=1 ; *line!=',' && *line!='\n'; line++)
+            for(tmp=0/*, sign=1*/, i=0 ; *line!=',' && *line!='\n' && *line!=' ' && *line!='\0' ; i++, line++)
             {
-                if(*line=='-')
+                /*if(*line=='-')
                     sign=-1;
                 else if(*line!='+')
-                    tmp=tmp*10+(((int)(*line)-'0')*sign);/*atoi(). what did you do here?*/
+                    tmp=tmp*10+(((int)(*line)-'0')*sign);
+                */
+                num[i]=*line;
             }
-            TW->value=tmp;
-            /*printf("dataCoding before addToList\n");*/
-            addToList(dataList, TW);
-            /*printf("dataCoding after addToList\n");*/
-            if(*line==' ') /*why?*/
-                line++;
+            num[i]='\0';
+            tmp=atoi(num);
+            if(isdigit(num[0]) || num[0]=='-' || num[0]=='+')
+            {
+                printf("!%s! = !%d!\n", num, tmp);
+                TW->value=tmp;
+                printf("dataCoding before addToList. value=%d\n", TW->value);
+                addToList(dataList, TW);
+                printf("dataCoding after addToList\n");
+                /*if(*line==' ')
+                    line++;*/
+            }
+            if(*line=='\0')
+                line--;
         }
     }
 }
 
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
 {
-    printf("inside getOperands with: %s\n", line);
+    /*printf("inside getOperands with: %s\n", line);*/
     char **operands = (char **)calloc(sizeof(char), MAXWORD * 2);
     char **thirdOperand = psalloc();
     char **tmp1 = psalloc(), **tmp2 = psalloc();
@@ -293,7 +316,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
     if (*tmp1 != NULL)
     {
         operands[0] = *tmp1;
-        printf("operands[0] = %s\n", operands[0]);
+        /*printf("operands[0] = %s\n", operands[0]);*/
         if (*operands[0] == ',')
         {
             errorLog(lineNumber, "unnecessary ',' character.");
@@ -323,7 +346,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         if (*tmp2 != NULL)
         {
             operands[1] = *tmp2;  
-            printf("operands[1] = %s\n", operands[1]);
+            /*printf("operands[1] = %s\n", operands[1]);*/
             if (*operands[1] == ',')
             {
                 errorLog(lineNumber, "unnecessary ',' character.");

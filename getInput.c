@@ -144,7 +144,7 @@ void deleteBlanks(int lineNumber, char *line)
 	int i=0, j;
 	for (j=0 ; j<MAXLINE && line[j]!='\0' ; j++)
 	{
-		if(line[j]!=' ' && line[j]!='\t')
+		if(!isspace(line[j]))
 		{
 			tmp[i++]=line[j];
 			if(tmp[j]==',')
@@ -155,14 +155,16 @@ void deleteBlanks(int lineNumber, char *line)
 			if(tmp[i-2]==',' && line[j+1]==',')
 				errorLog(lineNumber, "Syntax error: two commas in a row");
 		}
-		else
+		else if(tmp[i]!='\n')
 		{
 			tmp[i++]=' ';
 		}
 	}
-	if(tmp[i]==' ')
+	while(isspace(tmp[i]))
+	{
 		i--;
-	tmp[i]='\0';
+	}
+	tmp[--i]='\0';
 	strcpy(line, tmp);
 }
 
@@ -187,8 +189,10 @@ char *getWord(char *line, char **word)
 		c++;
 		line++;
 	}
+	/*printf("checkpoint getword 1\n");*/
 	*c = '\0';
 	*word = str;
+	/*printf("checkpoint getword 2: %s\n", str);*/
 
 	if(*line == ' ')
 		line++;
