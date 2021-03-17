@@ -13,7 +13,7 @@ void first(FILE *file)
     int L, lineNumber = 1, tmp=0;
     char label[MAXWORD], EXlabel[MAXWORD];
     char **firstWord = psalloc();
-    char *line = (char *)calloc(sizeof(char), MAXLINE);
+    char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
     /*List *codeList = listalloc();*/
     List *dataList = listalloc();
     Symbols *SymbolList = Slistalloc();
@@ -33,9 +33,12 @@ void first(FILE *file)
     createRulesTable();
     IC = 100;
     DC = 0;
-    while(fgets(line, MAXLINE, Sfile) != NULL)
+    while(fgets(Fline, MAXLINE, Sfile) != NULL)
     {
-        printf("\nfirstRunLoopStart: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);
+        line=Fline;
+        /*printf("\nfirstRunLoopStart: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);*/
+        if(lineNumber>1)
+            printlist(dataList);
         labelFlag=0;
         deleteBlanks(lineNumber, line);
         printf("line %d: |%s|\n", lineNumber, line);
@@ -273,7 +276,7 @@ int datalen(char *line, char *type)
 void dataCoding(char *line, struct lnode *dataList)
 {
     extern int DC;
-    int tmp, i/*, sign*/;
+    int tmp, i,j/*, sign*/;
     char num[MAXWORD];
     Row *TW = ralloc();
     /*printf("!%s!\n", line);*/
@@ -289,7 +292,7 @@ void dataCoding(char *line, struct lnode *dataList)
     }
     else
     {
-        for(; *line!='\0'; line++)
+        for(j=1; *line!='\0'; line++)
         {
             for(tmp=0/*, sign=1*/, i=0 ; *line!=',' && *line!='\n' && *line!=' ' && *line!='\0' ; i++, line++)
             {
@@ -305,6 +308,7 @@ void dataCoding(char *line, struct lnode *dataList)
             if(isdigit(num[0]) || num[0]=='-' || num[0]=='+')
             {
                 printf("!%s! = !%d!\n", num, tmp);
+                TW->address=DC+j;
                 TW->value=tmp;
                 printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->value.address, dataList->value.value, TW->value);
                 addToList(dataList, TW);

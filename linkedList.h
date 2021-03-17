@@ -10,7 +10,7 @@ typedef struct lnode{
 }List;
 
 List *listalloc();
-
+void printlist(struct lnode *list);
 void addToList(struct lnode *list, Row *value);
 
 Row getFromList(struct lnode *list, int index);

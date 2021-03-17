@@ -18,6 +18,14 @@ List *listalloc()
     p->value=*R;
     return p;
 }
+void printlist(struct lnode *list)
+{
+    printf("address=%d value=%d\n",list->value.address, list->value.value);
+    if(list->next != NULL)
+    {
+        printlist(list->next);
+    }
+}
 
 void addToList(struct lnode *list, Row *value)
 {
@@ -34,7 +42,7 @@ void addToList(struct lnode *list, Row *value)
     {
         addToList(list->next, value);
     }
-    printf("addToList: list.value.address=%d, list.value.value=%d, value=%d\n", list->value.address, list->value.value, value->value);
+    /*printf("addToList: list.value.address=%d, list.value.value=%d, value=%d\n", list->value.address, list->value.value, value->value);*/
         
 }
 
