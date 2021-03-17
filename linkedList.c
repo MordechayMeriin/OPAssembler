@@ -20,9 +20,9 @@ List *listalloc()
 }
 void printlist(struct lnode *list)
 {
-    printf("address=%d value=%d\n",list->value.address, list->value.value);
     if(list->next != NULL)
     {
+        printf("address=%d value=%d\n",list->value.address, list->value.value);
         printlist(list->next);
     }
 }

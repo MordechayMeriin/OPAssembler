@@ -24,7 +24,7 @@ void first(FILE *file)
     Array *codeList1 = createDynamicTable();
     /*Array *dataList1 = createDynamicTable();*/
  
-    if (line == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
+    if (Fline == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
     {
         mallocError("string");
     }
@@ -41,7 +41,7 @@ void first(FILE *file)
             printlist(dataList);
         labelFlag=0;
         deleteBlanks(lineNumber, line);
-        printf("line %d: |%s|\n", lineNumber, line);
+        printf("\nline %d: |%s|\n", lineNumber, line);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -160,7 +160,7 @@ void first(FILE *file)
         }
         lineNumber++;
         /*printSymbols(SymbolList, 1);*/
-        printf("firstRunLoopEnd: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);
+        /*printf("firstRunLoopEnd: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);*/
     }
     printf("now what??\n");
     if(areErrorsExist())
@@ -283,7 +283,7 @@ void dataCoding(char *line, struct lnode *dataList)
     if(*line=='\"')
     {
         line++;
-        for(i=1; *line!='\"' ;i++, line++)
+        for(i=1; *line!='\"' ; i++, line++)
         {
             TW->value=(int)(*line);
             TW->address=DC+i;
@@ -310,9 +310,10 @@ void dataCoding(char *line, struct lnode *dataList)
                 printf("!%s! = !%d!\n", num, tmp);
                 TW->address=DC+j;
                 TW->value=tmp;
-                printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->value.address, dataList->value.value, TW->value);
+                j++;
+                /*printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->value.address, dataList->value.value, TW->value);*/
                 addToList(dataList, TW);
-                printf("dataCoding after addToList. datalist: %d, %d, value=%d\n\n",dataList->value.address, dataList->value.value, TW->value);
+                /*printf("dataCoding after addToList. datalist: %d, %d, value=%d\n\n",dataList->value.address, dataList->value.value, TW->value);*/
                 /*if(*line==' ')
                     line++;*/
             }
