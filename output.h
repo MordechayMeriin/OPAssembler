@@ -9,5 +9,6 @@
 void printCodeListDebug(List *list);
 
 void printDynamicListDebug(Array *arr);
+/*int hex12(int a);*/
 
 #endif

@@ -159,7 +159,6 @@ void first(FILE *file)
             deleteBlanks(line);*/
         }
         lineNumber++;
-        /*printSymbols(SymbolList, 1);*/
         /*printf("firstRunLoopEnd: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);*/
     }
     printf("now what??\n");
@@ -174,6 +173,7 @@ void first(FILE *file)
         ICF=IC;
         DCF=DC;
         setVal(SymbolList, ICF);
+        printSymbols(SymbolList, 1);
         /*second(Sfile, codeList, dataList, SymbolList);*/
     }
     /*printCodeListDebug(codeList);*/
@@ -245,7 +245,7 @@ int datalen(char *line, char *type)
             ;
         /*printf("datalen checkpoint: !%s! %d\n", line, i);*/
         if(line[0]=='\"' && line[i]=='\"' && (line[i+1]=='\0' || (line[i+1] == ' ' /*&& line[i+2]=='\n'*/)))
-            return (i-1);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters, but indexes starts from 0*/
+            return (i);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters, but indexes starts from 0*/
     }
     if(strcmp(type, ".data")==0)
     {
@@ -289,6 +289,9 @@ void dataCoding(char *line, struct lnode *dataList)
             TW->address=DC+i;
             addToList(dataList, TW);
         }
+        TW->value=(int)('\0');
+        TW->address=DC+i;
+        addToList(dataList, TW);
     }
     else
     {

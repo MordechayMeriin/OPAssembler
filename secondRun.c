@@ -2,10 +2,10 @@
 
 void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
 {
-    /*extern int IC, DC, ICF, DCF;*/
+    extern int IC, DC, ICF, DCF;
     int L, lineNumber = 1;
     char **firstWord = psalloc();
-    char *line = (char *)calloc(sizeof(char), MAXLINE);
+    char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
     Symbols *tmp;
     Rule *rule;
     char **operands;
@@ -14,13 +14,14 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
 
     printf("insideSecond\n");
 
-    if (line == NULL)
+    if (Fline == NULL || firstWord == NULL)
     {
         mallocError("string");
     }
 
-    while(fgets(line, MAXLINE, file) != NULL)
+    while(fgets(Fline, MAXLINE, file) != NULL)
     {
+        line=Fline;
         deleteBlanks(lineNumber, line);
         if(!isEmpty(line))
         {
@@ -49,7 +50,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
                 {
                     mallocError("OpWord");
                 }
-                 L = 1;
+                L = 1;
                 rule = getRule(*firstWord);
                 operands = getOperands(line, lineNumber);
                 
@@ -97,7 +98,7 @@ void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *opera
         }
         if(validLabel(operand))
         {
-            for(; strcmp(SymbolList->name, operand)!=0 && SymbolList!=NULL ; SymbolList=SymbolList->next)
+            for(; strcmp(SymbolList->name, operand)!=0 && SymbolList->next!=NULL ; SymbolList=SymbolList->next)
                 ;
             if(strcmp(operand, SymbolList->name)==0)
             {

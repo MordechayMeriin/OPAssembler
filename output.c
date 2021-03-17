@@ -8,7 +8,7 @@ void printCodeListDebug(List *list)
     for (i = 0; i < 10; i++)
     {
         Row r = getFromList(list, i);
-        printf("list item %d: %d\t%d\t%c\n", i, r.address, r.value, r.ARE);
+        printf("list item %d: %d\t%x\t%c\n", i, r.address, r.value, r.ARE);
     }
 
     
@@ -23,7 +23,17 @@ void printCodeListDebug(List *list)
     }
     */
 }
-
+/*int hex12(int a)
+{
+    int i, tmp=0;
+    for(i=0; i<12 ; i++)
+    {
+        tmp=tmp|(a&1);
+        tmp=1<<tmp;
+        a=1<<a;
+    }
+    return tmp;
+}*/
 void printDynamicListDebug(Array *arr)
 {
     int i;
