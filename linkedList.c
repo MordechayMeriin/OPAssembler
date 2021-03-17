@@ -32,9 +32,9 @@ void addToList(struct lnode *list, Row *value)
     }
     else
     {
-    /*printf("addToList: list.value.address=%d, list.value.value=%d, value=%d\n", list->value.address, list->value.value, value->value);*/
         addToList(list->next, value);
     }
+    printf("addToList: list.value.address=%d, list.value.value=%d, value=%d\n", list->value.address, list->value.value, value->value);
         
 }
 

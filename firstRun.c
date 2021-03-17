@@ -60,8 +60,8 @@ void first(FILE *file)
                     tmp=datalen(line, *firstWord);
                     if(tmp)
                     {
-                        DC+=tmp;
                         dataCoding(line, dataList);
+                        DC+=tmp;
                         /*dataCoding1(line, dataList1);*/
                         printf("DC=%d\n", DC);
                     }
@@ -272,6 +272,7 @@ int datalen(char *line, char *type)
 
 void dataCoding(char *line, struct lnode *dataList)
 {
+    extern int DC;
     int tmp, i/*, sign*/;
     char num[MAXWORD];
     Row *TW = ralloc();
@@ -279,9 +280,10 @@ void dataCoding(char *line, struct lnode *dataList)
     if(*line=='\"')
     {
         line++;
-        for(; *line!='\"' ; line++)
+        for(i=1; *line!='\"' ;i++, line++)
         {
             TW->value=(int)(*line);
+            TW->address=DC+i;
             addToList(dataList, TW);
         }
     }
