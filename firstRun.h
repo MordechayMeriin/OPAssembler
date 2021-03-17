@@ -8,6 +8,7 @@
 #include "errors.h"
 #include "binary.h"
 #include "output.h"
+#include "dynamicTable.h"
 
 
 void first(FILE *file);

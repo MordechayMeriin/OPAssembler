@@ -17,7 +17,7 @@ void errorLog(int line, char *error)
     errorLength = strlen(errorMessage);
     if (errorsLog == NULL || *errorsLog == '\0')
     {
-        errorsLog = (char *)malloc(sizeof(char) * errorLength + 2));       
+        errorsLog = (char *)malloc(sizeof(char) * errorLength + 2);       
     }
     else
     {
@@ -55,5 +55,11 @@ void freeLogMemory()
 
 int areErrorsExist()
 {
-    return (!*errorsLog == '\0');
+    printf("inside areErrorsExist\n");
+    if (errorsLog != NULL)
+    {
+        return (strcmp(errorsLog, ""));
+    }
+    printf("errorsLog is NULL\n");
+    return 0;
 }

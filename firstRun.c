@@ -21,6 +21,7 @@ void first(FILE *file)
     char **operands;
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
+    Array *codeList1 = createDynamicTable();
  
     if (line == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
     {
@@ -31,7 +32,7 @@ void first(FILE *file)
     createRulesTable();
     IC = 100;
     DC = 0;
-    while(fgets(line, MAXLINE, file) != NULL)
+    while(fgets(line, MAXLINE, Sfile) != NULL)
     {
         labelFlag=0;
         deleteBlanks(lineNumber, line);
@@ -88,6 +89,7 @@ void first(FILE *file)
                 {
                     errorLog(lineNumber, strcat("Invalid direction: ", *firstWord));
                 }
+                
             }
             else /*it is a command line*/
             {
@@ -127,13 +129,16 @@ void first(FILE *file)
                         }
                     }
                     
-                    addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                    /*addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');*/
+                    addRowToDynamicTable(codeList1, IC++, *wordToInt12(operation), 'A');
                     if (operands[0] != NULL)
                     {
-                        addRowToCodeList(codeList, IC++, *codedOp1, 'N');
+                        /*addRowToCodeList(codeList, IC++, *codedOp1, 'N');*/
+                        addRowToDynamicTable(codeList1, IC++, *codedOp1, 'N');
                         if (operands[1] != NULL)
                         {
-                            addRowToCodeList(codeList, IC++, *codedOp2, 'N');
+                            /*addRowToCodeList(codeList, IC++, *codedOp2, 'N');*/
+                            addRowToDynamicTable(codeList1, IC++, *codedOp2, 'N');
                         }                        
                     }                                        
                 }
@@ -150,19 +155,22 @@ void first(FILE *file)
         lineNumber++;
         /*printSymbols(SymbolList, 1);*/
     }
-
+    printf("now what??\n");
     if(areErrorsExist())
     {
+        printf("errors\n");
         printErrors();
     }
     else
     {
+        printf("No errors\n");
         ICF=IC;
         DCF=DC;
         setVal(SymbolList, ICF);
         /*second(Sfile, codeList, dataList, SymbolList);*/
     }
-    printCodeListDebug(codeList);
+    /*printCodeListDebug(codeList);*/
+    printDynamicListDebug(codeList1);
 }
 
 int isEmpty(char *line)
@@ -305,18 +313,16 @@ void dataCoding(char *line, struct lnode *dataList)
 }
 
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
-{
-    /*printf("inside getOperands with: %s\n", line);*/
+{   
     char **operands = (char **)calloc(sizeof(char), MAXWORD * 2);
     char **thirdOperand = psalloc();
     char **tmp1 = psalloc(), **tmp2 = psalloc();
-
+    /*printf("inside getOperands with: %s\n", line);*/
     line = getWord(line, tmp1);
 
     if (*tmp1 != NULL)
     {
         operands[0] = *tmp1;
-        /*printf("operands[0] = %s\n", operands[0]);*/
         if (*operands[0] == ',')
         {
             errorLog(lineNumber, "unnecessary ',' character.");
@@ -325,8 +331,9 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
         {
             line = getWord(line, tmp2);
-            if (*tmp2 != NULL)
+            if (*tmp2 != NULL && **tmp2 != '\0')
             {
+                printf("2: tmp2 = '%s'\n", *tmp2);
                 if (**tmp2 == ',') 
                 {
                     line = getWord(line, tmp2); 
@@ -343,22 +350,23 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         {
             line = getWord(line, tmp2);
         }
-        if (*tmp2 != NULL)
+        operands[1] = *tmp2;  
+
+        if (*operands[1] == ',')
         {
-            operands[1] = *tmp2;  
-            /*printf("operands[1] = %s\n", operands[1]);*/
-            if (*operands[1] == ',')
-            {
-                errorLog(lineNumber, "unnecessary ',' character.");
-            }
+            errorLog(lineNumber, "unnecessary ',' character.");
+        }
 
-            line = getWord(line, thirdOperand);  
+        line = getWord(line, thirdOperand);  
 
-            if (strcmp(*thirdOperand, ""))
-            {
-                errorLog(lineNumber, "you can't have more then 2 operands.");
-            }
-        }        
+        if (strcmp(*thirdOperand, ""))
+        {
+            errorLog(lineNumber, "you can't have more then 2 operands.");
+        }
+
+
+             
+        printf("5\n");   
     }
     free(tmp1);
     free(tmp2);
@@ -471,9 +479,8 @@ void addOperand(OpWord *operation, Rule *rule, char *operand, Int12 *codedOperan
 
 void addRowToCodeList(List *list, int address ,Int12 value, char ARE)
 {
-    printf("inside addRowToCodeList\n");
     Row *row = ralloc();
-
+    printf("inside addRowToCodeList\n");
     row->address = address;
     row->value = value.value;
     row->ARE = ARE;

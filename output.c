@@ -23,3 +23,13 @@ void printCodeListDebug(List *list)
     }
     */
 }
+
+void printDynamicListDebug(Array *arr)
+{
+    int i;
+    for (i = 0; i < arr->used; i++)
+    {
+        printf("Row %d:\t%d\t%d\t%c\n",i , arr->array[i].address, arr->array[i].value, arr->array[i].ARE);
+    }
+    
+}
