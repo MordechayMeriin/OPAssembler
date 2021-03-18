@@ -173,11 +173,13 @@ void first(FILE *file)
         ICF=IC;
         DCF=DC;
         setVal(SymbolList, ICF);
+        setData(dataList);
         printSymbols(SymbolList, 1);
+        printDynamicListDebug(codeList1);
+        printlist(dataList);
         /*second(Sfile, codeList, dataList, SymbolList);*/
     }
     /*printCodeListDebug(codeList);*/
-    printDynamicListDebug(codeList1);
 }
 
 int isEmpty(char *line)

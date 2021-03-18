@@ -25,6 +25,8 @@ typedef struct symbols{
 
 Symbols *Slistalloc();
 
+void setData(List *Dlist);
+
 void addToTable(struct symbols *newS, char *name, char *attributes, int val, int lineNumber);
 
 void setVal(struct symbols *s, int val);
