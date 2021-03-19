@@ -161,15 +161,18 @@ void first(char *fileName)
     }
     else
     {
+        List *tmp;
         ICF=IC-1;
         DCF=DC;
         setVal(SymbolList, ICF);
         setData(dataList);
         printSymbols(SymbolList, 1);
         free(file);
-        second(fileName, codeList, dataList, SymbolList);
+        for(tmp=codeList; tmp->next!=NULL ; tmp=tmp->next)
+        ;
+        tmp->next=dataList;
         printCodeListDebug(codeList);
-        printCodeListDebug(dataList);
+        second(fileName, codeList, dataList, SymbolList);
         /*printlist(dataList);*/
     }
     
