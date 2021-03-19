@@ -4,11 +4,11 @@
 #include "firstRun.h"
 
 
-void first(FILE *file)
+void first(char *fileName)
 {
-    FILE *Sfile = file;
+    FILE *file = openFile(fileName);
     extern int IC, DC, ICF, DCF;
-    extern void second(FILE *,List *, List *, Symbols *);
+    extern void second(char *,List *, List *, Symbols *);
     short int labelFlag=0;
     int L, lineNumber = 1, tmp=0;
     char label[MAXWORD], EXlabel[MAXWORD];
@@ -31,7 +31,7 @@ void first(FILE *file)
     createRulesTable();
     IC = 100;
     DC = 0;
-    while(fgets(Fline, MAXLINE, Sfile) != NULL)
+    while(fgets(Fline, MAXLINE, file) != NULL)
     {
         line=Fline;
         /*printf("\nfirstRunLoopStart: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);*/
@@ -166,10 +166,11 @@ void first(FILE *file)
         setVal(SymbolList, ICF);
         setData(dataList);
         printSymbols(SymbolList, 1);
-        second(Sfile, codeList, dataList, SymbolList);
+        second(fileName, codeList, dataList, SymbolList);
         printCodeListDebug(codeList);
         printCodeListDebug(dataList);
         /*printlist(dataList);*/
+        free(file);
     }
     
 }

@@ -1,8 +1,10 @@
+
 #include "secondRun.h"
 
-void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
+void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
 {
     extern int IC, DC, ICF, DCF;
+    FILE *file = openFile(fileName);
     int L, lineNumber = 1;
     char **firstWord = psalloc();
     char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
@@ -12,7 +14,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
 
-    printf("insideSecond\n");
+    printf("\n\ninsideSecond\n\n");
 
     if (Fline == NULL || firstWord == NULL)
     {
@@ -21,6 +23,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
 
     while(fgets(Fline, MAXLINE, file) != NULL)
     {
+        printf("Line %d: '%s'", lineNumber, Fline);
         line=Fline;
         deleteBlanks(lineNumber, line);
         if(!isEmpty(line))
@@ -84,6 +87,7 @@ void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList)
     {
         /*files creating*/
     }
+    free(file);
 }
 
 void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber)

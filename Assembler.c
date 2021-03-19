@@ -11,11 +11,7 @@ int main(int argc, char *argv[])
    {
       for (i = 1; i < argc; i++)
       {
-         FILE *inputFile;
-         inputFile = openFile(argv[i]);
-         first(inputFile);
-
-         free(inputFile);
+         first(argv[i]);        
       }
       return 0;   
    }
