@@ -142,7 +142,7 @@ void deleteBlanks(int lineNumber, char *line)
 {
 	char tmp[MAXLINE];
 	int i=0, j;
-	for (j=0 ; j<MAXLINE && line[j]!='\0' ; j++)
+	for (j=0 ; j<MAXLINE && line[j]!='\0' && line[j]!='\n' ; j++)
 	{
 		if(!isspace(line[j]))
 		{
@@ -160,11 +160,11 @@ void deleteBlanks(int lineNumber, char *line)
 			tmp[i++]=' ';
 		}
 	}
-	while(isspace(tmp[i]))
+	while(isspace(tmp[i])&& i>0)
 	{
 		i--;
 	}
-	tmp[--i]='\0';
+	tmp[i]='\0';
 	strcpy(line, tmp);
 }
 

@@ -39,10 +39,10 @@ void first(char *fileName)
             printlist(dataList);*/
         labelFlag=0;
         
+            deleteBlanks(lineNumber, line);
         printf("\nline %d: |%s|\n", lineNumber, Fline);
         if(!isEmpty(line))
         {
-            deleteBlanks(lineNumber, line);
             line = getWord(line, firstWord);
             /*printf("word: %s\n", *firstWord);*/
             if(isItLable(lineNumber, *firstWord))
