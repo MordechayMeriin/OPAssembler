@@ -40,7 +40,7 @@ void first(char *fileName)
         labelFlag=0;
         
             deleteBlanks(lineNumber, line);
-        printf("\nline %d: |%s|\n", lineNumber, Fline);
+        /*printf("\nline %d: |%s|\n", lineNumber, Fline);*/
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -80,7 +80,7 @@ void first(char *fileName)
                         {
                             if (*line=='\0')
                             {
-                                printf("checkpoint exteral label\n");
+                                /*printf("checkpoint exteral label\n");*/
                                 addToTable(SymbolList, EXlabel, "external", 0, lineNumber);
                             }
                             else
@@ -127,7 +127,7 @@ void first(char *fileName)
                             codedOp1 = addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);                            
                             codedOp2 = addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
                             
-                            printf("2 operands: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);
+                            /*printf("2 operands: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);*/
                             addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                             addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->inVal)) ? 'N' : 'A');
                             addRowToCodeList(codeList, IC++, *codedOp2, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
@@ -136,7 +136,7 @@ void first(char *fileName)
                         {
                             
                             codedOp1 = addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
-                            printf("1 operand: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);
+                            /*printf("1 operand: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);*/
                             addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                             addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
                         }
@@ -166,11 +166,11 @@ void first(char *fileName)
         setVal(SymbolList, ICF);
         setData(dataList);
         printSymbols(SymbolList, 1);
+        free(file);
         second(fileName, codeList, dataList, SymbolList);
         printCodeListDebug(codeList);
         printCodeListDebug(dataList);
         /*printlist(dataList);*/
-        free(file);
     }
     
 }
@@ -333,15 +333,15 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
     char **thirdOperand = psalloc();
     char **tmp1 = psalloc(), **tmp2 = psalloc();
 
-    printf("inside getOperands. line = '%s'\n", line);
+    /*printf("inside getOperands. line = '%s'\n", line);*/
 
     line = getWord(line, tmp1);
-    printf("getOperands 1: *tmp1 = '%s'\n", *tmp1);
+    /*printf("getOperands 1: *tmp1 = '%s'\n", *tmp1);*/
 
     if (*tmp1 != NULL)
     {
         operands[0] = *tmp1;
-        printf("getOperands 2: operands[0] = '%s'\n", operands[0]);
+        /*printf("getOperands 2: operands[0] = '%s'\n", operands[0]);*/
         if (*operands[0] == ',')
         {
             errorLog(lineNumber, "unnecessary ',' character.");
@@ -349,11 +349,11 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         
         if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
         {
-            printf("getOperands 3: operands[0] = '%s'\n", operands[0]);
+            /*printf("getOperands 3: operands[0] = '%s'\n", operands[0]);*/
             line = getWord(line, tmp2);
             if (*tmp2 != NULL && **tmp2 != '\0')
             {
-                printf("2: tmp2 = '%s'\n", *tmp2);
+                /*printf("2: tmp2 = '%s'\n", *tmp2);*/
                 if (**tmp2 == ',') 
                 {
                     line = getWord(line, tmp2); 
@@ -440,25 +440,25 @@ void addOperandTypeToWord(OpWord *word, int value, int operandType)
 
 Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber)
 {
-    printf("inside addOperand: %s\n", operand);
+    /*printf("inside addOperand: %s\n", operand);*/
     Int12 *codedOperand = i12alloc();
     struct addressingMethod *method = getAddressingMethod(rule, operandType);
     if (*operand == '#')/*Immediate Addressing*/
     {
-        printf("%s is immediate.\n", operand);
+        /*printf("%s is immediate.\n", operand);*/
         if (method->immediate)
         {
             addOperandTypeToWord(operation, IMMEDIATE_ADDRESSING, operandType);
             if (!isStringNumber(++operand))
             {
-                printf("after ++operand: %s.\n", operand);
+                /*printf("after ++operand: %s.\n", operand);*/
                 errorLog(lineNumber, strcat(operand - 1, " - invalid operand. must be a number."));
             }
             else
             {
-                printf("after ++operand: %s.\n", operand);
+                /*printf("after ++operand: %s.\n", operand);*/
                 codedOperand->value = atoi(operand);
-                printf("codedOperand: %d.\n", codedOperand->value);
+                /*printf("codedOperand: %d.\n", codedOperand->value);*/
             }          
         }
         else

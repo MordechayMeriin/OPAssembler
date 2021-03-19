@@ -142,9 +142,13 @@ void deleteBlanks(int lineNumber, char *line)
 {
 	char tmp[MAXLINE];
 	int i=0, j;
-	for (j=0 ; j<MAXLINE && line[j]!='\0' && line[j]!='\n' ; j++)
+	for (j=0 ; j<MAXLINE && line[j]!='\0' ; j++)
 	{
-		if(!isspace(line[j]))
+		if(line[j]=='\n')
+		{
+			break;
+		}
+		else if(!isspace(line[j]))
 		{
 			tmp[i++]=line[j];
 			if(tmp[j]==',')
@@ -155,16 +159,17 @@ void deleteBlanks(int lineNumber, char *line)
 			if(tmp[i-2]==',' && line[j+1]==',')
 				errorLog(lineNumber, "Syntax error: two commas in a row");
 		}
-		else if(tmp[i]!='\n')
+		else if(line[j]!='\n')
 		{
 			tmp[i++]=' ';
 		}
 	}
-	while(isspace(tmp[i])&& i>0)
+	while(isSpace(tmp[i-1]) && i>1)
 	{
 		i--;
 	}
 	tmp[i]='\0';
+	/*printf("\n||%s||\n", tmp);*/
 	strcpy(line, tmp);
 }
 

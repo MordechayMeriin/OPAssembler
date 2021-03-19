@@ -6,7 +6,7 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
     extern int IC, DC, ICF, DCF;
     FILE *file = openFile(fileName);
     int L, lineNumber = 1;
-    char **firstWord = psalloc();
+    char **firstWord = psalloc(), **tmpWord=psalloc();
     char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
     Symbols *tmp;
     Rule *rule;
@@ -23,9 +23,10 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
 
     while(fgets(Fline, MAXLINE, file) != NULL)
     {
-        printf("Line %d: '%s'", lineNumber, Fline);
+        /*printf("\nLine %d: '%s'\n", lineNumber, Fline);*/
         line=Fline;
         deleteBlanks(lineNumber, line);
+        printf("Line %d: |%s|\n", lineNumber, Fline);
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -35,14 +36,15 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
             }
             if(isItDir(*firstWord))
             {
+                line=getWord(line,tmpWord);
                 if (strcmp(*firstWord, ".entry")==0)
                 {
-                    for(tmp=SymbolList ; strcmp(tmp->name, line)!=0 && tmp!=NULL ; tmp=tmp->next)
+                    for(tmp=SymbolList ; tmp->next!=NULL && strcmp(tmp->name, *tmpWord)!=0 ; tmp=tmp->next)
                     ;
-                    if(strcmp(line, tmp->name)==0)
+                    if(strcmp(*tmpWord, tmp->name)==0)
                         strcat(tmp->attributes, ", entry");
                     else
-                        errorLog(lineNumber, strcat(line, " is not a known label"));
+                        errorLog(lineNumber, strcat(*tmpWord, " is not a known label"));
                 }
             }
             else
@@ -69,9 +71,11 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
                         codedOp2 = i12alloc();
                         addOperand2(operation, SymbolList, rule, operands[0], codedOp1, SOURCE_OPERAND, lineNumber);
                         addOperand2(operation, SymbolList, rule, operands[1], codedOp2, TARGET_OPERAND, lineNumber);
+                        printf("two operands\n");
                     }
                     else
                     {
+                        printf("just one\n");
                         addOperand2(operation, SymbolList, rule, operands[0], codedOp1, TARGET_OPERAND, lineNumber);
                     }
                 }
@@ -95,20 +99,24 @@ void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *opera
     int rel=0;
     if (*operand != '#' && !isRegister(operand))
     {
+            printf("wow2 --%s--\n", operand);
         if (*operand == '%')
         {
             operand++;
             rel=1;
+            /*printf("wow0\n");*/
         }
         if(validLabel(operand))
         {
+            /*printf("--%s--\n", operand);*/
             for(; strcmp(SymbolList->name, operand)!=0 && SymbolList->next!=NULL ; SymbolList=SymbolList->next)
-                ;
+                /*printf("|%s|=?=|%s|\n",SymbolList->name, operand)*/;
+            /*printf("|%s|==|%s|\n",SymbolList->name, operand);*/
             if(strcmp(operand, SymbolList->name)==0)
             {
                 if(rel) /*Relative Addressing*/
                 {
-                    codedOperand->value = (SymbolList->value.value)-(0);
+                    codedOperand->value = (SymbolList->value.value)-(codedOperand->value);
                 }
                 else /*Direct addressing*/
                 {
@@ -117,6 +125,7 @@ void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *opera
             }
             else
             {
+                printf("wow1\n:");
                 errorLog(lineNumber, strcat(operand, " is not a known label"));
             }
         }
