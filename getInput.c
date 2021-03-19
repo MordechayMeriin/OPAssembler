@@ -192,7 +192,6 @@ char *getWord(char *line, char **word)
 	/*printf("checkpoint getword 1\n");*/
 	*c = '\0';
 	*word = str;
-	/*printf("checkpoint getword 2: %s\n", str);*/
 
 	if(*line == ' ')
 		line++;

@@ -39,6 +39,17 @@ unsigned int int12ToInt(Int12 *pint)
     return num;
 }
 
+unsigned int intTo12BitInt(int bigInt)
+{
+    unsigned int num;
+    unsigned int mask;
+
+    mask = MAX_12BIT_NUMBER;
+    num = bigInt & mask;
+
+    return num;
+}
+
 unsigned int wordToInt(OpWord *pword)
 {
     unsigned int num;

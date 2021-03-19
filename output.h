@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "linkedList.h"
 #include "dynamicTable.h"
+#include "binary.h"
 
 void printCodeListDebug(List *list);
 

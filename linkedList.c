@@ -50,7 +50,6 @@ Row getFromList(struct lnode *list, int index)
 {
     struct lnode *pCurrentNode = list;
     int i;
-    printf("getFromList: list.value.address = %d, index = %d\n", list->value.address, index);
     for (i = 0; i < index; i++)
     {
         if (pCurrentNode->next == NULL)

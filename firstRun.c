@@ -14,15 +14,13 @@ void first(FILE *file)
     char label[MAXWORD], EXlabel[MAXWORD];
     char **firstWord = psalloc();
     char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
-    /*List *codeList = listalloc();*/
+    List *codeList = listalloc();
     List *dataList = listalloc();
     Symbols *SymbolList = Slistalloc();
     Rule *rule;
     char **operands;
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
-    Array *codeList1 = createDynamicTable();
-    /*Array *dataList1 = createDynamicTable();*/
  
     if (Fline == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
     {
@@ -37,13 +35,14 @@ void first(FILE *file)
     {
         line=Fline;
         /*printf("\nfirstRunLoopStart: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);*/
-        if(lineNumber>1)
-            printlist(dataList);
+        /*if(lineNumber>1)
+            printlist(dataList);*/
         labelFlag=0;
-        deleteBlanks(lineNumber, line);
-        printf("\nline %d: |%s|\n", lineNumber, line);
+        
+        printf("\nline %d: |%s|\n", lineNumber, Fline);
         if(!isEmpty(line))
         {
+            deleteBlanks(lineNumber, line);
             line = getWord(line, firstWord);
             /*printf("word: %s\n", *firstWord);*/
             if(isItLable(lineNumber, *firstWord))
@@ -118,75 +117,73 @@ void first(FILE *file)
                     operation->opcode = rule->opcode;
                     operation->funct = rule->funct;
 
+                    
                     if (*operands[0] != '\0')
                     {
-                        L++; 
-                        codedOp1 = i12alloc();                       
+                        L++;                      
                         if (*operands[1] != '\0')
                         {
                             L++;
-                            codedOp2 = i12alloc();
-                            addOperand(operation, rule, operands[0], codedOp1, SOURCE_OPERAND, lineNumber);
-                            addOperand(operation, rule, operands[1], codedOp2, TARGET_OPERAND, lineNumber);
+                            codedOp1 = addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);                            
+                            codedOp2 = addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
+                            
+                            printf("2 operands: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);
+                            addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                            addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->inVal)) ? 'N' : 'A');
+                            addRowToCodeList(codeList, IC++, *codedOp2, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
                         }
                         else
                         {
-                            addOperand(operation, rule, operands[0], codedOp1, TARGET_OPERAND, lineNumber);
+                            
+                            codedOp1 = addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
+                            printf("1 operand: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);
+                            addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                            addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
                         }
                     }
-                    
-                    /*addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');*/
-                    addRowToDynamicTable(codeList1, IC++, *wordToInt12(operation), 'A');
-                    if (operands[0] != NULL)
+                    else
                     {
-                        /*addRowToCodeList(codeList, IC++, *codedOp1, 'N');*/
-                        addRowToDynamicTable(codeList1, IC++, *codedOp1, 'N');
-                        if (operands[1] != NULL)
-                        {
-                            /*addRowToCodeList(codeList, IC++, *codedOp2, 'N');*/
-                            addRowToDynamicTable(codeList1, IC++, *codedOp2, 'N');
-                        }                        
-                    }                                        
+                        addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                    }
+                                                     
                 }
                 else
                 {
                     errorLog(lineNumber, strcat("Unknown command: ", *firstWord));
-                }
-                 
-                
+                }              
             }
-            /*line=readLine(file);
-            deleteBlanks(line);*/
         }
         lineNumber++;
-        /*printf("firstRunLoopEnd: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);*/
     }
-    printf("now what??\n");
     if(areErrorsExist())
     {
-        printf("errors\n");
         printErrors();
     }
     else
     {
-        printf("No errors\n");
-        ICF=IC;
+        ICF=IC-1;
         DCF=DC;
         setVal(SymbolList, ICF);
         setData(dataList);
         printSymbols(SymbolList, 1);
-        printDynamicListDebug(codeList1);
-        printlist(dataList);
-        /*second(Sfile, codeList, dataList, SymbolList);*/
+        second(Sfile, codeList, dataList, SymbolList);
+        printCodeListDebug(codeList);
+        printCodeListDebug(dataList);
+        /*printlist(dataList);*/
     }
-    /*printCodeListDebug(codeList);*/
+    
 }
 
 int isEmpty(char *line)
 {
-    if(line[0]==';' || line[0]=='\0')
+    if(line[0]==';' || line[0]=='\0' || line[0]=='\n')
         return 1;
     return 0;
+}
+
+int isNotAbsolute(int addressingMethod)
+{
+    return (addressingMethod == DIRECT_ADDRESSING || addressingMethod == RELATIVE_ADDRESSING);
 }
 
 int isItDir(char *line)
@@ -278,10 +275,9 @@ int datalen(char *line, char *type)
 void dataCoding(char *line, struct lnode *dataList)
 {
     extern int DC;
-    int tmp, i,j/*, sign*/;
+    int tmp, i,j;
     char num[MAXWORD];
     Row *TW = ralloc();
-    /*printf("!%s!\n", line);*/
     if(*line=='\"')
     {
         line++;
@@ -289,6 +285,7 @@ void dataCoding(char *line, struct lnode *dataList)
         {
             TW->value=(int)(*line);
             TW->address=DC+i;
+            TW->ARE = 'A';
             addToList(dataList, TW);
         }
         TW->value=(int)('\0');
@@ -315,6 +312,7 @@ void dataCoding(char *line, struct lnode *dataList)
                 printf("!%s! = !%d!\n", num, tmp);
                 TW->address=DC+j;
                 TW->value=tmp;
+                TW->ARE = 'A';
                 j++;
                 /*printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->value.address, dataList->value.value, TW->value);*/
                 addToList(dataList, TW);
@@ -329,16 +327,20 @@ void dataCoding(char *line, struct lnode *dataList)
 }
 
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
-{   
+{       
     char **operands = (char **)calloc(sizeof(char), MAXWORD * 2);
     char **thirdOperand = psalloc();
     char **tmp1 = psalloc(), **tmp2 = psalloc();
-    /*printf("inside getOperands with: %s\n", line);*/
+
+    printf("inside getOperands. line = '%s'\n", line);
+
     line = getWord(line, tmp1);
+    printf("getOperands 1: *tmp1 = '%s'\n", *tmp1);
 
     if (*tmp1 != NULL)
     {
         operands[0] = *tmp1;
+        printf("getOperands 2: operands[0] = '%s'\n", operands[0]);
         if (*operands[0] == ',')
         {
             errorLog(lineNumber, "unnecessary ',' character.");
@@ -346,6 +348,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         
         if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
         {
+            printf("getOperands 3: operands[0] = '%s'\n", operands[0]);
             line = getWord(line, tmp2);
             if (*tmp2 != NULL && **tmp2 != '\0')
             {
@@ -399,8 +402,11 @@ int trimComma(char *word)/*delete a comma at the end of an operand, and return a
     }
     isComma =  (*(--word) == ',');
 
-    *word = '\0';
-
+    if (isComma)
+    {
+       *word = '\0';
+    }
+    
     return isComma;
 }
 
@@ -428,27 +434,31 @@ void addOperandTypeToWord(OpWord *word, int value, int operandType)
     else
     {
        word->outVal = value;
-    }    
+    }
 }
 
-void addOperand(OpWord *operation, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber)
+Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber)
 {
+    printf("inside addOperand: %s\n", operand);
+    Int12 *codedOperand = i12alloc();
     struct addressingMethod *method = getAddressingMethod(rule, operandType);
-
     if (*operand == '#')/*Immediate Addressing*/
     {
-        
+        printf("%s is immediate.\n", operand);
         if (method->immediate)
         {
             addOperandTypeToWord(operation, IMMEDIATE_ADDRESSING, operandType);
             if (!isStringNumber(++operand))
             {
+                printf("after ++operand: %s.\n", operand);
                 errorLog(lineNumber, strcat(operand - 1, " - invalid operand. must be a number."));
             }
             else
             {
+                printf("after ++operand: %s.\n", operand);
                 codedOperand->value = atoi(operand);
-            }           
+                printf("codedOperand: %d.\n", codedOperand->value);
+            }          
         }
         else
         {
@@ -484,23 +494,23 @@ void addOperand(OpWord *operation, Rule *rule, char *operand, Int12 *codedOperan
     {
         if (method->direct)
         {
-            addOperandTypeToWord(operation, REGISTER_DIRECT_ADDRESSING, operandType);
+            addOperandTypeToWord(operation, DIRECT_ADDRESSING, operandType);
         }
         else
         {
             errorLog(lineNumber, strcat("direct addressing operand is not supported for the command: ", rule->name));
         }       
     }
+
+    return codedOperand;
 }
 
 void addRowToCodeList(List *list, int address ,Int12 value, char ARE)
 {
     Row *row = ralloc();
-    printf("inside addRowToCodeList\n");
     row->address = address;
     row->value = value.value;
     row->ARE = ARE;
-    printf("row: address = %d, value = %d, ARE = %c\n", row->address, row->value, row->ARE);
     addToList(list, row);
 }
 

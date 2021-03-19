@@ -13,6 +13,7 @@
 
 void first(FILE *file);
 int isEmpty(char * line); /*is it an empty line or a comment line*/
+int isNotAbsolute(int addressingMethod);
 int isItDir(char *line); /*is it a directive statment - data, string, labels etc*/
 int isItLable(int lineNumber, char *word/*, Symbols *list*/); /*not implemented the second argument yet*/
 int datalen(char *line, char *type);
@@ -23,7 +24,7 @@ char **getOperands(char *line, int lineNumber);/*Return an array of strings, rep
 int trimComma(char *word);/*delete a comma at the end of an operand, and return an indication if there was a comma.*/
 int isRegister(char *operand);
 void addOperandTypeToWord(OpWord *word, int value, int operandType);
-void addOperand(OpWord *operation, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber);
+Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber);
 void addRowToCodeList(List *list, int address ,Int12 value, char ARE);
 void second(FILE *file, List *codeList, List *dataList, Symbols *SymbolList);
 

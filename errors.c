@@ -55,11 +55,9 @@ void freeLogMemory()
 
 int areErrorsExist()
 {
-    printf("inside areErrorsExist\n");
     if (errorsLog != NULL)
     {
         return (strcmp(errorsLog, ""));
     }
-    printf("errorsLog is NULL\n");
     return 0;
 }
