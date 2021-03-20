@@ -42,8 +42,6 @@ void addToList(struct lnode *list, Row *value)
     {
         addToList(list->next, value);
     }
-    /*printf("addToList: list.value.address=%d, list.value.value=%d, value=%d\n", list->value.address, list->value.value, value->value);*/
-        
 }
 
 Row getFromList(struct lnode *list, int index)
@@ -147,17 +145,3 @@ void setData(List *Dlist)
     if(Dlist->next!=NULL)
         setData(Dlist->next);
 }
-
-/*void setAddress(struct symbols *s, char *name, Int12 address)
-{
-    if (strcmp(s->next->name, name)==0)
-    {
-        s->address=address;
-    }
-    else if(s->next != NULL)
-        setAddress(s->next, name, address);
-    else
-    {
-        error
-    }
-}*/

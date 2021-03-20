@@ -10,23 +10,3 @@ void printCodeListDebug(List *list)
         list = list->next;
     }   
 }
-/*int hex12(int a)
-{
-    int i, tmp=0;
-    for(i=0; i<12 ; i++)
-    {
-        tmp=tmp|(a&1);
-        tmp=1<<tmp;
-        a=1<<a;
-    }
-    return tmp;
-}*/
-void printDynamicListDebug(Array *arr)
-{
-    int i;
-    for (i = 0; i < arr->used; i++)
-    {
-        printf("Row %d:\t%d\t%d\t%c\n",i , arr->array[i].address, arr->array[i].value, arr->array[i].ARE);
-    }
-    
-}

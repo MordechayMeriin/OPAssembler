@@ -29,7 +29,7 @@ typedef struct opword /*12 digit machine code line*/
     unsigned int outVal: OUTVAL_SIZE;
 } OpWord;
 
-typedef struct int12{
+typedef struct int12{ /*value, address or register, in 12 digit machine language*/
     signed int value: WORD_SIZE;
 } Int12;
 
@@ -54,7 +54,7 @@ typedef struct addressingMethod
     unsigned int registerDirect: 1;
 }AddressingMethod;
 
-typedef struct rule
+typedef struct rule /*commad details*/
 {
     unsigned int opcode: OPCODE_SIZE;
     unsigned int funct: FUNCT_SIZE;

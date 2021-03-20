@@ -4,6 +4,7 @@
 /*extern int currentLine;*/
 int  IC = 100, DC = 1, ICF, DCF; /*global vars*/
 
+
 int main(int argc, char *argv[]) 
 {
    int i;
@@ -11,7 +12,7 @@ int main(int argc, char *argv[])
    {
       for (i = 1; i < argc; i++)
       {
-         first(argv[i]);        
+         first(argv[i]);
       }
       return 0;   
    }
