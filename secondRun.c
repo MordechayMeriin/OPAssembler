@@ -27,6 +27,7 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
         line=Fline;
         deleteBlanks(lineNumber, line);
         printf("Line %d: |%s|\n", lineNumber, Fline);
+
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord);
@@ -42,43 +43,33 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
                     for(tmp=SymbolList ; tmp->next!=NULL && strcmp(tmp->name, *tmpWord)!=0 ; tmp=tmp->next)
                     ;
                     if(strcmp(*tmpWord, tmp->name)==0)
-                        strcat(tmp->attributes, ", entry");
+                    {
+                        tmp->attributes = strcat(tmp->attributes, ", entry");
+                        tmp->attributeList.entry = 1;
+                    }                        
                     else
                         errorLog(lineNumber, strcat(*tmpWord, " is not a known label"));
                 }
             }
             else
-            {
+            {              
                 /**complete command coding*/ 
-                operation = (OpWord *)calloc(sizeof(OpWord), 1);
-                if (operation == NULL)
-                {
-                    mallocError("OpWord");
-                }
-                L = 1;
-                rule = getRule(*firstWord);
+
+                int operationAddress = codeList->value.address;
                 operands = getOperands(line, lineNumber);
-                
-                operation->opcode = rule->opcode;
-                operation->funct = rule->funct;
-                if (operands[0] != NULL)
+
+                if (*operands[0] != '\0')
                 {
-                    L++; 
-                    codedOp1 = i12alloc();                       
-                    if (operands[1] != NULL)
-                    {
-                        L++;
-                        codedOp2 = i12alloc();
-                        addOperand2(operation, SymbolList, rule, operands[0], codedOp1, SOURCE_OPERAND, lineNumber);
-                        addOperand2(operation, SymbolList, rule, operands[1], codedOp2, TARGET_OPERAND, lineNumber);
-                        printf("two operands\n");
-                    }
-                    else
-                    {
-                        printf("just one\n");
-                        addOperand2(operation, SymbolList, rule, operands[0], codedOp1, TARGET_OPERAND, lineNumber);
+                    codeList = codeList->next; 
+                    addOperand2(SymbolList, operands[0], &codeList, operationAddress, lineNumber);   
+
+                    if (*operands[1] != '\0')
+                    {                              
+                        codeList = codeList->next;              
+                        addOperand2(SymbolList, operands[1], &codeList, operationAddress, lineNumber);
                     }
                 }
+                codeList = codeList->next; 
             }
         }
         lineNumber++;
@@ -94,7 +85,7 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
     free(file);
 }
 
-void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber)
+void addOperand2(Symbols *SymbolList, char *operand, List **codeList, int operationAddress, int lineNumber)
 {
     int rel=0;
     if (*operand != '#' && !isRegister(operand))
@@ -116,11 +107,13 @@ void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *opera
             {
                 if(rel) /*Relative Addressing*/
                 {
-                    codedOperand->value = (SymbolList->value.value)-(codedOperand->value);
+                    (*codeList)->value.value = SymbolList->value.value - operationAddress;
+                    (*codeList)->value.ARE = 'A';
                 }
                 else /*Direct addressing*/
                 {
-                    codedOperand->value = SymbolList->value.value;
+                    (*codeList)->value.value = SymbolList->value.value;
+                    (*codeList)->value.ARE = (SymbolList->attributeList.external) ? 'E' : 'R';
                 }
             }
             else

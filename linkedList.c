@@ -81,11 +81,11 @@ Symbols *Slistalloc()
     return p;
 }
 
-void addToTable(struct symbols *newS, char *name, char *attributes, int val, int lineNumber)
+void addToTable(struct symbols *newS, char *name, char *attributes, int attribute, int val, int lineNumber)
 {
     if (strcmp(newS->name, name)==0)
     {
-        if (strcmp(attributes, "external"))
+        if (attribute == external)
         {
             errorLog(lineNumber, "two symbols with the same name");
         }
@@ -96,10 +96,29 @@ void addToTable(struct symbols *newS, char *name, char *attributes, int val, int
         strcpy(newS->name ,name);
         strcpy(newS->attributes ,attributes);
         newS->value.value=val;
+
+        switch (attribute)
+        {
+        case code:
+            newS->attributeList.code = 1;
+        break;
+        case data:
+            newS->attributeList.data = 1;
+        break;
+        case external:
+            newS->attributeList.external = 1;
+        break;
+        case entry:
+            newS->attributeList.entry = 1;
+        break;
+        
+        default:
+            break;
+        }
     }
     else
     {
-        addToTable(newS->next, name, attributes, val, lineNumber);
+        addToTable(newS->next, name, attributes, attribute, val, lineNumber);
     }
         
 }

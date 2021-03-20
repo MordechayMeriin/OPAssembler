@@ -14,6 +14,12 @@
 #define REGISTER_DIRECT_ADDRESSING 3
 
 
+enum arributesEnum{
+    code,
+    data,
+    external,
+    entry
+};
 
 typedef struct opword /*12 digit machine code line*/
 {

@@ -5,4 +5,4 @@
 
 void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList);
 
-void addOperand2(OpWord *operation, Symbols *SymbolList, Rule *rule, char *operand, Int12 *codedOperand, int operandType, int lineNumber);    
+void addOperand2(Symbols *SymbolList, char *operand, List **codeList, int operationAddress, int lineNumber);

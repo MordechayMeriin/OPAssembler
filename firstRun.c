@@ -30,7 +30,7 @@ void first(char *fileName)
     deleteBlanks(line);*/
     createRulesTable();
     IC = 100;
-    DC = 0;
+    DC = 1;
     while(fgets(Fline, MAXLINE, file) != NULL)
     {
         line=Fline;
@@ -57,7 +57,7 @@ void first(char *fileName)
                 {
                     if(labelFlag)
                     {
-                        addToTable(SymbolList, label, "data", DC, lineNumber);
+                        addToTable(SymbolList, label, "data", data, DC, lineNumber);
                     }
                     tmp=datalen(line, *firstWord);
                     if(tmp)
@@ -81,7 +81,7 @@ void first(char *fileName)
                             if (*line=='\0')
                             {
                                 /*printf("checkpoint exteral label\n");*/
-                                addToTable(SymbolList, EXlabel, "external", 0, lineNumber);
+                                addToTable(SymbolList, EXlabel, "external", external, 0, lineNumber);
                             }
                             else
                             {
@@ -100,7 +100,7 @@ void first(char *fileName)
             {
                 if(labelFlag)
                 {
-                    addToTable(SymbolList, label, "code", IC, lineNumber);
+                    addToTable(SymbolList, label, "code", code, IC, lineNumber);
                 }
                 if (isValidCommand(*firstWord))
                 {
@@ -171,9 +171,10 @@ void first(char *fileName)
         for(tmp=codeList; tmp->next!=NULL ; tmp=tmp->next)
         ;
         tmp->next=dataList;
-        printCodeListDebug(codeList);
+        
         second(fileName, codeList, dataList, SymbolList);
-        /*printlist(dataList);*/
+        printCodeListDebug(codeList);
+        printSymbols(SymbolList, 1);
     }
     
 }
