@@ -4,6 +4,7 @@
         "string.h": "c",
         "stdio.h": "c",
         "typeinfo": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "common.h": "c"
     }
 }

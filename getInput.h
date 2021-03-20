@@ -7,12 +7,9 @@
 #define MAXLINE 82
 #define MAXWORD 32
 
-/*char *getLine(FILE *);
-char skipBlanks(FILE *, int *);*/
 FILE *openFile(char *);
-/*char *readLine(FILE *);*/
-void deleteBlanks(int lineNumber, char *);
-char *getWord(char *line, char **word);
+void deleteBlanks(int lineNumber, char *); /*deletes unnecessary spaces and tabs, and make the line more readable*/
+char *getWord(char *line, char **word); /*move the first word to **word and returns pointer to the next word*/
 int isSpace(char);
 
 #endif

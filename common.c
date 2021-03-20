@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "common.h"
 #define MAXWORD 20
 
 void mallocError(char *dataType)
@@ -31,16 +32,3 @@ int isStringNumber(char *str)
     }
     return 1;
 }
-
-/*int openWord(char *line, char *word, int wordLength)
-{
-    char tmp[MAXWORD];
-    int i;
-
-     for(i=0 ; i<wordLength ; i++)
-        tmp[i]=line[i];
-    tmp[i]='\0';
-    if(strcmp(tmp,word)==0)
-        return 1;
-    return 0;
-}*/

@@ -11,61 +11,51 @@ void first(char *fileName)
     extern void second(char *,List *, List *, Symbols *);
     short int labelFlag=0;
     int L, lineNumber = 1, tmp=0;
-    char label[MAXWORD], EXlabel[MAXWORD];
-    char **firstWord = psalloc();
-    char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
-    List *codeList = listalloc();
-    List *dataList = listalloc();
-    Symbols *SymbolList = Slistalloc();
+    char label[MAXWORD], EXlabel[MAXWORD]; /*lables names*/
+    char **firstWord = psalloc(); /*first word in line*/
+    char *line /**/, *Fline /*pointer to first char in line*/ = (char *)calloc(sizeof(char), MAXLINE);
+    List *codeList = listalloc(); /*list of commands and arguments*/
+    List *dataList = listalloc(); /**/
+    Symbols *SymbolList = Slistalloc(); /*list of symbols labeles etc*/
     Rule *rule;
     char **operands;
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
  
-    if (Fline == NULL || firstWord == NULL /*|| EXlabel == NULL*/)
+    if (Fline == NULL || firstWord == NULL)
     {
         mallocError("string");
     }
-    /*line=readLine(file);
-    deleteBlanks(line);*/
     createRulesTable();
     IC = 100;
     DC = 0;
     while(fgets(Fline, MAXLINE, file) != NULL)
     {
         line=Fline;
-        /*printf("\nfirstRunLoopStart: datalist.value.address = %d, datalist.value.value=%d, labelFlag=%d\n", dataList->value.address, dataList->value.value, labelFlag);*/
-        /*if(lineNumber>1)
-            printlist(dataList);*/
         labelFlag=0;
-        
-            deleteBlanks(lineNumber, line);
-        /*printf("\nline %d: |%s|\n", lineNumber, Fline);*/
+        deleteBlanks(lineNumber, line);
         if(!isEmpty(line))
         {
-            line = getWord(line, firstWord);
-            /*printf("word: %s\n", *firstWord);*/
-            if(isItLable(lineNumber, *firstWord))
+            line = getWord(line, firstWord); /*takes the first word in the line to firstWord, and moves line to point to the next word*/
+            if(isItLable(lineNumber, *firstWord)) /*if the first word is a label*/
             {
                 labelFlag=1;
                 strcpy(label, *firstWord);
-                line = getWord(line, firstWord);
+                line = getWord(line, firstWord); /*saves the label in another var and moved to the next word*/
             }
-            if(isItDir(*firstWord))
+            if(isItDir(*firstWord)) /*it is a direction*/
             {
                 if (strcmp(*firstWord, ".data")==0 ||  strcmp(*firstWord, ".string")==0)
                 {
                     if(labelFlag)
                     {
-                        addToTable(SymbolList, label, "data", DC, lineNumber);
+                        addToTable(SymbolList, label, "data", DC, lineNumber); /*adds the label's details to the symbols list*/
                     }
                     tmp=datalen(line, *firstWord);
                     if(tmp)
                     {
-                        dataCoding(line, dataList);
+                        dataCoding(line, dataList); /*saves the data to the memory in a seperate list*/
                         DC+=tmp;
-                        /*dataCoding1(line, dataList1);*/
-                        printf("DC=%d\n", DC);
                     }
                     else
                         errorLog(lineNumber, "Invalid data");
@@ -80,7 +70,6 @@ void first(char *fileName)
                         {
                             if (*line=='\0')
                             {
-                                /*printf("checkpoint exteral label\n");*/
                                 addToTable(SymbolList, EXlabel, "external", 0, lineNumber);
                             }
                             else
@@ -100,7 +89,7 @@ void first(char *fileName)
             {
                 if(labelFlag)
                 {
-                    addToTable(SymbolList, label, "code", IC, lineNumber);
+                    addToTable(SymbolList, label, "code", IC, lineNumber);/*adds the label's details to the symbols list*/
                 }
                 if (isValidCommand(*firstWord))
                 {
@@ -127,7 +116,6 @@ void first(char *fileName)
                             codedOp1 = addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);                            
                             codedOp2 = addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
                             
-                            /*printf("2 operands: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);*/
                             addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                             addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->inVal)) ? 'N' : 'A');
                             addRowToCodeList(codeList, IC++, *codedOp2, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
@@ -136,7 +124,6 @@ void first(char *fileName)
                         {
                             
                             codedOp1 = addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
-                            /*printf("1 operand: operation inVal = %d. outVal = %d.\n", operation->inVal, operation->outVal);*/
                             addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                             addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
                         }
@@ -161,19 +148,19 @@ void first(char *fileName)
     }
     else
     {
-        List *tmp;
+        List *tmpList;
         ICF=IC-1;
         DCF=DC;
         setVal(SymbolList, ICF);
         setData(dataList);
         printSymbols(SymbolList, 1);
         free(file);
-        for(tmp=codeList; tmp->next!=NULL ; tmp=tmp->next)
+        for(tmpList=codeList; tmpList->next->next!=NULL ; tmpList=tmpList->next)
         ;
-        tmp->next=dataList;
+        tmpList->next=dataList;/*ataches dataList to the end of codelist*/
+
         printCodeListDebug(codeList);
-        second(fileName, codeList, dataList, SymbolList);
-        /*printlist(dataList);*/
+        second(fileName, codeList, dataList, SymbolList); /*start the second run*/
     }
     
 }
@@ -241,18 +228,15 @@ int datalen(char *line, char *type)
     int i, j=0;
     if(strcmp(type, ".string")==0)
     {
-        /*printf("string datalen: ||%s||, %d\n", line, strlen(line));*/
         if(strlen(line)<=2)
             return 0;
         for(i=1; line[i]!='\0' && line[i]!='\"' ; i++)
             ;
-        /*printf("datalen checkpoint: !%s! %d\n", line, i);*/
-        if(line[0]=='\"' && line[i]=='\"' && (line[i+1]=='\0' || (line[i+1] == ' ' /*&& line[i+2]=='\n'*/)))
+        if(line[0]=='\"' && line[i]=='\"' && (line[i+1]=='\0' || (line[i+1] == ' ')))
             return (i);/*starts with appostrophes, ends with appostrophes, total 2 spare cahracters, but indexes starts from 0*/
     }
     if(strcmp(type, ".data")==0)
     {
-        /*printf("data datalen: ||%s||, %d\n", line, strlen(line));*/
         for(i=0; line[i]!='\0' ; i++)
         {
             if(isdigit(line[i]) || line[i]==' ' || line[i]==',' || line[i]=='-' || line[i]== '+')
@@ -271,7 +255,6 @@ int datalen(char *line, char *type)
                     break;
             }
         }
-        /*printf("datalen checkpoint: !%s! %d\n", line, j);*/
     }
     return j;
 }
@@ -300,29 +283,19 @@ void dataCoding(char *line, struct lnode *dataList)
     {
         for(j=1; *line!='\0'; line++)
         {
-            for(tmp=0/*, sign=1*/, i=0 ; *line!=',' && *line!='\n' && *line!=' ' && *line!='\0' ; i++, line++)
+            for(tmp=0, i=0 ; *line!=',' && *line!='\n' && *line!=' ' && *line!='\0' ; i++, line++)
             {
-                /*if(*line=='-')
-                    sign=-1;
-                else if(*line!='+')
-                    tmp=tmp*10+(((int)(*line)-'0')*sign);
-                */
                 num[i]=*line;
             }
             num[i]='\0';
             tmp=atoi(num);
             if(isdigit(num[0]) || num[0]=='-' || num[0]=='+')
             {
-                printf("!%s! = !%d!\n", num, tmp);
                 TW->address=DC+j;
                 TW->value=tmp;
                 TW->ARE = 'A';
                 j++;
-                /*printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->value.address, dataList->value.value, TW->value);*/
                 addToList(dataList, TW);
-                /*printf("dataCoding after addToList. datalist: %d, %d, value=%d\n\n",dataList->value.address, dataList->value.value, TW->value);*/
-                /*if(*line==' ')
-                    line++;*/
             }
             if(*line=='\0')
                 line--;
@@ -336,15 +309,11 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
     char **thirdOperand = psalloc();
     char **tmp1 = psalloc(), **tmp2 = psalloc();
 
-    /*printf("inside getOperands. line = '%s'\n", line);*/
-
     line = getWord(line, tmp1);
-    /*printf("getOperands 1: *tmp1 = '%s'\n", *tmp1);*/
-
+    
     if (*tmp1 != NULL)
     {
         operands[0] = *tmp1;
-        /*printf("getOperands 2: operands[0] = '%s'\n", operands[0]);*/
         if (*operands[0] == ',')
         {
             errorLog(lineNumber, "unnecessary ',' character.");
@@ -352,11 +321,9 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         
         if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
         {
-            /*printf("getOperands 3: operands[0] = '%s'\n", operands[0]);*/
             line = getWord(line, tmp2);
             if (*tmp2 != NULL && **tmp2 != '\0')
             {
-                /*printf("2: tmp2 = '%s'\n", *tmp2);*/
                 if (**tmp2 == ',') 
                 {
                     line = getWord(line, tmp2); 
@@ -386,10 +353,6 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         {
             errorLog(lineNumber, "you can't have more then 2 operands.");
         }
-
-
-             
-        /*printf("5\n");   */
     }
     free(tmp1);
     free(tmp2);
@@ -443,25 +406,20 @@ void addOperandTypeToWord(OpWord *word, int value, int operandType)
 
 Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType, int lineNumber)
 {
-    /*printf("inside addOperand: %s\n", operand);*/
     Int12 *codedOperand = i12alloc();
     struct addressingMethod *method = getAddressingMethod(rule, operandType);
     if (*operand == '#')/*Immediate Addressing*/
     {
-        /*printf("%s is immediate.\n", operand);*/
         if (method->immediate)
         {
             addOperandTypeToWord(operation, IMMEDIATE_ADDRESSING, operandType);
             if (!isStringNumber(++operand))
             {
-                /*printf("after ++operand: %s.\n", operand);*/
                 errorLog(lineNumber, strcat(operand - 1, " - invalid operand. must be a number."));
             }
             else
             {
-                /*printf("after ++operand: %s.\n", operand);*/
                 codedOperand->value = atoi(operand);
-                /*printf("codedOperand: %d.\n", codedOperand->value);*/
             }          
         }
         else
@@ -516,42 +474,4 @@ void addRowToCodeList(List *list, int address ,Int12 value, char ARE)
     row->value = value.value;
     row->ARE = ARE;
     addToList(list, row);
-}
-
-void dataCoding1(char *line, Array *dataList)
-{
-    int tmp, i;
-    char num[MAXWORD];
-    Row *TW = ralloc();
-    if(*line=='\"')
-    {
-        line++;
-        for(; *line!='\"' ; line++)
-        {
-            TW->value=(int)(*line);
-            addToDynamicTable(dataList, TW);
-        }
-    }
-    else
-    {
-        for(; *line!='\0'; line++)
-        {
-            for(tmp=0, i=0 ; *line!=',' && *line!='\n' && *line!=' ' && *line!='\0' ; i++, line++)
-            {
-                num[i]=*line;
-            }
-            num[i]='\0';
-            tmp=atoi(num);
-            if(isdigit(num[0]) || num[0]=='-' || num[0]=='+')
-            {
-                printf("!%s! = !%d!\n", num, tmp);
-                TW->value=tmp;
-                printf("dataCoding before addToList. datalist: %d, %d, value=%d\n",dataList->array->address, dataList->array->value, TW->value);
-                addToDynamicTable(dataList, TW);
-                printf("dataCoding after addToList\n");
-            }
-            if(*line=='\0')
-                line--;
-        }
-    }
 }

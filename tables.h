@@ -9,12 +9,5 @@ struct label /*entries and externals tables*/
     int address;
 };
 
-/*struct symbols
-{
-    char symbol[10];
-    int value;
-    char attributes[4]; code/entry/data/external
-};*/
-
 
 #endif
