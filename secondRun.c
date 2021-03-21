@@ -20,12 +20,15 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
     {
         line=Fline;
         deleteBlanks(lineNumber, line);
+        printf("\nline %d: |%s|\n", lineNumber, line);
 
         if(!isEmpty(line))
         {
             line = getWord(line, firstWord, lineNumber);
+            printf("checkpoint %s\n", line);
             if(isItLable(lineNumber, *firstWord))
             {
+                printf("|%s| is a label\n", *firstWord);
                 line = getWord(line, firstWord, lineNumber);
             }
             if(isItDir(*firstWord))
@@ -47,7 +50,6 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
             else
             {              
                 /**complete command coding*/ 
-
                 int operationAddress = codeListP->value.address;
                 operands = getOperands(line, lineNumber);
 

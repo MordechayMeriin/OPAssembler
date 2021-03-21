@@ -67,7 +67,6 @@ char *getWord(char *line, char **word, int lineNumber)
 	char *c = (char *)calloc(sizeof(char), MAXWORD);
 	char *str = c;
 	int wordCounter = 0;
-
 	while (isSpace(*line) && *line != '\0')
 		line++;
 

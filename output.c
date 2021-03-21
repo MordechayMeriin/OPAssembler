@@ -19,7 +19,6 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
     objFile = CreateFile(fileName, ".obj");
 
     fprintf(objFile, "%d %d\n", ICF - 100, DCF);
-    printf("%d %d\n", ICF - 100, DCF);/*Debug*/
 
     while (codeList->next != NULL)
     {
