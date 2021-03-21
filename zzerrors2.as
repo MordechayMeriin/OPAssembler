@@ -58,7 +58,7 @@ someLabel24: .entry KAMEHAMEHA
 .extern KAMEHAMEHA
 someLabel24: .extern HOPA
 .entry HOPA
-HOPA: .data -21
+;HOPA: .data -21
 
 ;relative addressing errors
 .extern FRIEND

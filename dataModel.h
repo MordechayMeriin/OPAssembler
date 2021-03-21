@@ -64,6 +64,7 @@ typedef struct rule /*commad details*/
     unsigned int opcode: OPCODE_SIZE;
     unsigned int funct: FUNCT_SIZE;
     char *name;
+    unsigned int numOfOperands: 2;
     AddressingMethod inAd;
     AddressingMethod outAd;
 } Rule;

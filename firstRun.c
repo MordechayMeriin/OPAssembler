@@ -141,6 +141,11 @@ void first(char *fileName)
                             L++;                      
                             if (*operands[1] != '\0')
                             {
+                                if (rule->numOfOperands != 2)
+                                {
+                                    errorLogCat(lineNumber, rule->name, " doesn't expect 2 operands");
+                                }
+                                
                                 L++;
                                 codedOp1 = addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);                            
                                 codedOp2 = addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
@@ -151,7 +156,10 @@ void first(char *fileName)
                             }
                             else
                             {
-                                
+                                if (rule->numOfOperands != 1)
+                                {
+                                    errorLogCat(lineNumber, rule->name, " doesn't expect a single operand");
+                                }
                                 codedOp1 = addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
                                 addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                                 addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
@@ -159,6 +167,10 @@ void first(char *fileName)
                         }
                         else
                         {
+                            if (rule->numOfOperands != 0)
+                                {
+                                    errorLogCat(lineNumber, rule->name, " expects operands");
+                                }
                             addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                         }
                                                      
