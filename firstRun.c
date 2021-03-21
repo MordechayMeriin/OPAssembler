@@ -199,7 +199,6 @@ void first(char *fileName)
     }
     free(firstWord);
     free(Fline);
-    /*free(operands);*/
     if(areErrorsExist())
     {
         printErrors();
