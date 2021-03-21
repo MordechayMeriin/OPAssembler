@@ -16,8 +16,7 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
     while (codeList->next != NULL)
     {
         fprintf(objFile, "%04d %03X %c\n", codeList->value.address, intTo12BitInt(codeList->value.value), codeList->value.ARE);
-        printf("%04d %03X %c\n", codeList->value.address, intTo12BitInt(codeList->value.value), codeList->value.ARE);
-        
+
         /*free previous node*/
         codeList = codeList->next;
         free(codeListForFree);
@@ -40,7 +39,6 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
             }
             
             fprintf(entFile, "%s %04d\n", symbolsList->name, symbolsList->value.value);
-            printf("Ent: %s %04d\n", symbolsList->name, symbolsList->value.value);/**Debug*/           
         }    
         /*free previous node*/   
         symbolsList = symbolsList->next;
@@ -69,7 +67,6 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
         }
 
         fprintf(extFile, "%s %04d\n", externalsList->name, externalsList->value.value);
-        printf("Ext: %s %04d\n", externalsList->name, externalsList->value.value);/**Debug*/
 
         /*free previous node*/   
         externalsList = externalsList->next;
