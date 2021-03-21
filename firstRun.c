@@ -156,6 +156,7 @@ void first(char *fileName)
 
                                 free(codedOp1);
                                 free(codedOp2);
+
                             }
                             else
                             {
@@ -178,9 +179,12 @@ void first(char *fileName)
                                 }
                             addRowToCodeList(codeList, IC++, *codedOperation, 'A');
                         }
+
                         free(codedOperation);
                         free(operation);
-                        
+                        free(operands);
+                       
+
                     }
                     else
                     {
@@ -195,7 +199,7 @@ void first(char *fileName)
     }
     free(firstWord);
     free(Fline);
-    free(operands);
+    /*free(operands);*/
     freeRulesTable();
     if(areErrorsExist())
     {
@@ -212,6 +216,7 @@ void first(char *fileName)
 
         for(tmpList=codeList; tmpList->next->next!=NULL ; tmpList=tmpList->next)
         ;
+        free(tmpList->next);
         tmpList->next=dataList;/*attaches dataList to the end of codelist*/
         
         second(fileName, codeList, dataList, SymbolList, ICF, DCF); /*start the second run*/

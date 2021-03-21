@@ -64,6 +64,7 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
                         addOperand2(SymbolList, externals, operands[1], &codeListP, operationAddress, lineNumber);
                     }
                 }
+                free(operands);
                 codeListP = codeListP->next; 
             }
         }
@@ -82,6 +83,28 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
     else
     {
         createFiles(codeList, SymbolList, externals, ICF, DCF, fileName);
+    }
+    while (codeList != NULL)
+    {
+        codeListP = codeList->next;
+        free(codeList);
+        codeList = codeListP;
+    }
+    while (SymbolList != NULL)
+    {
+        tmp = SymbolList->next;
+        free(SymbolList->name);
+        free(SymbolList->attributes);
+        free(SymbolList);
+        SymbolList = tmp;
+    }
+    while (externals != NULL)
+    {
+        tmp = externals->next;
+        free(externals->name);
+        free(externals->attributes);
+        free(externals);
+        externals = tmp;
     }
     fclose(file);
 }
