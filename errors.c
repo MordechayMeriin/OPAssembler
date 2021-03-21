@@ -23,7 +23,7 @@ void errorLog(int line, char *error)
     errorLength = strlen(errorMessage);
     if (errorsLog == NULL || *errorsLog == '\0')
     {
-        errorsLog = (char *)malloc(sizeof(char) * errorLength + 2);       
+        errorsLog = (char *)calloc(sizeof(char) , errorLength + 2);       
     }
     else
     {

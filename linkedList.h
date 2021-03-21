@@ -2,6 +2,7 @@
 #define LINKED_LIST_INCLUDED
 
 #include "dataModel.h"
+#include "getInput.h"
 
 
 typedef struct lnode{

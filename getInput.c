@@ -8,7 +8,7 @@ FILE *openFile(char *fileName)
 	FILE *pf;
 	char *fullFileName;
 	char ending[] = ".as";
-	fullFileName = (char *)malloc(sizeof(fileName) + sizeof(ending));
+	fullFileName = (char *)malloc(strlen(fileName) + strlen(ending));
 	if (fullFileName == NULL)
 	{
 		mallocError("string");

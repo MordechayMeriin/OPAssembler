@@ -48,9 +48,9 @@ Symbols *Slistalloc()
     }
     else
     {
-        char *tmp = (char *)calloc(sizeof(char), 1);
+        char *tmp = (char *)calloc(sizeof(char), MAXWORD);
         p->name = tmp;
-        tmp = (char *)calloc(sizeof(char), 1);
+        tmp = (char *)calloc(sizeof(char), MAXWORD);
         p->attributes = tmp;
     }
     return p;

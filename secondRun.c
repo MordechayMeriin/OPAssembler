@@ -24,8 +24,8 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
 
         if(!isEmpty(line))
         {
-            line = getWord(line, firstWord, lineNumber);
             printf("checkpoint %s\n", line);
+            line = getWord(line, firstWord, lineNumber);
             if(isItLable(lineNumber, *firstWord))
             {
                 printf("|%s| is a label\n", *firstWord);
