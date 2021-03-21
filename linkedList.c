@@ -16,6 +16,7 @@ List *listalloc()
     }  
     p->next = NULL;
     p->value=*R;
+    free(R);
     return p;
 }
 void printlist(struct lnode *list)
@@ -34,7 +35,7 @@ void addToList(struct lnode *list, Row *value)
         
         List *newList;
         list->value = *value;       
-        newList = listalloc();          
+        newList = listalloc();
         list->next = newList;
         newList->next = NULL;
     }

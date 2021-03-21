@@ -153,6 +153,8 @@ void first(char *fileName)
                                 addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                                 addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->inVal)) ? 'N' : 'A');
                                 addRowToCodeList(codeList, IC++, *codedOp2, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
+                                free(codedOp2);
+                                free(codedOp1);
                             }
                             else
                             {
@@ -163,6 +165,7 @@ void first(char *fileName)
                                 codedOp1 = addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
                                 addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                                 addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
+                                free(codedOp1);
                             }
                         }
                         else
@@ -173,7 +176,8 @@ void first(char *fileName)
                                 }
                             addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
                         }
-                                                     
+                        free(operands);
+                        free(operation);                         
                     }
                     else
                     {
@@ -200,6 +204,7 @@ void first(char *fileName)
 
         for(tmpList=codeList; tmpList->next->next!=NULL ; tmpList=tmpList->next)
         ;
+        free(tmpList->next);
         tmpList->next=dataList;/*attaches dataList to the end of codelist*/
         
         second(fileName, codeList, dataList, SymbolList, ICF, DCF); /*start the second run*/
@@ -512,6 +517,7 @@ Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType,
     {
         if (method->registerDirect)
         {
+            free(codedOperand);
             codedOperand = intToRegister(atoi(++operand));
             addOperandTypeToWord(operation, REGISTER_DIRECT_ADDRESSING, operandType);
         }
