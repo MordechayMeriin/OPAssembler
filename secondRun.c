@@ -1,18 +1,14 @@
 
 #include "secondRun.h"
 
-void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
+void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList, int ICF, int DCF)
 {
-    extern int IC, DC, ICF, DCF;
     FILE *file = openFile(fileName);
-    int L, lineNumber = 1;
+    int lineNumber = 1;
     char **firstWord = psalloc(), **tmpWord=psalloc();
     char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
     Symbols *tmp, *externals = Slistalloc();
-    Rule *rule;
     char **operands;
-    OpWord *operation;
-    Int12 *codedOp1 = NULL, *codedOp2 = NULL;
     List *codeListP = codeList;
 
     if (Fline == NULL || firstWord == NULL)
@@ -22,10 +18,8 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
 
     while(fgets(Fline, MAXLINE, file) != NULL)
     {
-        /*printf("\nLine %d: '%s'\n", lineNumber, Fline);*/
         line=Fline;
         deleteBlanks(lineNumber, line);
-        /*printf("Line %d: |%s|\n", lineNumber, Fline);*/
 
         if(!isEmpty(line))
         {
@@ -89,19 +83,15 @@ void addOperand2(Symbols *SymbolList, Symbols *externalsList, char *operand, Lis
     int rel=0;
     if (*operand != '#' && !isRegister(operand))
     {
-            /*printf("wow2 --%s--\n", operand);*/
         if (*operand == '%')
         {
             operand++;
             rel=1;
-            /*printf("wow0\n");*/
         }
         if(validLabel(operand))
         {
-            /*printf("--%s--\n", operand);*/
             for(; strcmp(SymbolList->name, operand)!=0 && SymbolList->next!=NULL ; SymbolList=SymbolList->next)
-                /*printf("|%s|=?=|%s|\n",SymbolList->name, operand)*/;
-            /*printf("|%s|==|%s|\n",SymbolList->name, operand);*/
+                ;
             if(strcmp(operand, SymbolList->name)==0)
             {
                 if(rel) /*Relative Addressing*/

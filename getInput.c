@@ -41,7 +41,7 @@ void deleteBlanks(int lineNumber, char *line)
 		else if(!isspace(line[j]))
 		{
 			tmp[i++]=line[j];
-			if(tmp[j]==',')
+			if(line[j]==',' || line[j]==':') /*',' and ':' could appear without a space after them, but it easier to analye when there is one*/
 				tmp[i++]=' ';
 		}
 		else if(i==0 || line[j+1]==',' || tmp[i-1]==' ')
@@ -49,7 +49,7 @@ void deleteBlanks(int lineNumber, char *line)
 			if(tmp[i-2]==',' && line[j+1]==',')
 				errorLog(lineNumber, "Syntax error: two commas in a row");
 		}
-		else if(line[j]!='\n')
+		else if(line[j]!='\n' || (isdigit(tmp[i-1]) && isdigit(line[j+1])))
 		{
 			tmp[i++]=' ';
 		}
@@ -77,6 +77,8 @@ char *getWord(char *line, char **word, int lineNumber)
 		if (wordCounter == MAXWORD - 1)
 		{
 			errorLog(lineNumber, "word is too long");
+			strcpy(c,"-exception");
+			c+=10;
 			break;
 		}
 		

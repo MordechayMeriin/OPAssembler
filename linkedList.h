@@ -34,7 +34,7 @@ typedef struct symbols{
 
 Symbols *Slistalloc();
 
-void setData(List *Dlist); /*update the addresses of the data with IC*/
+void setData(List *Dlist, int ICF); /*update the addresses of the data with IC*/
 
 void addToTable(struct symbols *newS, char *name, char *attributes, int attribute, int val, int lineNumber, int allowDup);
 

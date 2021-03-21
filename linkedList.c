@@ -138,10 +138,9 @@ void printSymbols(struct symbols *S, int num)
     }    
 }
 
-void setData(List *Dlist)
+void setData(List *Dlist, int ICF)
 {
-    extern int ICF;
     Dlist->value.address+=ICF;
     if(Dlist->next!=NULL)
-        setData(Dlist->next);
+        setData(Dlist->next, ICF);
 }

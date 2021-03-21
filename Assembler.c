@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include "firstRun.h"
 
-/*extern int currentLine;*/
-int  IC = 100, DC = 1, ICF, DCF; /*global vars*/
-
-
 int main(int argc, char *argv[]) 
 {
    int i;
