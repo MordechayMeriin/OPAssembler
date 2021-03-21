@@ -4,7 +4,6 @@
 #include "rulesHash.h"
 #include "linkedList.h"
 #include "getInput.h"
-#include "tables.h"
 #include "errors.h"
 #include "binary.h"
 #include "output.h"
