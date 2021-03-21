@@ -200,7 +200,6 @@ void first(char *fileName)
     free(firstWord);
     free(Fline);
     /*free(operands);*/
-    freeRulesTable();
     if(areErrorsExist())
     {
         printErrors();

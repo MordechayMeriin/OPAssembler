@@ -60,7 +60,8 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
 
                     if (*operands[1] != '\0')
                     {                              
-                        codeListP = codeListP->next;              
+                        codeListP = codeListP->next;   
+                        printf("operands[1] = '%s'\n", operands[1]);           
                         addOperand2(SymbolList, externals, operands[1], &codeListP, operationAddress, lineNumber);
                     }
                 }
@@ -73,8 +74,8 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
 
     free(firstWord);
     free(tmpWord);
-    free(Fline);
-    free(operands);
+    free(Fline);    
+    freeRulesTable();
     if(areErrorsExist())
     {
         printErrors();
@@ -83,7 +84,7 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
     else
     {
         createFiles(codeList, SymbolList, externals, ICF, DCF, fileName);
-    }
+    }/*
     while (codeList != NULL)
     {
         codeListP = codeList->next;
@@ -105,13 +106,14 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
         free(externals->attributes);
         free(externals);
         externals = tmp;
-    }
+    }*/
     fclose(file);
 }
 
 void addOperand2(Symbols *SymbolList, Symbols *externalsList, char *operand, List **codeList, int operationAddress, int lineNumber)
 {
     int rel=0;
+    printf("1\n");
     if (*operand != '#' && !isRegister(operand))
     {
         if (*operand == '%')
@@ -121,10 +123,12 @@ void addOperand2(Symbols *SymbolList, Symbols *externalsList, char *operand, Lis
         }
         if(validLabel(operand))
         {
+            printf("2\n");
             for(; strcmp(SymbolList->name, operand)!=0 && SymbolList->next!=NULL ; SymbolList=SymbolList->next)
                 ;
             if(strcmp(operand, SymbolList->name)==0)
             {
+                printf("3\n");
                 if(rel) /*Relative Addressing*/
                 {
                     (*codeList)->value.value = SymbolList->value.value - operationAddress;
@@ -132,6 +136,7 @@ void addOperand2(Symbols *SymbolList, Symbols *externalsList, char *operand, Lis
                 }
                 else /*Direct addressing*/
                 {
+                    printf("4\n");
                     (*codeList)->value.value = SymbolList->value.value;
                     if (SymbolList->attributeList.external)
                     {
