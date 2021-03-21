@@ -49,25 +49,3 @@ someLabel20: bne notHere
 someLabel21: jsr notHere
 someLabel22: red notHere
 someLabel23: prn notHere
-
-
-; entry and extern simultaneous deceleration (could be found post first-pass)
-.entry HENSHIN
-.extern HENSHIN
-someLabel24: .entry KAMEHAMEHA
-.extern KAMEHAMEHA
-someLabel24: .extern HOPA
-.entry HOPA
-;HOPA: .data -21
-
-;relative addressing errors
-.extern FRIEND
-jsr %FRIEND
-
-DJ: .data 123
-jmp %DJ
-
-bne %ledZeppelin
-ledZeppelin: .string "Stairway to heaven"
-
-;

@@ -1,0 +1,268 @@
+Assembly errors:
+
+Error at line 5: 1myLabel is an invalid label name
+Error at line 6: word is too long
+Error at line 7: Unknown command: this
+Error at line 8: Unknown command: thisLabelIsErroneous
+Error at line 9: label name alreaady used
+Error at line 12: invalid data syntax
+Error at line 13: invalid data syntax
+Error at line 14: Syntax error: two commas in a row
+Error at line 14: Invalid direction: .data,
+Error at line 15: Syntax error: two commas in a row
+Error at line 16: invalid data syntax
+Error at line 17: Unknown command: mov,
+Error at line 18: Syntax error: two commas in a row
+Error at line 18: you can't have more then 2 operands.
+Error at line 19: Unknown command: sub,
+Error at line 20: Unknown command: add,
+Error at line 21: Unknown command: add,
+Error at line 22: Unknown command: inc,
+Error at line 23: Unknown command: inc,
+Error at line 27: line is too long
+Error at line 28: line is too long
+Error at line 31: invalid data - no data
+Error at line 32: invalid data syntax
+Error at line 33: invalid data syntax
+Error at line 34: invalid data syntax
+Error at line 35: invalid data syntax
+Error at line 37: invalid data syntax
+Error at line 38: 2048 is out of range
+Error at line 39: -2049 is out of range
+Error at line 40: invalid data syntax
+Error at line 41: invalid data syntax
+Error at line 45: invalid string - no data
+Error at line 46: invalid string syntax
+Error at line 47: invalid string syntax
+Error at line 48: invalid string syntax
+Error at line 49: invalid string syntax
+Error at line 50: invalid string syntax
+Error at line 51: invalid string - no data
+Error at line 54: invalid data syntax
+Error at line 55: syntax error: you cann't have nothing after the string
+Error at line 56: extern direction contains more than one operand
+Error at line 58: you can't have more then 2 operands.
+Error at line 59: you can't have more then 2 operands.
+Error at line 60: you can't have more then 2 operands.
+Error at line 61: you can't have more then 2 operands.
+Error at line 62: you can't have more then 2 operands.
+Error at line 63: you can't have more then 2 operands.
+Error at line 64: you can't have more then 2 operands.
+Error at line 65: you can't have more then 2 operands.
+Error at line 66: you can't have more then 2 operands.
+Error at line 67: you can't have more then 2 operands.
+Error at line 68: clr doesn't expect 2 operands
+Error at line 68: register addressing operand is not supported for the command: clr
+Error at line 69: 2 operands without ',' seperate.
+Error at line 69: clr doesn't expect 2 operands
+Error at line 69: register addressing operand is not supported for the command: clr
+Error at line 70: inc doesn't expect 2 operands
+Error at line 70: register addressing operand is not supported for the command: inc
+Error at line 71: 2 operands without ',' seperate.
+Error at line 71: inc doesn't expect 2 operands
+Error at line 71: register addressing operand is not supported for the command: inc
+Error at line 72: you can't have more then 2 operands.
+Error at line 72: dec doesn't expect 2 operands
+Error at line 72: direct addressing operand is not supported for the command: dec
+Error at line 73: 2 operands without ',' seperate.
+Error at line 73: you can't have more then 2 operands.
+Error at line 73: dec doesn't expect 2 operands
+Error at line 73: direct addressing operand is not supported for the command: dec
+Error at line 74: jmp doesn't expect 2 operands
+Error at line 74: relative addressing operand is not supported for the command: jmp
+Error at line 75: 2 operands without ',' seperate.
+Error at line 75: jmp doesn't expect 2 operands
+Error at line 75: relative addressing operand is not supported for the command: jmp
+Error at line 76: bne doesn't expect 2 operands
+Error at line 76: direct addressing operand is not supported for the command: bne
+Error at line 77: 2 operands without ',' seperate.
+Error at line 77: bne doesn't expect 2 operands
+Error at line 77: direct addressing operand is not supported for the command: bne
+Error at line 78: jsr doesn't expect 2 operands
+Error at line 78: direct addressing operand is not supported for the command: jsr
+Error at line 79: 2 operands without ',' seperate.
+Error at line 79: jsr doesn't expect 2 operands
+Error at line 79: direct addressing operand is not supported for the command: jsr
+Error at line 80: red doesn't expect 2 operands
+Error at line 80: register addressing operand is not supported for the command: red
+Error at line 81: 2 operands without ',' seperate.
+Error at line 81: red doesn't expect 2 operands
+Error at line 81: register addressing operand is not supported for the command: red
+Error at line 82: prn doesn't expect 2 operands
+Error at line 82: register addressing operand is not supported for the command: prn
+Error at line 83: 2 operands without ',' seperate.
+Error at line 83: prn doesn't expect 2 operands
+Error at line 83: register addressing operand is not supported for the command: prn
+Error at line 84: invalid data syntax
+Error at line 85: syntax error: you cann't have nothing after the string
+Error at line 86: extern direction contains more than one operand
+Error at line 88: you can't have more then 2 operands.
+Error at line 89: you can't have more then 2 operands.
+Error at line 90: you can't have more then 2 operands.
+Error at line 91: you can't have more then 2 operands.
+Error at line 92: you can't have more then 2 operands.
+Error at line 93: you can't have more then 2 operands.
+Error at line 94: you can't have more then 2 operands.
+Error at line 95: you can't have more then 2 operands.
+Error at line 96: you can't have more then 2 operands.
+Error at line 97: you can't have more then 2 operands.
+Error at line 98: clr doesn't expect 2 operands
+Error at line 98: register addressing operand is not supported for the command: clr
+Error at line 99: 2 operands without ',' seperate.
+Error at line 99: clr doesn't expect 2 operands
+Error at line 99: register addressing operand is not supported for the command: clr
+Error at line 100: inc doesn't expect 2 operands
+Error at line 100: register addressing operand is not supported for the command: inc
+Error at line 101: 2 operands without ',' seperate.
+Error at line 101: inc doesn't expect 2 operands
+Error at line 101: register addressing operand is not supported for the command: inc
+Error at line 102: you can't have more then 2 operands.
+Error at line 102: dec doesn't expect 2 operands
+Error at line 102: direct addressing operand is not supported for the command: dec
+Error at line 103: 2 operands without ',' seperate.
+Error at line 103: you can't have more then 2 operands.
+Error at line 103: dec doesn't expect 2 operands
+Error at line 103: direct addressing operand is not supported for the command: dec
+Error at line 104: jmp doesn't expect 2 operands
+Error at line 104: relative addressing operand is not supported for the command: jmp
+Error at line 105: 2 operands without ',' seperate.
+Error at line 105: jmp doesn't expect 2 operands
+Error at line 105: relative addressing operand is not supported for the command: jmp
+Error at line 106: bne doesn't expect 2 operands
+Error at line 106: direct addressing operand is not supported for the command: bne
+Error at line 107: 2 operands without ',' seperate.
+Error at line 107: bne doesn't expect 2 operands
+Error at line 107: direct addressing operand is not supported for the command: bne
+Error at line 108: jsr doesn't expect 2 operands
+Error at line 108: direct addressing operand is not supported for the command: jsr
+Error at line 109: 2 operands without ',' seperate.
+Error at line 109: jsr doesn't expect 2 operands
+Error at line 109: direct addressing operand is not supported for the command: jsr
+Error at line 110: red doesn't expect 2 operands
+Error at line 110: register addressing operand is not supported for the command: red
+Error at line 111: 2 operands without ',' seperate.
+Error at line 111: red doesn't expect 2 operands
+Error at line 111: register addressing operand is not supported for the command: red
+Error at line 112: prn doesn't expect 2 operands
+Error at line 112: register addressing operand is not supported for the command: prn
+Error at line 113: 2 operands without ',' seperate.
+Error at line 113: prn doesn't expect 2 operands
+Error at line 113: register addressing operand is not supported for the command: prn
+Error at line 116: invalid data - no data
+Error at line 117: invalid string - no data
+Error at line 118: there is no operand
+Error at line 119: there is no operand
+Error at line 120: mov doesn't expect a single operand
+Error at line 121: cmp doesn't expect a single operand
+Error at line 122: add doesn't expect a single operand
+Error at line 123: sub doesn't expect a single operand
+Error at line 123: immeidate addressing operand is not supported for the command: sub
+Error at line 124: lea doesn't expect a single operand
+Error at line 125: clr expects operands
+Error at line 126: inc expects operands
+Error at line 127: dec expects operands
+Error at line 128: jmp expects operands
+Error at line 129: bne expects operands
+Error at line 130: jsr expects operands
+Error at line 131: red expects operands
+Error at line 132: prn expects operands
+Error at line 133: invalid data - no data
+Error at line 134: invalid string - no data
+Error at line 135: there is no operand
+Error at line 136: there is no operand
+Error at line 137: mov doesn't expect a single operand
+Error at line 138: cmp doesn't expect a single operand
+Error at line 139: add doesn't expect a single operand
+Error at line 140: sub doesn't expect a single operand
+Error at line 140: immeidate addressing operand is not supported for the command: sub
+Error at line 141: lea doesn't expect a single operand
+Error at line 142: clr expects operands
+Error at line 143: inc expects operands
+Error at line 144: dec expects operands
+Error at line 145: jmp expects operands
+Error at line 146: bne expects operands
+Error at line 147: jsr expects operands
+Error at line 148: red expects operands
+Error at line 149: prn expects operands
+Error at line 152: Unknown command: COOK
+Error at line 153: Invalid direction: .Data
+Error at line 154: Invalid direction: .sTring
+Error at line 158: relative addressing operand is not supported for the command: mov
+Error at line 158: immeidate addressing operand is not supported for the command: mov
+Error at line 159: relative addressing operand is not supported for the command: mov
+Error at line 159: relative addressing operand is not supported for the command: mov
+Error at line 160: relative addressing operand is not supported for the command: mov
+Error at line 161: relative addressing operand is not supported for the command: mov
+Error at line 162: immeidate addressing operand is not supported for the command: mov
+Error at line 163: relative addressing operand is not supported for the command: mov
+Error at line 164: relative addressing operand is not supported for the command: cmp
+Error at line 164: relative addressing operand is not supported for the command: cmp
+Error at line 165: relative addressing operand is not supported for the command: add
+Error at line 165: immeidate addressing operand is not supported for the command: add
+Error at line 166: relative addressing operand is not supported for the command: add
+Error at line 166: relative addressing operand is not supported for the command: add
+Error at line 167: relative addressing operand is not supported for the command: add
+Error at line 168: relative addressing operand is not supported for the command: add
+Error at line 169: immeidate addressing operand is not supported for the command: add
+Error at line 170: relative addressing operand is not supported for the command: add
+Error at line 171: relative addressing operand is not supported for the command: sub
+Error at line 171: immeidate addressing operand is not supported for the command: sub
+Error at line 172: relative addressing operand is not supported for the command: sub
+Error at line 172: relative addressing operand is not supported for the command: sub
+Error at line 173: relative addressing operand is not supported for the command: sub
+Error at line 174: relative addressing operand is not supported for the command: sub
+Error at line 175: immeidate addressing operand is not supported for the command: sub
+Error at line 176: relative addressing operand is not supported for the command: sub
+Error at line 177: immeidate addressing operand is not supported for the command: lea
+Error at line 177: immeidate addressing operand is not supported for the command: lea
+Error at line 178: immeidate addressing operand is not supported for the command: lea
+Error at line 179: immeidate addressing operand is not supported for the command: lea
+Error at line 179: relative addressing operand is not supported for the command: lea
+Error at line 180: immeidate addressing operand is not supported for the command: lea
+Error at line 181: relative addressing operand is not supported for the command: lea
+Error at line 181: immeidate addressing operand is not supported for the command: lea
+Error at line 182: relative addressing operand is not supported for the command: lea
+Error at line 182: relative addressing operand is not supported for the command: lea
+Error at line 183: relative addressing operand is not supported for the command: lea
+Error at line 184: relative addressing operand is not supported for the command: lea
+Error at line 185: register addressing operand is not supported for the command: lea
+Error at line 185: immeidate addressing operand is not supported for the command: lea
+Error at line 186: register addressing operand is not supported for the command: lea
+Error at line 186: relative addressing operand is not supported for the command: lea
+Error at line 187: register addressing operand is not supported for the command: lea
+Error at line 188: register addressing operand is not supported for the command: lea
+Error at line 189: immeidate addressing operand is not supported for the command: lea
+Error at line 190: relative addressing operand is not supported for the command: lea
+Error at line 191: immeidate addressing operand is not supported for the command: clr
+Error at line 192: relative addressing operand is not supported for the command: clr
+Error at line 193: immeidate addressing operand is not supported for the command: not
+Error at line 194: relative addressing operand is not supported for the command: not
+Error at line 195: immeidate addressing operand is not supported for the command: inc
+Error at line 196: relative addressing operand is not supported for the command: inc
+Error at line 197: immeidate addressing operand is not supported for the command: dec
+Error at line 198: relative addressing operand is not supported for the command: dec
+Error at line 199: immeidate addressing operand is not supported for the command: jmp
+Error at line 200: register addressing operand is not supported for the command: jmp
+Error at line 201: immeidate addressing operand is not supported for the command: bne
+Error at line 202: register addressing operand is not supported for the command: bne
+Error at line 203: immeidate addressing operand is not supported for the command: jsr
+Error at line 204: register addressing operand is not supported for the command: jsr
+Error at line 205: immeidate addressing operand is not supported for the command: red
+Error at line 206: relative addressing operand is not supported for the command: red
+Error at line 207: relative addressing operand is not supported for the command: prn
+Error at line 208: rts doesn't expect a single operand
+Error at line 208: immeidate addressing operand is not supported for the command: rts
+Error at line 209: rts doesn't expect a single operand
+Error at line 209: direct addressing operand is not supported for the command: rts
+Error at line 210: rts doesn't expect a single operand
+Error at line 210: relative addressing operand is not supported for the command: rts
+Error at line 211: rts doesn't expect a single operand
+Error at line 211: register addressing operand is not supported for the command: rts
+Error at line 212: stop doesn't expect a single operand
+Error at line 212: immeidate addressing operand is not supported for the command: stop
+Error at line 213: stop doesn't expect a single operand
+Error at line 213: direct addressing operand is not supported for the command: stop
+Error at line 214: stop doesn't expect a single operand
+Error at line 214: relative addressing operand is not supported for the command: stop
+Error at line 215: stop doesn't expect a single operand
+Error at line 215: register addressing operand is not supported for the command: stop
