@@ -79,9 +79,9 @@ Symbols *Slistalloc()
     return p;
 }
 
-void addToTable(struct symbols *newS, char *name, char *attributes, int attribute, int val, int lineNumber)
+void addToTable(struct symbols *newS, char *name, char *attributes, int attribute, int val, int lineNumber, int allowDup)
 {
-    if (strcmp(newS->name, name)==0)
+    if (strcmp(newS->name, name)==0 && !allowDup)
     {
         if (attribute == external)
         {
@@ -116,7 +116,7 @@ void addToTable(struct symbols *newS, char *name, char *attributes, int attribut
     }
     else
     {
-        addToTable(newS->next, name, attributes, attribute, val, lineNumber);
+        addToTable(newS->next, name, attributes, attribute, val, lineNumber, allowDup);
     }
         
 }

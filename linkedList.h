@@ -36,7 +36,7 @@ Symbols *Slistalloc();
 
 void setData(List *Dlist); /*update the addresses of the data with IC*/
 
-void addToTable(struct symbols *newS, char *name, char *attributes, int attribute, int val, int lineNumber);
+void addToTable(struct symbols *newS, char *name, char *attributes, int attribute, int val, int lineNumber, int allowDup);
 
 void setVal(struct symbols *s, int val); /*update the values of the symbols*/
 

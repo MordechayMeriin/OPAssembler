@@ -9,7 +9,7 @@
 
 FILE *openFile(char *);
 void deleteBlanks(int lineNumber, char *); /*deletes unnecessary spaces and tabs, and make the line more readable*/
-char *getWord(char *line, char **word); /*move the first word to **word and returns pointer to the next word*/
+char *getWord(char *line, char **word, int lineNumber); /*move the first word to **word and returns pointer to the next word*/
 int isSpace(char);
 
 #endif

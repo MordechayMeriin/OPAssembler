@@ -62,16 +62,24 @@ void deleteBlanks(int lineNumber, char *line)
 	strcpy(line, tmp);
 }
 
-char *getWord(char *line, char **word)
+char *getWord(char *line, char **word, int lineNumber)
 {
 	char *c = (char *)calloc(sizeof(char), MAXWORD);
 	char *str = c;
+	int wordCounter = 0;
 
 	while (isSpace(*line) && *line != '\0')
 		line++;
 
 	while (!isSpace(*line) && *line != '\0')
 	{
+		
+		if (wordCounter == MAXWORD - 1)
+		{
+			errorLog(lineNumber, "word is too long");
+			break;
+		}
+		
 		*c = *line;
 		if (*c == ',')
 		{
@@ -81,6 +89,7 @@ char *getWord(char *line, char **word)
 		}
 		c++;
 		line++;
+		wordCounter++;
 	}
 	*c = '\0';
 	*word = str;

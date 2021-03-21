@@ -21,6 +21,11 @@ enum arributesEnum{
     entry
 };
 
+enum Boolean{
+    false = 0,
+    true = 1
+};
+
 typedef struct opword /*12 digit machine code line*/
 {
     unsigned int opcode: OPCODE_SIZE;

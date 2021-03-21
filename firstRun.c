@@ -30,26 +30,31 @@ void first(char *fileName)
     IC = 100;
     DC = 1;
     while(fgets(Fline, MAXLINE, file) != NULL)
-    {
+    {      
         line=Fline;
         labelFlag=0;
         deleteBlanks(lineNumber, line);
+        printf("line %d: '%s'\n", lineNumber, Fline);
         if(!isEmpty(line))
         {
-            line = getWord(line, firstWord); /*takes the first word in the line to firstWord, and moves line to point to the next word*/
+            line = getWord(line, firstWord, lineNumber); /*takes the first word in the line to firstWord, and moves line to point to the next word*/
+            printf("*firstWord = '%s'\n", *firstWord);
             if(isItLable(lineNumber, *firstWord)) /*if the first word is a label*/
             {
+                printf("its a label\n");
                 labelFlag=1;
                 strcpy(label, *firstWord);
-                line = getWord(line, firstWord); /*saves the label in another var and moved to the next word*/
+                line = getWord(line, firstWord, lineNumber); /*saves the label in another var and moved to the next word*/
             }
+            printf("its not a label\n");
             if(isItDir(*firstWord)) /*it is a direction*/
             {
+                printf("its  a dir\n");
                 if (strcmp(*firstWord, ".data")==0 ||  strcmp(*firstWord, ".string")==0)
                 {
                     if(labelFlag)
                     {
-                        addToTable(SymbolList, label, "data", data, DC, lineNumber); /*adds the label's details to the symbols list*/
+                        addToTable(SymbolList, label, "data", data, DC, lineNumber, false); /*adds the label's details to the symbols list*/
                     }
                     tmp=datalen(line, *firstWord);
                     if(tmp)
@@ -64,13 +69,13 @@ void first(char *fileName)
                 {
                     if(strcmp(*firstWord, ".extern")==0)
                     {
-                        line = getWord(line, firstWord);
+                        line = getWord(line, firstWord, lineNumber);
                         strcpy(EXlabel, *firstWord);
                         if (validLabel(EXlabel))
                         {
                             if (*line=='\0')
                             {
-                                addToTable(SymbolList, EXlabel, "external", external, 0, lineNumber);
+                                addToTable(SymbolList, EXlabel, "external", external, 0, lineNumber, false);
                             }
                             else
                             {
@@ -81,18 +86,20 @@ void first(char *fileName)
                 }
                 else
                 {
-                    errorLog(lineNumber, strcat("Invalid direction: ", *firstWord));
+                    errorLogCat(lineNumber, "Invalid direction: ", *firstWord);
                 }
                 
             }
             else /*it is a command line*/
             {
+                printf("its a command\n");
                 if(labelFlag)
                 {
-                    addToTable(SymbolList, label, "code", code, IC, lineNumber); /*adds the label's details to the symbols list*/
+                    addToTable(SymbolList, label, "code", code, IC, lineNumber, false); /*adds the label's details to the symbols list*/
                 }
                 if (isValidCommand(*firstWord))
                 {
+                    printf("its a command\n");
                     operation = (OpWord *)calloc(sizeof(OpWord), 1);                    
                     if (operation == NULL)
                     {
@@ -136,7 +143,8 @@ void first(char *fileName)
                 }
                 else
                 {
-                    errorLog(lineNumber, strcat("Unknown command: ", *firstWord));
+                    printf("its an invalid command\n");
+                    errorLogCat(lineNumber,"Unknown command: ", *firstWord);
                 }              
             }
         }
@@ -153,16 +161,15 @@ void first(char *fileName)
         DCF=DC;
         setVal(SymbolList, ICF);
         setData(dataList);
-        printSymbols(SymbolList, 1);
-        free(file);
+        
+        fclose(file);
         for(tmpList=codeList; tmpList->next->next!=NULL ; tmpList=tmpList->next)
         ;
 
         tmpList->next=dataList;/*ataches dataList to the end of codelist*/
 
-        printCodeListDebug(codeList);
+        
         second(fileName, codeList, dataList, SymbolList); /*start the second run*/
-
     }
     
 }
@@ -190,12 +197,17 @@ int isItDir(char *line)
 
 int isItLable(int lineNumber, char *word)
 {
+    if(strlen(word)>=MAXWORD)
+    {
+        errorLog(lineNumber, "invalid label name, too long");
+        return 0;
+    }
+            
     if(word[strlen(word)-1]==':')
     {
         word[strlen(word)-1]='\0';
-        if(strlen(word)>=MAXWORD)
-            errorLog(lineNumber, "invalid label name, too long");
-        else if(validLabel(word))
+        
+        if(validLabel(word))
         {
             return 1;
         }
@@ -311,7 +323,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
     char **thirdOperand = psalloc();
     char **tmp1 = psalloc(), **tmp2 = psalloc();
 
-    line = getWord(line, tmp1);
+    line = getWord(line, tmp1, lineNumber);
     
     if (*tmp1 != NULL)
     {
@@ -323,12 +335,12 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         
         if (!trimComma(operands[0])) /*if first operand doesn't end with a comma*/
         {
-            line = getWord(line, tmp2);
+            line = getWord(line, tmp2, lineNumber);
             if (*tmp2 != NULL && **tmp2 != '\0')
             {
                 if (**tmp2 == ',') 
                 {
-                    line = getWord(line, tmp2); 
+                    line = getWord(line, tmp2, lineNumber); 
                     operands[1] = *tmp2;
                 }
                 else
@@ -340,7 +352,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
         }
         else /*if first operand ends with a comma*/
         {
-            line = getWord(line, tmp2);
+            line = getWord(line, tmp2, lineNumber);
         }
         operands[1] = *tmp2;  
 
@@ -349,7 +361,7 @@ char **getOperands(char *line, int lineNumber)/*Return an array of strings, repr
             errorLog(lineNumber, "unnecessary ',' character.");
         }
 
-        line = getWord(line, thirdOperand);  
+        line = getWord(line, thirdOperand, lineNumber);  
 
         if (strcmp(*thirdOperand, ""))
         {
@@ -417,7 +429,7 @@ Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType,
             addOperandTypeToWord(operation, IMMEDIATE_ADDRESSING, operandType);
             if (!isStringNumber(++operand))
             {
-                errorLog(lineNumber, strcat(operand - 1, " - invalid operand. must be a number."));
+                errorLogCat(lineNumber, operand - 1, " - invalid operand. must be a number.");
             }
             else
             {
@@ -426,7 +438,7 @@ Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType,
         }
         else
         {
-            errorLog(lineNumber, strcat("immeidate addressing operand is not supported for the command: ", rule->name));
+            errorLogCat(lineNumber, "immeidate addressing operand is not supported for the command: ", rule->name);
         }       
     }
     else if (*operand == '%') /*Relative Addressing*/
@@ -437,7 +449,7 @@ Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType,
         }
         else
         {
-            errorLog(lineNumber, strcat("relative addressing operand is not supported for the command: ", rule->name));
+            errorLogCat(lineNumber, "relative addressing operand is not supported for the command: ", rule->name);
         }
         
         
@@ -451,7 +463,7 @@ Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType,
         }
         else
         {
-            errorLog(lineNumber, strcat("register addressing operand is not supported for the command: ", rule->name));
+            errorLogCat(lineNumber, "register addressing operand is not supported for the command: ", rule->name);
         }        
     }
     else /*Direct addressing*/
@@ -462,7 +474,7 @@ Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType,
         }
         else
         {
-            errorLog(lineNumber, strcat("direct addressing operand is not supported for the command: ", rule->name));
+            errorLogCat(lineNumber, "direct addressing operand is not supported for the command: ", rule->name);
         }       
     }
 

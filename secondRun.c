@@ -8,13 +8,12 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
     int L, lineNumber = 1;
     char **firstWord = psalloc(), **tmpWord=psalloc();
     char *line, *Fline = (char *)calloc(sizeof(char), MAXLINE);
-    Symbols *tmp;
+    Symbols *tmp, *externals = Slistalloc();
     Rule *rule;
     char **operands;
     OpWord *operation;
     Int12 *codedOp1 = NULL, *codedOp2 = NULL;
-
-    printf("\n\ninsideSecond\n\n");
+    List *codeListP = codeList;
 
     if (Fline == NULL || firstWord == NULL)
     {
@@ -26,18 +25,18 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
         /*printf("\nLine %d: '%s'\n", lineNumber, Fline);*/
         line=Fline;
         deleteBlanks(lineNumber, line);
-        printf("Line %d: |%s|\n", lineNumber, Fline);
+        /*printf("Line %d: |%s|\n", lineNumber, Fline);*/
 
         if(!isEmpty(line))
         {
-            line = getWord(line, firstWord);
+            line = getWord(line, firstWord, lineNumber);
             if(isItLable(lineNumber, *firstWord))
             {
-                line = getWord(line, firstWord);
+                line = getWord(line, firstWord, lineNumber);
             }
             if(isItDir(*firstWord))
             {
-                line=getWord(line,tmpWord);
+                line=getWord(line,tmpWord, lineNumber);
                 if (strcmp(*firstWord, ".entry")==0)
                 {
                     for(tmp=SymbolList ; tmp->next!=NULL && strcmp(tmp->name, *tmpWord)!=0 ; tmp=tmp->next)
@@ -55,21 +54,21 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
             {              
                 /**complete command coding*/ 
 
-                int operationAddress = codeList->value.address;
+                int operationAddress = codeListP->value.address;
                 operands = getOperands(line, lineNumber);
 
                 if (*operands[0] != '\0')
                 {
-                    codeList = codeList->next; 
-                    addOperand2(SymbolList, operands[0], &codeList, operationAddress, lineNumber);   
+                    codeListP = codeListP->next; 
+                    addOperand2(SymbolList, externals, operands[0], &codeListP, operationAddress, lineNumber);   
 
                     if (*operands[1] != '\0')
                     {                              
-                        codeList = codeList->next;              
-                        addOperand2(SymbolList, operands[1], &codeList, operationAddress, lineNumber);
+                        codeListP = codeListP->next;              
+                        addOperand2(SymbolList, externals, operands[1], &codeListP, operationAddress, lineNumber);
                     }
                 }
-                codeList = codeList->next; 
+                codeListP = codeListP->next; 
             }
         }
         lineNumber++;
@@ -80,17 +79,17 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList)
     }
     else
     {
-        /*files creating*/
+        createFiles(codeList, SymbolList, externals, ICF, DCF, fileName);
     }
-    free(file);
+    fclose(file);
 }
 
-void addOperand2(Symbols *SymbolList, char *operand, List **codeList, int operationAddress, int lineNumber)
+void addOperand2(Symbols *SymbolList, Symbols *externalsList, char *operand, List **codeList, int operationAddress, int lineNumber)
 {
     int rel=0;
     if (*operand != '#' && !isRegister(operand))
     {
-            printf("wow2 --%s--\n", operand);
+            /*printf("wow2 --%s--\n", operand);*/
         if (*operand == '%')
         {
             operand++;
@@ -113,12 +112,19 @@ void addOperand2(Symbols *SymbolList, char *operand, List **codeList, int operat
                 else /*Direct addressing*/
                 {
                     (*codeList)->value.value = SymbolList->value.value;
-                    (*codeList)->value.ARE = (SymbolList->attributeList.external) ? 'E' : 'R';
+                    if (SymbolList->attributeList.external)
+                    {
+                        (*codeList)->value.ARE = 'E';
+                        addToTable(externalsList, operand, "", code, (*codeList)->value.address, lineNumber, true);
+                    }
+                    else
+                    {
+                        (*codeList)->value.ARE = 'R';
+                    }
                 }
             }
             else
             {
-                printf("wow1\n:");
                 errorLog(lineNumber, strcat(operand, " is not a known label"));
             }
         }
