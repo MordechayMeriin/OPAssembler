@@ -107,15 +107,6 @@ void setVal(struct symbols *s, int val)
         setVal(s->next, val);
 }
 
-void printSymbols(struct symbols *S, int num)
-{
-    if(S->next != NULL)
-    {
-    printf("symbol n%d: %s, %s, %d\n", num, S->name, S->attributes, S->value.value);
-        printSymbols(S->next, num+1);
-    }    
-}
-
 void setData(List *Dlist, int ICF)
 {
     Dlist->value.address+=ICF;
