@@ -43,7 +43,9 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
             printf("Ent: %s %04d\n", symbolsList->name, symbolsList->value.value);/**Debug*/           
         }    
         /*free previous node*/   
-        symbolsList = symbolsList->next;  
+        symbolsList = symbolsList->next;
+        free(symbolsListForFree->name);
+        free(symbolsListForFree->attributes);
         free(symbolsListForFree);
         symbolsListForFree = symbolsList;
     }
@@ -71,6 +73,8 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
 
         /*free previous node*/   
         externalsList = externalsList->next;
+        free(externalsListForFree->name);
+        free(externalsListForFree->attributes);
         free(externalsListForFree);
         externalsListForFree= externalsList;
     }  
