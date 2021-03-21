@@ -10,7 +10,7 @@ void first(char *fileName)
     int  IC = 100, DC = 1, ICF, DCF;
     extern void second(char *,List *, List *, Symbols *, int, int);
     short int labelFlag=0;
-    int L, lineNumber = 1, tmp=0;
+    int lineNumber = 1, tmp=0;
     char label[MAXWORD], EXlabel[MAXWORD]; /*lables names*/
     char **firstWord = psalloc(); /*first word in line*/
     char tmpLine[2*MAXLINE]="", *line /**/, *Fline /*pointer to first char in line*/ = (char *)calloc(sizeof(char), MAXLINE);
@@ -63,6 +63,7 @@ void first(char *fileName)
                 {
                     labelFlag=1;
                     strcpy(label, *firstWord);
+                    
                     line = getWord(line, firstWord, lineNumber); /*saves the label in another var and moved to the next word*/
                     tmpS=SymbolList;
                     for(; strcmp(tmpS->name, label)!=0 && tmpS->next!=NULL ; tmpS=tmpS->next)
@@ -122,23 +123,23 @@ void first(char *fileName)
                     }
                     if (isValidCommand(*firstWord))
                     {
+                        Int12 *codedOperation;
                         operation = (OpWord *)calloc(sizeof(OpWord), 1);                        
                         if (operation == NULL)
                         {
                             mallocError("OpWord");
                         }
 
-                        L = 1;
                         rule = getRule(*firstWord);
                         operands = getOperands(line, lineNumber);
                         
                         operation->opcode = rule->opcode;
                         operation->funct = rule->funct;
 
-                    
+                        codedOperation = wordToInt12(operation);
+
                         if (*operands[0] != '\0')
                         {
-                            L++;                      
                             if (*operands[1] != '\0')
                             {
                                 if (rule->numOfOperands != 2)
@@ -146,13 +147,15 @@ void first(char *fileName)
                                     errorLogCat(lineNumber, rule->name, " doesn't expect 2 operands");
                                 }
                                 
-                                L++;
                                 codedOp1 = addOperand(operation, rule, operands[0], SOURCE_OPERAND, lineNumber);                            
                                 codedOp2 = addOperand(operation, rule, operands[1], TARGET_OPERAND, lineNumber);
                             
-                                addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                                addRowToCodeList(codeList, IC++, *codedOperation, 'A');
                                 addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->inVal)) ? 'N' : 'A');
                                 addRowToCodeList(codeList, IC++, *codedOp2, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
+
+                                free(codedOp1);
+                                free(codedOp2);
                             }
                             else
                             {
@@ -161,9 +164,11 @@ void first(char *fileName)
                                     errorLogCat(lineNumber, rule->name, " doesn't expect a single operand");
                                 }
                                 codedOp1 = addOperand(operation, rule, operands[0], TARGET_OPERAND, lineNumber);
-                                addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                                addRowToCodeList(codeList, IC++, *codedOperation, 'A');
                                 addRowToCodeList(codeList, IC++, *codedOp1, (isNotAbsolute(operation->outVal)) ? 'N' : 'A');
+                                free(codedOp1);
                             }
+
                         }
                         else
                         {
@@ -171,9 +176,11 @@ void first(char *fileName)
                                 {
                                     errorLogCat(lineNumber, rule->name, " expects operands");
                                 }
-                            addRowToCodeList(codeList, IC++, *wordToInt12(operation), 'A');
+                            addRowToCodeList(codeList, IC++, *codedOperation, 'A');
                         }
-                                                     
+                        free(codedOperation);
+                        free(operation);
+                        
                     }
                     else
                     {
@@ -184,7 +191,12 @@ void first(char *fileName)
         }
 
         lineNumber++;
+
     }
+    free(firstWord);
+    free(Fline);
+    free(operands);
+    freeRulesTable();
     if(areErrorsExist())
     {
         printErrors();
@@ -374,6 +386,7 @@ void dataCoding(char *line, struct lnode *dataList, int DC, int lineNumber)
                 line--;
         }
     }
+    free(TW);
 }
 
 char **getOperands(char *line, int lineNumber)/*Return an array of strings, representing the operands. Comma checks included*/
@@ -512,6 +525,7 @@ Int12 *addOperand(OpWord *operation, Rule *rule, char *operand, int operandType,
     {
         if (method->registerDirect)
         {
+            free(codedOperand);
             codedOperand = intToRegister(atoi(++operand));
             addOperandTypeToWord(operation, REGISTER_DIRECT_ADDRESSING, operandType);
         }
@@ -542,4 +556,5 @@ void addRowToCodeList(List *list, int address ,Int12 value, char ARE)
     row->value = value.value;
     row->ARE = ARE;
     addToList(list, row);
+    free(row);
 }

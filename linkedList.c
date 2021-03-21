@@ -18,14 +18,7 @@ List *listalloc()
     p->value=*R;
     return p;
 }
-void printlist(struct lnode *list)
-{
-    if(list->next != NULL)
-    {
-        printf("address=%d value=%d\n",list->value.address, list->value.value);
-        printlist(list->next);
-    }
-}
+
 
 void addToList(struct lnode *list, Row *value)
 {
@@ -44,22 +37,6 @@ void addToList(struct lnode *list, Row *value)
     }
 }
 
-Row getFromList(struct lnode *list, int index)
-{
-    struct lnode *pCurrentNode = list;
-    int i;
-    for (i = 0; i < index; i++)
-    {
-        if (pCurrentNode->next == NULL)
-        {
-            /* Handle error: Index out of the boundary of the array. */
-            printf("%s\n", "");
-        }
-        
-        pCurrentNode = pCurrentNode->next;
-    }
-    return pCurrentNode->value;
-}
 
 Symbols *Slistalloc()
 {

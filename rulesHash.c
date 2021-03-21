@@ -78,6 +78,19 @@ void createRulesTable()
     }
 }
 
+void freeRulesTable()
+{
+    int i;
+    for (i = 0; i < HASHSIZE; i++)
+    {
+        if (hashTab[i] != NULL)
+        {
+            free(hashTab[i]);
+        }
+    }
+    
+}
+
 int isValidCommand(char *command)
 {
     if (getRule(command) != NULL)

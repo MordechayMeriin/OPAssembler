@@ -69,9 +69,15 @@ void second(char *fileName, List *codeList, List *dataList, Symbols *SymbolList,
         }
         lineNumber++;
     }
+
+    free(firstWord);
+    free(tmpWord);
+    free(Fline);
+    free(operands);
     if(areErrorsExist())
     {
         printErrors();
+        freeLogMemory();
     }
     else
     {

@@ -10,10 +10,9 @@ typedef struct lnode{
 }List;
 
 List *listalloc();
-void printlist(struct lnode *list);
 void addToList(struct lnode *list, Row *value); /*add new row to list*/
 
-Row getFromList(struct lnode *list, int index);
+
 
 typedef struct att{
     unsigned int code: 1;

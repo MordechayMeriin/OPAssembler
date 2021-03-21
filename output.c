@@ -1,33 +1,34 @@
 #include "output.h"
 
-void printCodeListDebug(List *list)
-{
-    printf("inside printCodeListDebug\n");
-
-    while (list->next != NULL)
-    {
-        printf("%04d\t%03X\t%c\n", list->value.address, intTo12BitInt(list->value.value), list->value.ARE);
-        list = list->next;
-    }   
-}
-
-void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, int ICF, int DCF, char *fileName)
+void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, int ICF, int DCF, char *fileName)/*create the machine code files and free data lists*/
 {
     FILE *entFile, *extFile, *objFile;
+    List *codeListForFree;
+    Symbols *symbolsListForFree, *externalsListForFree;
     int isEnt = 0, isExt = 0; 
 
-    objFile = CreateFile(fileName, ".obj");
+    objFile = CreateFile(fileName, ".ob");
+
+    /*print .ob file*/
 
     fprintf(objFile, "%d %d\n", ICF - 100, DCF);
-
+    codeListForFree = codeList;
     while (codeList->next != NULL)
     {
         fprintf(objFile, "%04d %03X %c\n", codeList->value.address, intTo12BitInt(codeList->value.value), codeList->value.ARE);
         printf("%04d %03X %c\n", codeList->value.address, intTo12BitInt(codeList->value.value), codeList->value.ARE);
+        
+        /*free previous node*/
         codeList = codeList->next;
+        free(codeListForFree);
+        codeListForFree = codeList;
     }
+    free(codeList);
     fclose(objFile);
 
+    symbolsListForFree = symbolsList;
+
+    /*print .ent file*/
     while (symbolsList->next != NULL)
     {
         if (symbolsList->attributeList.entry)
@@ -40,15 +41,22 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
             
             fprintf(entFile, "%s %04d\n", symbolsList->name, symbolsList->value.value);
             printf("Ent: %s %04d\n", symbolsList->name, symbolsList->value.value);/**Debug*/           
-        }       
-        symbolsList = symbolsList->next;      
+        }    
+        /*free previous node*/   
+        symbolsList = symbolsList->next;  
+        free(symbolsListForFree);
+        symbolsListForFree = symbolsList;
     }
+    free(symbolsList);
 
     if (entFile != NULL)
     {
         fclose(entFile);
     }
 
+    externalsListForFree = externalsList;
+
+    /*print .ext file*/
     while (externalsList->next != NULL)
     {
 
@@ -61,8 +69,12 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
         fprintf(extFile, "%s %04d\n", externalsList->name, externalsList->value.value);
         printf("Ext: %s %04d\n", externalsList->name, externalsList->value.value);/**Debug*/
 
+        /*free previous node*/   
         externalsList = externalsList->next;
+        free(externalsListForFree);
+        externalsListForFree= externalsList;
     }  
+    free(externalsList);
     
     if (extFile != NULL)
     {
@@ -72,7 +84,7 @@ void createFiles(List *codeList, Symbols *symbolsList, Symbols *externalsList, i
 }
 
 
-FILE *CreateFile(char *fileName, char *extention)
+FILE *CreateFile(char *fileName, char *extention)/*create a new file with specified name and extention*/
 {
     FILE *file;
     char *fullFileName = (char *)calloc(sizeof(char), strlen(fileName) + strlen(extention) + 1);
@@ -91,5 +103,6 @@ FILE *CreateFile(char *fileName, char *extention)
         printf("Error: could not create the file %s.\n", fullFileName);
         exit(2);
     }
+    free(fullFileName);
     return file;
 }
